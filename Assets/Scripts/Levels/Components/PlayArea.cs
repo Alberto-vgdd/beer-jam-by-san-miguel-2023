@@ -8,12 +8,11 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class PlayArea : MonoBehaviour
 {
-    private const float PLAY_AREA_WIDTH = 1.8f;
-    private const float PLAY_AREA_DEPTH = 2.7f;
+    private const float PLAY_AREA_WIDTH = 2.7f;
+    private const float PLAY_AREA_DEPTH = 1.8f;
     private const float START_HEIGHT = 2.1f;
     private static Vector3 START_PLANE_CENTER = new Vector3(PLAY_AREA_WIDTH / 2f, 0f, -PLAY_AREA_DEPTH / 2f);
     private static Vector3 POSITION_CENTER_OFFSET = new Vector3(BeerBottle.BOTTLE_HALF_WIDTH, 0f, BeerBottle.BOTTLE_HALF_WIDTH);
-    private const float BASE_HEIGHT_CHANGE_TIME = 0.15f;
 
     public delegate void PieceDroppedHandler(BottlePiece bottlePiece);
     public PieceDroppedHandler PieceDropped;

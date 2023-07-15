@@ -8,7 +8,7 @@ public class Level : MonoBehaviour
     public delegate void BeerBoxCompletedHandler();
     public static BeerBoxCompletedHandler BeerBoxCompleted;
 
-    private const int ROWS_OF_BOXES = 3;
+    private const int ROWS_OF_BOXES = 2;
     private const int COLUMNS_OF_BOXES = 3;
 
     [Header("Components")]

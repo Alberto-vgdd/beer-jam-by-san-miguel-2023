@@ -6,12 +6,13 @@ using UnityEngine;
 
 public class BeerBox : MonoBehaviour
 {
-    internal const float WIDTH = 0.6f;
+    internal const float WIDTH = 0.9f;
     internal const float DEPTH = 0.9f;
 
     internal const float BEER_BOX_SPAWN_TIME = 0.3f;
     internal const float BEER_BOX_DESTROY_TIME = 0.3f;
     internal const float ADD_BOTTLE_TIME = 0.1f;
+    internal const float BOTTLE_OFFSET = 0.15f;
 
     [Header("Components.")]
     [SerializeField]
@@ -46,13 +47,13 @@ public class BeerBox : MonoBehaviour
     {
 
         Vector3 localPosition = beerBottlesOriginsParent.InverseTransformPoint(position);
-        Vector2Int localCoordinates = new Vector2Int(Mathf.RoundToInt((localPosition.x - 0.15f) / 0.3f), Mathf.RoundToInt((localPosition.z + 0.15f) / 0.3f));
+        Vector2Int localCoordinates = new Vector2Int(Mathf.RoundToInt((localPosition.x - BOTTLE_OFFSET) / 0.3f), Mathf.RoundToInt((localPosition.z + BOTTLE_OFFSET) / 0.3f));
         return localCoordinates;
     }
 
     private Vector3 GetPositionFromLocalCoordinates(Vector2Int localCoordinates)
     {
-        Vector3 localPosition = new Vector3((localCoordinates.x * 0.3f) + 0.15f, 0f, (localCoordinates.y * 0.3f) - 0.15f);
+        Vector3 localPosition = new Vector3((localCoordinates.x * 0.3f) + BOTTLE_OFFSET, 0f, (localCoordinates.y * 0.3f) - BOTTLE_OFFSET);
         Vector3 position = beerBottlesOriginsParent.TransformPoint(localPosition);
         return position;
     }
