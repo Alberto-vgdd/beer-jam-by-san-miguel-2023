@@ -163,6 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   beerBottlesParent: {fileID: 774474452461826471}
   rotationPivot: {fileID: 4105633485836844871}
+  originOffset: {fileID: 517553585512895877}
   boundsBoxCollider: {fileID: 6860251770188125982}
   nextBoundsBoxCollider: {fileID: 176739686216774606}
 --- !u!1 &9110869072717007462

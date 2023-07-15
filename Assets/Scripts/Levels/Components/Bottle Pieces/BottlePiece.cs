@@ -9,15 +9,14 @@ public class BottlePiece : MonoBehaviour
 {
 
     private static Vector3[] ROTATIONS = { Vector3.up * 0f, Vector3.up * 90f, Vector3.up * 180f, Vector3.up * 270f };
-    public const float ROTATION_TIME = 0.075f;
-    public const float MOVEMENT_TIME = 0.05f;
-
 
     [Header("Components")]
     [SerializeField]
     private Transform beerBottlesParent;
     [SerializeField]
     private Transform rotationPivot;
+    [SerializeField]
+    private Transform originOffset;
     [SerializeField]
     private BoxCollider boundsBoxCollider;
     [SerializeField]
@@ -30,6 +29,8 @@ public class BottlePiece : MonoBehaviour
     private Tween positionAnimation;
     private Tween rotationAnimation;
 
+    private float movementTime;
+    private float rotationTime;
 
 
 
@@ -38,6 +39,11 @@ public class BottlePiece : MonoBehaviour
     {
         rotationIndex = 0;
         beerBottles = beerBottlesParent.GetComponentsInChildren<BeerBottle>();
+
+        foreach (BeerBottle beerBottle in beerBottles)
+        {
+            beerBottle.EnableBoxCollider(false);
+        }
 
         playerControls = new PlayerControls();
         playerControls.Enable();
@@ -55,11 +61,11 @@ public class BottlePiece : MonoBehaviour
         }
 
         Sequence rotationSequence = DOTween.Sequence();
-        rotationSequence = rotationSequence.Append(rotationPivot.DOLocalRotate(ROTATIONS[rotationIndex], ROTATION_TIME));
+        rotationSequence = rotationSequence.Append(rotationPivot.DOLocalRotate(ROTATIONS[rotationIndex], rotationTime));
 
         foreach (BeerBottle beerBottle in beerBottles)
         {
-            rotationSequence = rotationSequence.Join(beerBottle.transform.DORotate(Vector3.zero, ROTATION_TIME));
+            rotationSequence = rotationSequence.Join(beerBottle.transform.DORotate(Vector3.zero, rotationTime));
 
         }
 
@@ -74,7 +80,7 @@ public class BottlePiece : MonoBehaviour
 
     internal Vector3 GetHalfExtents()
     {
-        return boundsBoxCollider.bounds.extents / 2f;
+        return boundsBoxCollider.bounds.extents;
     }
 
     internal Vector3 GetCenter()
@@ -82,15 +88,61 @@ public class BottlePiece : MonoBehaviour
         return boundsBoxCollider.bounds.center;
     }
 
-    internal void MoveTo(Vector3 newPosition, float time)
+    internal void MoveToLocalPosition(Vector3 newLocalPosition, bool animate)
     {
-        DOTweenUtils.CompleteTween(positionAnimation);
-        positionAnimation = transform.DOMove(newPosition, time);
+        if (animate)
+        {
+            DOTweenUtils.CompleteTween(positionAnimation);
+            positionAnimation = transform.DOLocalMove(newLocalPosition, movementTime);
+        }
+        else
+        {
+            transform.localPosition = newLocalPosition;
+        }
+    }
+
+    internal void CorrectRotationMoveToLocalPosition(Vector3 newLocalPosition, bool animate)
+    {
+        if (animate)
+        {
+            DOTweenUtils.CompleteTween(positionAnimation);
+            positionAnimation = transform.DOLocalMove(newLocalPosition, rotationTime);
+        }
+        else
+        {
+            transform.localPosition = newLocalPosition;
+        }
     }
 
     internal void PreviewNextRotation(out Vector3 centerAfterRotation, out Vector3 halfExtentsAfterRotation)
     {
         centerAfterRotation = nextBoundsBoxCollider.bounds.center;
-        halfExtentsAfterRotation = nextBoundsBoxCollider.bounds.extents / 2f;
+        halfExtentsAfterRotation = nextBoundsBoxCollider.bounds.extents;
+    }
+
+    internal BeerBottle[] GetBottles()
+    {
+        return beerBottles;
+    }
+
+    internal Vector3 GetOriginOffset()
+    {
+        return originOffset.position;
+    }
+
+    internal void SetPieceTimes(float newMovementTime, float newRotationTime)
+    {
+        movementTime = newMovementTime;
+        rotationTime = newRotationTime;
+    }
+
+    internal float GetMovementTime()
+    {
+        return movementTime;
+    }
+
+    internal float GetRotationTime()
+    {
+        return rotationTime;
     }
 }

@@ -11,6 +11,8 @@ TagManager:
   - 
   - Water
   - UI
+  - BeerBottle
+  - BeerBoxes
   - 
   - 
   - 
@@ -34,9 +36,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - Do Not Render
   m_SortingLayers:
   - name: Default
     uniqueID: 0
