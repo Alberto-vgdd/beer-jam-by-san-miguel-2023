@@ -10,6 +10,7 @@ public class BottlePiece : MonoBehaviour
 
     private static Vector3[] ROTATIONS = { Vector3.up * 0f, Vector3.up * 90f, Vector3.up * 180f, Vector3.up * 270f };
     public const float ROTATION_TIME = 0.075f;
+    public const float MOVEMENT_TIME = 0.05f;
 
 
     [Header("Components")]
@@ -19,10 +20,14 @@ public class BottlePiece : MonoBehaviour
     private Transform rotationPivot;
     [SerializeField]
     private BoxCollider boundsBoxCollider;
+    [SerializeField]
+    private BoxCollider nextBoundsBoxCollider;
 
     private BeerBottle[] beerBottles;
     private PlayerControls playerControls;
     private int rotationIndex;
+
+    private Tween positionAnimation;
     private Tween rotationAnimation;
 
 
@@ -77,8 +82,15 @@ public class BottlePiece : MonoBehaviour
         return boundsBoxCollider.bounds.center;
     }
 
-    internal void MoveTo(Vector3 candidatePosition)
+    internal void MoveTo(Vector3 newPosition, float time)
     {
-        transform.position = candidatePosition;
+        DOTweenUtils.CompleteTween(positionAnimation);
+        positionAnimation = transform.DOMove(newPosition, time);
+    }
+
+    internal void PreviewNextRotation(out Vector3 centerAfterRotation, out Vector3 halfExtentsAfterRotation)
+    {
+        centerAfterRotation = nextBoundsBoxCollider.bounds.center;
+        halfExtentsAfterRotation = nextBoundsBoxCollider.bounds.extents / 2f;
     }
 }

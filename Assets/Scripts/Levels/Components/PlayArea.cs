@@ -9,6 +9,8 @@ public class PlayArea : MonoBehaviour
 {
     private const float PLAY_AREA_WIDTH = 1.8f;
     private const float PLAY_AREA_DEPTH = 1.8f;
+    private static Vector3 POSITION_CENTER_OFFSET = new Vector3(BeerBottle.BOTTLE_HALF_WIDTH, 0f, BeerBottle.BOTTLE_HALF_WIDTH);
+
     [Header("Components")]
     [SerializeField]
     private BottlePiece bottlePiece;
@@ -45,47 +47,61 @@ public class PlayArea : MonoBehaviour
         pendingRotation = true;
     }
 
+    private void OnDpadPressed(CallbackContext context)
+    {
+        Vector2 input = context.ReadValue<Vector2>();
+        pendingInputs.Add(input);
+    }
+
     bool pendingRotation = false;
+    List<Vector2> pendingInputs = new List<Vector2>();
+
     IEnumerator HandleInputs()
     {
         while (true)
         {
             if (pendingRotation)
             {
+                bottlePiece.PreviewNextRotation(out Vector3 centerAfterRotation, out Vector3 halfExtentsAfterRotation);
+
+                if (IsPieceOutOfBounds(centerAfterRotation, halfExtentsAfterRotation, out Vector3 correctionOffset))
+                {
+                    bottlePiece.MoveTo(SnapPositionToGrid(bottlePiece.GetPosition() + correctionOffset), BottlePiece.ROTATION_TIME);
+                }
+
                 bottlePiece.Rotate();
                 yield return new WaitForSeconds(BottlePiece.ROTATION_TIME);
 
-                if (IsPieceOutOfBounds(bottlePiece.GetCenter(), bottlePiece.GetHalfExtents(), out Vector3 correctionOffset))
-                {
-                    bottlePiece.MoveTo(bottlePiece.GetPosition() + correctionOffset);
-                }
 
                 pendingRotation = false;
             }
+
+            while (pendingInputs.Count > 0)
+            {
+                Vector2 input = pendingInputs[0];
+                pendingInputs.RemoveAt(0);
+
+
+                if (input.x != 0)
+                {
+                    if (PieceCanBeMovedTo(bottlePiece, Vector3.right * Mathf.Sign(input.x), out Vector3 candidatePosition))
+                    {
+                        bottlePiece.MoveTo(SnapPositionToGrid(candidatePosition), BottlePiece.MOVEMENT_TIME);
+                        yield return new WaitForSeconds(BottlePiece.MOVEMENT_TIME);
+                    }
+                }
+
+                else if (input.y != 0)
+                {
+                    if (PieceCanBeMovedTo(bottlePiece, Vector3.forward * Mathf.Sign(input.y), out Vector3 candidatePosition))
+                    {
+                        bottlePiece.MoveTo(SnapPositionToGrid(candidatePosition), BottlePiece.MOVEMENT_TIME);
+                        yield return new WaitForSeconds(BottlePiece.MOVEMENT_TIME);
+                    }
+                }
+            }
             yield return new WaitForEndOfFrame();
         }
-    }
-
-    private void OnDpadPressed(CallbackContext context)
-    {
-        Vector2 input = context.ReadValue<Vector2>();
-
-        if (input.x != 0)
-        {
-            if (PieceCanBeMovedTo(bottlePiece, Vector3.right * input.x, out Vector3 candidatePosition))
-            {
-                bottlePiece.MoveTo(candidatePosition);
-            }
-        }
-
-        if (input.y != 0)
-        {
-            if (PieceCanBeMovedTo(bottlePiece, Vector3.forward * input.y, out Vector3 candidatePosition))
-            {
-                bottlePiece.MoveTo(candidatePosition);
-            }
-        }
-
     }
 
     private bool PieceCanBeMovedTo(BottlePiece bottlePiece, Vector3 direction, out Vector3 candidatePosition)
@@ -106,23 +122,32 @@ public class PlayArea : MonoBehaviour
     {
         correctionOffset = Vector3.zero;
 
-        if (pieceCenter.x + halfExtents.x > PLAY_AREA_WIDTH)
+        Vector3 centerOnPlayArea = transform.InverseTransformPoint(pieceCenter);
+
+        if (centerOnPlayArea.x + halfExtents.x > PLAY_AREA_WIDTH)
         {
             correctionOffset += Vector3.left * BeerBottle.BOTTLE_WIDTH;
         }
-        else if (pieceCenter.x - halfExtents.x < 0)
+        else if (centerOnPlayArea.x - halfExtents.x < 0)
         {
             correctionOffset += Vector3.right * BeerBottle.BOTTLE_WIDTH;
         }
-        if (pieceCenter.z + halfExtents.z > 0)
+        if (centerOnPlayArea.z + halfExtents.z > 0)
         {
             correctionOffset += Vector3.back * BeerBottle.BOTTLE_WIDTH;
         }
-        else if (pieceCenter.z - halfExtents.z < -PLAY_AREA_DEPTH)
+        else if (centerOnPlayArea.z - halfExtents.z < -PLAY_AREA_DEPTH)
         {
             correctionOffset += Vector3.forward * BeerBottle.BOTTLE_WIDTH;
         }
 
         return correctionOffset != Vector3.zero;
+    }
+
+    private Vector3 SnapPositionToGrid(Vector3 position)
+    {
+        Vector3 positionOnPlayArea = transform.InverseTransformPoint(position);
+        Vector3 snappedPosition = new Vector3(MathF.Floor(positionOnPlayArea.x / BeerBottle.BOTTLE_WIDTH) * BeerBottle.BOTTLE_WIDTH, positionOnPlayArea.y, Mathf.Floor(positionOnPlayArea.z / BeerBottle.BOTTLE_WIDTH) * BeerBottle.BOTTLE_WIDTH);
+        return transform.TransformPoint(snappedPosition + POSITION_CENTER_OFFSET);
     }
 }
