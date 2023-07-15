@@ -8,6 +8,9 @@ public class Level : MonoBehaviour
     public delegate void BeerBoxCompletedHandler();
     public static BeerBoxCompletedHandler BeerBoxCompleted;
 
+    public delegate void BeerBoxRuinedHandler();
+    public static BeerBoxRuinedHandler BeerBoxRuined;
+
     private const int ROWS_OF_BOXES = 2;
     private const int COLUMNS_OF_BOXES = 3;
 
@@ -25,22 +28,24 @@ public class Level : MonoBehaviour
     [SerializeField]
     private AnimationCurve beerBoxDestroyTimeProgression;
     [SerializeField]
+    private AnimationCurve beerBoxRuinTimeProgression;
+    [SerializeField]
     private AnimationCurve addBottleTimeProgression;
 
     private float difficulty;
     private float beerBoxSpawnTime;
     private float beerBoxDestroyTime;
+    private float beerBoxRuinTime;
     private float addBottleTime;
 
 
     private BeerBox[] beerBoxes;
-    List<BeerBox> fullBeerBoxes;
+
 
 
     private void Awake()
     {
         beerBoxes = new BeerBox[ROWS_OF_BOXES * COLUMNS_OF_BOXES];
-        fullBeerBoxes = new List<BeerBox>();
 
         for (int i = 0; i < COLUMNS_OF_BOXES; i++)
         {
@@ -81,13 +86,14 @@ public class Level : MonoBehaviour
         difficulty = newDifficulty;
         beerBoxSpawnTime = beerBoxSpawnTimeProgression.Evaluate(difficulty);
         beerBoxDestroyTime = beerBoxDestroyTimeProgression.Evaluate(difficulty);
+        beerBoxRuinTime = beerBoxRuinTimeProgression.Evaluate(difficulty);
         addBottleTime = addBottleTimeProgression.Evaluate(difficulty);
 
         foreach (BeerBox beerBox in beerBoxes)
         {
             if (beerBox != null)
             {
-                beerBox.UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime);
+                beerBox.UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime, beerBoxRuinTime);
             }
         }
     }
@@ -112,11 +118,18 @@ public class Level : MonoBehaviour
         return false;
     }
 
+
     private IEnumerator DropPieceAndSpawnNewOne(BottlePiece bottlePiece)
     {
         InputManager.PauseGameplayInputs(true);
 
+
         BeerBottle[] beerBottles = bottlePiece.GetBottles();
+        List<BeerBox> fullBeerBoxes = new List<BeerBox>();
+
+
+        IDictionary<BeerBox, int> beerBoxesToCollision = new Dictionary<BeerBox, int>();
+
         foreach (BeerBottle beerBottle in beerBottles)
         {
             if (TryGetBeerBox(beerBottle, out BeerBox beerBox))
@@ -134,6 +147,12 @@ public class Level : MonoBehaviour
                 else
                 {
                     Debug.Log("No empty space found in beer box. Remove a life");
+                    if (!beerBoxesToCollision.ContainsKey(beerBox))
+                    {
+                        beerBoxesToCollision[beerBox] = 0;
+                    }
+                    beerBoxesToCollision[beerBox]++;
+
                 }
             }
             else
@@ -144,6 +163,61 @@ public class Level : MonoBehaviour
         yield return new WaitForSeconds(addBottleTime);
 
         Destroy(bottlePiece.gameObject);
+
+        if (beerBoxesToCollision.Count > 0)
+        {
+
+            BeerBox highestCountBeerBox = null;
+            int highestCount = -1;
+
+            IDictionary<Vector3Int, Vector3> newBeerBoxIndexToSpawnDirection = new Dictionary<Vector3Int, Vector3>();
+
+            foreach (BeerBox beerBox in beerBoxesToCollision.Keys)
+            {
+                if (beerBoxesToCollision[beerBox] > highestCount)
+                {
+                    highestCountBeerBox = beerBox;
+                    highestCount = beerBoxesToCollision[beerBox];
+                }
+            }
+
+
+            for (int i = 0; i < beerBoxes.Length; i++)
+            {
+                if (beerBoxes[i] == highestCountBeerBox)
+                {
+                    int columnIndex = i % COLUMNS_OF_BOXES;
+                    int rowIndex = i / COLUMNS_OF_BOXES;
+
+                    Vector3 clearingBoxDirection = Vector3.back;
+                    if (rowIndex == 0)
+                    {
+                        clearingBoxDirection = Vector3.forward;
+                    }
+
+                    newBeerBoxIndexToSpawnDirection[new Vector3Int(i, columnIndex, rowIndex)] = -clearingBoxDirection;
+                    beerBoxes[i].RuinAndDestroy(clearingBoxDirection);
+                    beerBoxes[i] = null;
+                }
+            }
+
+            if (BeerBoxRuined != null)
+            {
+                BeerBoxRuined();
+            }
+            yield return new WaitForSeconds(beerBoxRuinTime);
+
+            foreach (Vector3Int beerBoxIndex in newBeerBoxIndexToSpawnDirection.Keys)
+            {
+                Vector3 boxPosition = new Vector3(beerBoxIndex.y * BeerBox.WIDTH, 0f, -beerBoxIndex.z * BeerBox.DEPTH);
+                beerBoxes[beerBoxIndex.x] = Instantiate<BeerBox>(beerBoxPrefab, boxPosition, Quaternion.identity, beerBoxesParent);
+                beerBoxes[beerBoxIndex.x].UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime, beerBoxRuinTime);
+                beerBoxes[beerBoxIndex.x].Spawn(newBeerBoxIndexToSpawnDirection[beerBoxIndex]);
+            }
+
+            yield return new WaitForSeconds(beerBoxSpawnTime);
+        }
+        beerBoxesToCollision.Clear();
 
         if (fullBeerBoxes.Count > 0)
         {
@@ -177,7 +251,7 @@ public class Level : MonoBehaviour
             {
                 Vector3 boxPosition = new Vector3(beerBoxIndex.y * BeerBox.WIDTH, 0f, -beerBoxIndex.z * BeerBox.DEPTH);
                 beerBoxes[beerBoxIndex.x] = Instantiate<BeerBox>(beerBoxPrefab, boxPosition, Quaternion.identity, beerBoxesParent);
-                beerBoxes[beerBoxIndex.x].UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime);
+                beerBoxes[beerBoxIndex.x].UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime, beerBoxRuinTime);
                 beerBoxes[beerBoxIndex.x].Spawn(newBeerBoxesIndexToSpawnDirection[beerBoxIndex]);
             }
 

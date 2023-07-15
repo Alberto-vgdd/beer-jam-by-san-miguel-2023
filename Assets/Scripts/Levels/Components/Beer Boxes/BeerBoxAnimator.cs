@@ -31,4 +31,26 @@ public class BeerBoxAnimator : MonoBehaviour
         positionAnimation = positionPivot.DOLocalMove(targetPosition, time);
         return positionAnimation;
     }
+
+    internal Tween RuinAnimation(float beerBoxRuinTime)
+    {
+        DOTweenUtils.CompleteTween(positionAnimation);
+
+        Vector3 randomRotation = new Vector3((UnityEngine.Random.value > 0.5) ? 5f : -5f, (UnityEngine.Random.value > 0.5) ? 6f : -6f, (UnityEngine.Random.value > 0.5) ? 4f : -4f);
+
+        return DOTween.Sequence()
+            .Append(
+                DOTween.Sequence()
+                .Append(scalePivot.DOPunchScale(new Vector3(0.8f, -0.6f, 0.8f), beerBoxRuinTime / 4f))
+                .Append(rotationPivot.DOLocalRotate(randomRotation, beerBoxRuinTime / 4f).SetEase(Ease.InOutBack))
+                .AppendInterval(beerBoxRuinTime / 4f)
+                .Append(scalePivot.DOScale(Vector3.zero, beerBoxRuinTime / 4f))
+            )
+            .Join(
+                DOTween.Sequence()
+                    .AppendInterval(beerBoxRuinTime / 4f)
+                    .Append(positionPivot.DOLocalJump(Vector3.zero, 0.8f, 1, 3f * beerBoxRuinTime / 4f))
+
+            );
+    }
 }

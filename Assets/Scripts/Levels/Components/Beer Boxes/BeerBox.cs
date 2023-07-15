@@ -29,6 +29,7 @@ public class BeerBox : MonoBehaviour
 
     private float beerBoxSpawnTime;
     private float beerBoxDestroyTime;
+    private float beerBoxRuinTime;
     private float addBottleTime;
 
 
@@ -110,10 +111,18 @@ public class BeerBox : MonoBehaviour
             .OnComplete(() => Destroy(this.gameObject));
     }
 
-    internal void UpdateProgressionTimes(float newBeerBoxSpawnTime, float newBeerBoxDestroyTime, float newAddBottleTime)
+    internal void UpdateProgressionTimes(float newBeerBoxSpawnTime, float newBeerBoxDestroyTime, float newAddBottleTime, float newBeerboxRuinTime)
     {
         beerBoxSpawnTime = newBeerBoxSpawnTime;
         beerBoxDestroyTime = newBeerBoxDestroyTime;
+        beerBoxRuinTime = newBeerboxRuinTime;
         addBottleTime = newAddBottleTime;
+    }
+
+    internal void RuinAndDestroy(Vector3 clearingBoxDirection)
+    {
+        DOTween.Sequence()
+             .Append(beerBoxAnimator.RuinAnimation(beerBoxRuinTime))
+             .OnComplete(() => Destroy(this.gameObject));
     }
 }
