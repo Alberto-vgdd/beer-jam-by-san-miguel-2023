@@ -48,7 +48,7 @@ public class DifficultyManager : MonoBehaviour
         if (currentCompletedBoxes >= completedBoxesToIncreaseDifficulty)
         {
             currentCompletedBoxes = 0;
-            difficulty = Mathf.Clamp01(difficulty + 0.025f);
+            difficulty = Mathf.Clamp01(difficulty + difficultyIncrease);
             OnDifficultyChanged();
         }
 

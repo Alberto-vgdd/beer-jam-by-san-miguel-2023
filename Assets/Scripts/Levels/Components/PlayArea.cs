@@ -9,7 +9,7 @@ using static UnityEngine.InputSystem.InputAction;
 public class PlayArea : MonoBehaviour
 {
     private const float PLAY_AREA_WIDTH = 1.8f;
-    private const float PLAY_AREA_DEPTH = 1.8f;
+    private const float PLAY_AREA_DEPTH = 2.7f;
     private const float START_HEIGHT = 2.1f;
     private static Vector3 START_PLANE_CENTER = new Vector3(PLAY_AREA_WIDTH / 2f, 0f, -PLAY_AREA_DEPTH / 2f);
     private static Vector3 POSITION_CENTER_OFFSET = new Vector3(BeerBottle.BOTTLE_HALF_WIDTH, 0f, BeerBottle.BOTTLE_HALF_WIDTH);
@@ -96,6 +96,10 @@ public class PlayArea : MonoBehaviour
         rotationTime = rotationTimeProgression.Evaluate(difficulty);
         heightChangeTime = heightChangeTimeProgression.Evaluate(difficulty);
 
+
+        linearGravity = (gravityTime < 0.5f);
+
+
         if (bottlePiece != null)
         {
             bottlePiece.SetPieceTimes(movementTime, rotationTime);
@@ -121,6 +125,7 @@ public class PlayArea : MonoBehaviour
 
     private void OnRotateButtonPressed(InputAction.CallbackContext context)
     {
+        rotationCooldwon = true;
         pendingRotation = true;
     }
 
@@ -141,6 +146,7 @@ public class PlayArea : MonoBehaviour
         {
             if (pendingRotation)
             {
+                pendingRotation = false;
                 bottlePiece.PreviewNextRotation(out Vector3 centerAfterRotation, out Vector3 halfExtentsAfterRotation);
 
                 if (IsPieceOutOfBounds(centerAfterRotation, halfExtentsAfterRotation, out Vector3 correctionOffset))
@@ -149,11 +155,12 @@ public class PlayArea : MonoBehaviour
                 }
 
                 bottlePiece.Rotate();
+
+
                 yield return new WaitForSeconds(bottlePiece.GetRotationTime());
 
-
-                pendingRotation = false;
             }
+
 
             while (pendingInputs.Count > 0)
             {
@@ -190,28 +197,55 @@ public class PlayArea : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
-
+    bool linearGravity = false;
+    bool rotationCooldwon = false;
     private IEnumerator HandleGravity()
     {
         while (true)
         {
             if (gravityEnabled)
             {
-                gravityTimer += Time.deltaTime;
-
-                if (gravityTimer >= gravityTime)
+                if (rotationCooldwon)
                 {
-                    gravityTimer = 0f;
+                    rotationCooldwon = false;
 
-                    if (currentHeight <= BeerBottle.BOTTLE_WIDTH)
+                    if (linearGravity)
                     {
-                        gravityEnabled = false;
-                        pendingDropPiece = true;
+                        yield return new WaitForSeconds(0.2f);
                     }
                     else
                     {
-                        currentHeight -= BeerBottle.BOTTLE_WIDTH;
-                        heightTransform.DOLocalMove(Vector3.up * currentHeight, heightChangeTime);
+                        gravityTimer = 0f;
+                    }
+                }
+                gravityTimer += Time.deltaTime;
+
+                if (linearGravity)
+                {
+                    heightTransform.localPosition = Vector3.Lerp(Vector3.up * START_HEIGHT, Vector3.up * 0.3f, gravityTimer / (gravityTime * 6f));
+                    if (gravityTimer >= gravityTime * 6f)
+                    {
+                        gravityTimer = 0f;
+                        gravityEnabled = false;
+                        pendingDropPiece = true;
+                    }
+                }
+                else
+                {
+                    if (gravityTimer >= gravityTime)
+                    {
+                        gravityTimer = 0f;
+
+                        if (currentHeight <= BeerBottle.BOTTLE_WIDTH)
+                        {
+                            gravityEnabled = false;
+                            pendingDropPiece = true;
+                        }
+                        else
+                        {
+                            currentHeight -= BeerBottle.BOTTLE_WIDTH;
+                            heightTransform.DOLocalMove(Vector3.up * currentHeight, heightChangeTime);
+                        }
                     }
                 }
             }
