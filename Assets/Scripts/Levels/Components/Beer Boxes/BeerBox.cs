@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class BeerBox : MonoBehaviour
 {
-    internal const float WIDTH = 0.9f;
+    internal const float WIDTH = 0.6f;
     internal const float DEPTH = 0.9f;
 
     internal const float BEER_BOX_SPAWN_TIME = 0.3f;
@@ -90,14 +90,6 @@ public class BeerBox : MonoBehaviour
         return true;
     }
 
-    internal void Clear()
-    {
-        foreach (BeerBottle beerBottle in coordinatesToBottle.Values)
-        {
-            Destroy(beerBottle.gameObject);
-        }
-        coordinatesToBottle.Clear();
-    }
 
     internal void Spawn(Vector3 spawnDirection)
     {
@@ -108,6 +100,7 @@ public class BeerBox : MonoBehaviour
     {
         DOTween.Sequence()
             .Append(beerBoxAnimator.MoveTo(clearingBoxDirection * DEPTH, beerBoxDestroyTime))
+            .AppendCallback(StopBeerBottlesAnimations)
             .OnComplete(() => Destroy(this.gameObject));
     }
 
@@ -123,6 +116,18 @@ public class BeerBox : MonoBehaviour
     {
         DOTween.Sequence()
              .Append(beerBoxAnimator.RuinAnimation(beerBoxRuinTime))
+             .AppendCallback(StopBeerBottlesAnimations)
              .OnComplete(() => Destroy(this.gameObject));
+    }
+
+    private void StopBeerBottlesAnimations()
+    {
+        foreach (BeerBottle beerBottle in coordinatesToBottle.Values)
+        {
+            if (beerBottle != null)
+            {
+                DOTweenUtils.CompleteTween(beerBottle.GetMoveToBoxAnimation());
+            }
+        }
     }
 }

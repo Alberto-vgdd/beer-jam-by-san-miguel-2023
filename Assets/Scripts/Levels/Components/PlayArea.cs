@@ -8,7 +8,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class PlayArea : MonoBehaviour
 {
-    private const float PLAY_AREA_WIDTH = 2.7f;
+    private const float PLAY_AREA_WIDTH = 1.8f;
     private const float PLAY_AREA_DEPTH = 1.8f;
     private const float START_HEIGHT = 2.1f;
     private static Vector3 START_PLANE_CENTER = new Vector3(PLAY_AREA_WIDTH / 2f, 0f, -PLAY_AREA_DEPTH / 2f);
@@ -42,7 +42,6 @@ public class PlayArea : MonoBehaviour
     private bool gravityEnabled = false;
     private float gravityTime;
     private float gravityTimer = 0f;
-
     private float difficulty;
     private float heightChangeTime;
     private float movementTime;
@@ -57,8 +56,6 @@ public class PlayArea : MonoBehaviour
 
     void Start()
     {
-        OnDifficultyChanged(0f);
-
         StartCoroutine(HandleInputs());
         StartCoroutine(HandleGravity());
     }
@@ -96,7 +93,7 @@ public class PlayArea : MonoBehaviour
         heightChangeTime = heightChangeTimeProgression.Evaluate(difficulty);
 
 
-        linearGravity = (gravityTime < 0.5f);
+        linearGravity = (gravityTime < 0.00f);
 
 
         if (bottlePiece != null)
@@ -155,7 +152,6 @@ public class PlayArea : MonoBehaviour
 
                 bottlePiece.Rotate();
 
-
                 yield return new WaitForSeconds(bottlePiece.GetRotationTime());
 
             }
@@ -204,20 +200,14 @@ public class PlayArea : MonoBehaviour
         {
             if (gravityEnabled)
             {
+                gravityTimer += Time.deltaTime;
+
                 if (rotationCooldwon)
                 {
                     rotationCooldwon = false;
 
-                    if (linearGravity)
-                    {
-                        yield return new WaitForSeconds(0.2f);
-                    }
-                    else
-                    {
-                        gravityTimer = 0f;
-                    }
+                    yield return new WaitForSeconds(0.2f);
                 }
-                gravityTimer += Time.deltaTime;
 
                 if (linearGravity)
                 {
@@ -320,7 +310,7 @@ public class PlayArea : MonoBehaviour
         gravityEnabled = true;
         currentHeight = START_HEIGHT;
         gravityTimer = 0f;
-        heightTransform.localPosition = Vector3.up * START_HEIGHT;
+        heightTransform.localPosition = Vector3.up * currentHeight;
     }
 
     private Vector3 WorldPositionToGridLocalPosition(Vector3 position)

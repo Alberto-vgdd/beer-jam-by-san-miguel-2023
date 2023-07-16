@@ -23,7 +23,6 @@ public class BottlePiece : MonoBehaviour
     private BoxCollider nextBoundsBoxCollider;
 
     private BeerBottle[] beerBottles;
-    private PlayerControls playerControls;
     private int rotationIndex;
 
     private Tween positionAnimation;
@@ -34,8 +33,7 @@ public class BottlePiece : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
-    void Awake()
+    internal void Initialise()
     {
         rotationIndex = 0;
         beerBottles = beerBottlesParent.GetComponentsInChildren<BeerBottle>();
@@ -44,9 +42,6 @@ public class BottlePiece : MonoBehaviour
         {
             beerBottle.EnableBoxCollider(false);
         }
-
-        playerControls = new PlayerControls();
-        playerControls.Enable();
     }
 
 
@@ -63,11 +58,11 @@ public class BottlePiece : MonoBehaviour
         Sequence rotationSequence = DOTween.Sequence();
         rotationSequence = rotationSequence.Append(rotationPivot.DOLocalRotate(ROTATIONS[rotationIndex], rotationTime));
 
-        foreach (BeerBottle beerBottle in beerBottles)
-        {
-            rotationSequence = rotationSequence.Join(beerBottle.transform.DORotate(Vector3.zero, rotationTime));
+        // foreach (BeerBottle beerBottle in beerBottles)
+        // {
+        //     rotationSequence = rotationSequence.Join(beerBottle.transform.DORotate(Vector3.zero, rotationTime));
 
-        }
+        // }
 
         rotationAnimation = rotationSequence;
 
@@ -144,5 +139,37 @@ public class BottlePiece : MonoBehaviour
     internal float GetRotationTime()
     {
         return rotationTime;
+    }
+
+    internal int GetNumberOfBottles()
+    {
+        return beerBottles.Length;
+    }
+
+    internal void SetBottlesVisuals(BottleVisuals[] bottlesVisuals)
+    {
+        for (int i = 0; i < beerBottles.Length; i++)
+        {
+            beerBottles[i].SetBottleVisuals(bottlesVisuals[i]);
+        }
+    }
+
+    internal IDictionary<Vector2Int, Sprite> GetPieceLocalCoordinatesToSprites()
+    {
+        IDictionary<Vector2Int, Sprite> localCoordinatesToSprites = new Dictionary<Vector2Int, Sprite>();
+        foreach (BeerBottle beerBottle in beerBottles)
+        {
+            localCoordinatesToSprites[GetLocalCoordinatesFromPoint(beerBottle.GetPosition())] = beerBottle.GetBottleVisualsSprite();
+        }
+        return localCoordinatesToSprites;
+    }
+
+
+    internal Vector2Int GetLocalCoordinatesFromPoint(Vector3 position)
+    {
+
+        Vector3 localPosition = transform.InverseTransformPoint(position);
+        Vector2Int localCoordinates = new Vector2Int(Mathf.RoundToInt((localPosition.x) / 0.3f), Mathf.RoundToInt((localPosition.z) / 0.3f));
+        return localCoordinates;
     }
 }

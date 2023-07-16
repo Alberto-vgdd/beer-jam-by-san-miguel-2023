@@ -8,6 +8,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6596411505182783900}
     m_Modifications:
+    - target: {fileID: 4711788927928933038, guid: e537a0bb0d8dc4dc986433d0b42c9b3c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7237387888890297439, guid: e537a0bb0d8dc4dc986433d0b42c9b3c,
         type: 3}
       propertyPath: m_RootOrder
@@ -87,6 +92,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6596411505182783900}
     m_Modifications:
+    - target: {fileID: 4711788927928933038, guid: e537a0bb0d8dc4dc986433d0b42c9b3c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7237387888890297439, guid: e537a0bb0d8dc4dc986433d0b42c9b3c,
         type: 3}
       propertyPath: m_RootOrder
@@ -166,6 +176,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6596411505182783900}
     m_Modifications:
+    - target: {fileID: 4711788927928933038, guid: e537a0bb0d8dc4dc986433d0b42c9b3c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7237387888890297439, guid: e537a0bb0d8dc4dc986433d0b42c9b3c,
         type: 3}
       propertyPath: m_RootOrder
@@ -298,7 +313,7 @@ PrefabInstance:
     - target: {fileID: 7135071431103326229, guid: 2a61cfd6272ed4741b369cee31109d7e,
         type: 3}
       propertyPath: m_Name
-      value: T Bottle Piece Variant
+      value: T Bottle Piece
       objectReference: {fileID: 0}
     - target: {fileID: 7211465796707727741, guid: 2a61cfd6272ed4741b369cee31109d7e,
         type: 3}
@@ -390,6 +405,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6596411505182783900}
     m_Modifications:
+    - target: {fileID: 4711788927928933038, guid: e537a0bb0d8dc4dc986433d0b42c9b3c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7237387888890297439, guid: e537a0bb0d8dc4dc986433d0b42c9b3c,
         type: 3}
       propertyPath: m_RootOrder

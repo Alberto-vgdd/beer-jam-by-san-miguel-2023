@@ -65,7 +65,7 @@ public class Level : MonoBehaviour
 
     void Start()
     {
-        playArea.SpawnNewPiece(Instantiate<BottlePiece>(PieceManager.Instance.GetRandomBottlePiece()));
+        playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece());
     }
 
 
@@ -260,7 +260,7 @@ public class Level : MonoBehaviour
         fullBeerBoxes.Clear();
 
 
-        playArea.SpawnNewPiece(Instantiate<BottlePiece>(PieceManager.Instance.GetRandomBottlePiece()));
+        playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece());
 
         InputManager.PauseGameplayInputs(false);
     }

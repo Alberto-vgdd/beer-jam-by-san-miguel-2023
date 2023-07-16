@@ -1,0 +1,45 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class NextPieceDisplay : MonoBehaviour
+{
+    private const float BOTTLE_VISUAL_SIZE = 100f;
+
+    [Header("Components")]
+    [SerializeField]
+    private Image[] bottleVisualsImages;
+    [SerializeField]
+    private RectTransform[] bottleVisualsRectTransforms;
+    [SerializeField]
+    private GameObject[] bottleVisualsGameObjects;
+    void OnEnable()
+    {
+        PieceManager.NextPieceChanged += OnNextPieceChanged;
+    }
+
+    void OnDisable()
+    {
+        PieceManager.NextPieceChanged -= OnNextPieceChanged;
+    }
+
+    private void OnNextPieceChanged(BottlePiece bottlePiece)
+    {
+        IDictionary<Vector2Int, Sprite> localCoordinatesToSprites = bottlePiece.GetPieceLocalCoordinatesToSprites();
+        foreach (GameObject bottleVisualGameObject in bottleVisualsGameObjects)
+        {
+            bottleVisualGameObject.SetActive(false);
+        }
+
+        int i = 0;
+        foreach (Vector2Int localCoordinate in localCoordinatesToSprites.Keys)
+        {
+            bottleVisualsGameObjects[i].SetActive(true);
+            bottleVisualsImages[i].sprite = localCoordinatesToSprites[localCoordinate];
+            bottleVisualsRectTransforms[i].anchoredPosition = new Vector2(localCoordinate.x, localCoordinate.y) * BOTTLE_VISUAL_SIZE;
+            i++;
+        }
+    }
+}
