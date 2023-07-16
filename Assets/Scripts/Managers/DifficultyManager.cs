@@ -16,6 +16,8 @@ public class DifficultyManager : MonoBehaviour
     private int completedBoxesToIncreaseDifficulty = 10;
     [SerializeField]
     private float difficultyIncrease = 0.1f;
+    [SerializeField]
+    private int[] boxesCompletedToScore;
 
 
     int currentCompletedBoxes = 0;
@@ -42,9 +44,9 @@ public class DifficultyManager : MonoBehaviour
         }
     }
 
-    private void OnBeerBoxCompleted()
+    private void OnBeerBoxCompleted(int boxesCompleted)
     {
-        currentCompletedBoxes++;
+        currentCompletedBoxes += boxesCompletedToScore[Mathf.Clamp(boxesCompleted, 1, boxesCompletedToScore.Length) - 1];
         if (currentCompletedBoxes >= completedBoxesToIncreaseDifficulty)
         {
             currentCompletedBoxes = 0;

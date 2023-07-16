@@ -131,7 +131,7 @@ TextureImporter:
         width: 387
         height: 347
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -152,7 +152,7 @@ TextureImporter:
         width: 361
         height: 345
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -173,7 +173,7 @@ TextureImporter:
         width: 559
         height: 303
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -194,7 +194,7 @@ TextureImporter:
         width: 678
         height: 501
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -202,27 +202,6 @@ TextureImporter:
       bones: []
       spriteID: 49678984c8ac04f729a3019f7ec198a2
       internalID: 838008405
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: bottle_visuals_sprite_sheet_4
-      rect:
-        serializedVersion: 2
-        x: 812
-        y: 1180
-        width: 17
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ad84c3d84a5af4fc39ba8caca2f6f7cd
-      internalID: -859540125
       vertices: []
       indices: 
       edges: []
@@ -236,7 +215,7 @@ TextureImporter:
         width: 603
         height: 333
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -252,12 +231,12 @@ TextureImporter:
       name: bottle_visuals_sprite_sheet_6
       rect:
         serializedVersion: 2
-        x: 31
-        y: 983
-        width: 65
-        height: 49
+        x: 357
+        y: 196
+        width: 281
+        height: 617
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -265,69 +244,6 @@ TextureImporter:
       bones: []
       spriteID: 5a7230d2f0c0e464899be5006f0d4a75
       internalID: 1696885440
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: bottle_visuals_sprite_sheet_7
-      rect:
-        serializedVersion: 2
-        x: 91
-        y: 1023
-        width: 14
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2f6bdd8eaeb9e4ba6a2a8120d6ba1481
-      internalID: 2043240611
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: bottle_visuals_sprite_sheet_8
-      rect:
-        serializedVersion: 2
-        x: 114
-        y: 1025
-        width: 7
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 04d911817ae0a49e0afcb1b6b5be1773
-      internalID: -846911484
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: bottle_visuals_sprite_sheet_9
-      rect:
-        serializedVersion: 2
-        x: 67
-        y: 852
-        width: 51
-        height: 52
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 951aee07f02124a62871d7fcbeed19b2
-      internalID: -592157205
       vertices: []
       indices: 
       edges: []
@@ -341,7 +257,7 @@ TextureImporter:
         width: 525
         height: 374
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

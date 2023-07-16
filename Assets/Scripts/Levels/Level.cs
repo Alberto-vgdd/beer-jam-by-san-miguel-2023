@@ -2,11 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Level : MonoBehaviour
 {
-    public delegate void BeerBoxCompletedHandler();
+    public delegate void BeerBoxCompletedHandler(int boxesCompleted);
     public static BeerBoxCompletedHandler BeerBoxCompleted;
+
+    public delegate void BellRingedHandler(int boxesCompleted, float boxCompletedTime);
+    public BellRingedHandler BellRinged;
 
     public delegate void BeerBoxRuinedHandler();
     public static BeerBoxRuinedHandler BeerBoxRuined;
@@ -32,6 +36,13 @@ public class Level : MonoBehaviour
     [SerializeField]
     private AnimationCurve addBottleTimeProgression;
 
+
+    [Header("Audio Sources")]
+    [SerializeField]
+    private AudioSource boxRuinedAudioSource;
+    [SerializeField]
+    private AudioSource boxSpawnedAudioSource;
+
     private float difficulty;
     private float beerBoxSpawnTime;
     private float beerBoxDestroyTime;
@@ -40,8 +51,6 @@ public class Level : MonoBehaviour
 
 
     private BeerBox[] beerBoxes;
-
-
 
     private void Awake()
     {
@@ -186,6 +195,10 @@ public class Level : MonoBehaviour
             {
                 if (beerBoxes[i] == highestCountBeerBox)
                 {
+                    if (fullBeerBoxes.Contains(highestCountBeerBox))
+                    {
+                        fullBeerBoxes.Remove(highestCountBeerBox);
+                    }
                     int columnIndex = i % COLUMNS_OF_BOXES;
                     int rowIndex = i / COLUMNS_OF_BOXES;
 
@@ -205,6 +218,8 @@ public class Level : MonoBehaviour
             {
                 BeerBoxRuined();
             }
+            boxRuinedAudioSource.pitch = Random.Range(0.95f, 1.05f);
+            boxRuinedAudioSource.Play();
             yield return new WaitForSeconds(beerBoxRuinTime);
 
             foreach (Vector3Int beerBoxIndex in newBeerBoxIndexToSpawnDirection.Keys)
@@ -221,6 +236,11 @@ public class Level : MonoBehaviour
 
         if (fullBeerBoxes.Count > 0)
         {
+            if (BellRinged != null)
+            {
+                BellRinged(fullBeerBoxes.Count, beerBoxDestroyTime);
+            }
+
             IDictionary<Vector3Int, Vector3> newBeerBoxesIndexToSpawnDirection = new Dictionary<Vector3Int, Vector3>();
             for (int i = 0; i < beerBoxes.Length; i++)
             {
@@ -238,14 +258,15 @@ public class Level : MonoBehaviour
                     newBeerBoxesIndexToSpawnDirection[new Vector3Int(i, columnIndex, rowIndex)] = -clearingBoxDirection;
                     beerBoxes[i].CompleteAndDestroy(clearingBoxDirection);
                     beerBoxes[i] = null;
+
+                    yield return new WaitForSeconds(beerBoxDestroyTime);
                 }
             }
 
             if (BeerBoxCompleted != null)
             {
-                BeerBoxCompleted();
+                BeerBoxCompleted(fullBeerBoxes.Count);
             }
-            yield return new WaitForSeconds(beerBoxDestroyTime);
 
             foreach (Vector3Int beerBoxIndex in newBeerBoxesIndexToSpawnDirection.Keys)
             {
@@ -254,7 +275,8 @@ public class Level : MonoBehaviour
                 beerBoxes[beerBoxIndex.x].UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime, beerBoxRuinTime);
                 beerBoxes[beerBoxIndex.x].Spawn(newBeerBoxesIndexToSpawnDirection[beerBoxIndex]);
             }
-
+            boxSpawnedAudioSource.pitch = Random.Range(0.95f, 1.05f);
+            boxSpawnedAudioSource.Play();
             yield return new WaitForSeconds(beerBoxSpawnTime);
         }
         fullBeerBoxes.Clear();

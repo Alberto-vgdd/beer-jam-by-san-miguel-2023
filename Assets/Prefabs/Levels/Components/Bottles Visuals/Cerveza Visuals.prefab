@@ -96,12 +96,12 @@ PrefabInstance:
         type: 3}
       propertyPath: sprite
       value: 
-      objectReference: {fileID: -35579601, guid: ad4e584e6fdca47a8abb3f36819fcdb5,
+      objectReference: {fileID: 1696885440, guid: ad4e584e6fdca47a8abb3f36819fcdb5,
         type: 3}
     - target: {fileID: 5192118786267702669, guid: 0e838a305144a4eb285aaa865daceee6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5192118786267702669, guid: 0e838a305144a4eb285aaa865daceee6,
         type: 3}
@@ -156,7 +156,7 @@ PrefabInstance:
     - target: {fileID: 7142842923689711718, guid: 0e838a305144a4eb285aaa865daceee6,
         type: 3}
       propertyPath: m_Name
-      value: Cerveza Visuals Variant
+      value: Cerveza Visuals
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

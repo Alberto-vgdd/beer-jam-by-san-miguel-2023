@@ -10,6 +10,8 @@ public class NextPieceDisplay : MonoBehaviour
 
     [Header("Components")]
     [SerializeField]
+    private RectTransform visualsParent;
+    [SerializeField]
     private Image[] bottleVisualsImages;
     [SerializeField]
     private RectTransform[] bottleVisualsRectTransforms;
@@ -34,12 +36,18 @@ public class NextPieceDisplay : MonoBehaviour
         }
 
         int i = 0;
+
+        Vector2 totalAnchoredPosition = Vector2.zero;
         foreach (Vector2Int localCoordinate in localCoordinatesToSprites.Keys)
         {
             bottleVisualsGameObjects[i].SetActive(true);
             bottleVisualsImages[i].sprite = localCoordinatesToSprites[localCoordinate];
             bottleVisualsRectTransforms[i].anchoredPosition = new Vector2(localCoordinate.x, localCoordinate.y) * BOTTLE_VISUAL_SIZE;
+            totalAnchoredPosition += bottleVisualsRectTransforms[i].anchoredPosition;
             i++;
         }
+
+        totalAnchoredPosition /= localCoordinatesToSprites.Keys.Count;
+        visualsParent.anchoredPosition = -totalAnchoredPosition;
     }
 }

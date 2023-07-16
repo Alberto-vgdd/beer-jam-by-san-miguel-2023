@@ -5,6 +5,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
+using Random = UnityEngine.Random;
 
 public class PlayArea : MonoBehaviour
 {
@@ -34,6 +35,12 @@ public class PlayArea : MonoBehaviour
     [SerializeField]
     private AnimationCurve movementTimeProgression;
 
+
+    [Header("Audio Sources")]
+    [SerializeField]
+    private AudioSource pieceRotatedAudioSource;
+    [SerializeField]
+    private AudioSource piecePlacedAudioSource;
 
     private BottlePiece bottlePiece;
     private PlayerControls playerControls;
@@ -152,6 +159,9 @@ public class PlayArea : MonoBehaviour
 
                 bottlePiece.Rotate();
 
+
+                pieceRotatedAudioSource.pitch = Random.Range(0.95f, 1.05f);
+                pieceRotatedAudioSource.Play();
                 yield return new WaitForSeconds(bottlePiece.GetRotationTime());
 
             }
@@ -298,6 +308,8 @@ public class PlayArea : MonoBehaviour
             bottlePiece = null;
             gravityEnabled = false;
             PieceDropped(droppedPiece);
+            piecePlacedAudioSource.pitch = Random.Range(0.95f, 1.05f);
+            piecePlacedAudioSource.Play();
         }
     }
 
