@@ -222,6 +222,45 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Navigation"",
+            ""id"": ""64e47d00-66be-4e3d-86c4-9a3c8a104ffa"",
+            ""actions"": [
+                {
+                    ""name"": ""Exit Game"",
+                    ""type"": ""Button"",
+                    ""id"": ""d808a669-8e6e-466f-8b89-25a1f79eb621"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""9f597f9b-11f4-42f6-bae5-ac268b6a7dae"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse and Keyboard"",
+                    ""action"": ""Exit Game"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1353d951-1d5c-40f7-be05-04a29ac32979"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Exit Game"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -259,6 +298,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Gameplay_Rotate = m_Gameplay.FindAction("Rotate", throwIfNotFound: true);
         m_Gameplay_Movement = m_Gameplay.FindAction("Movement", throwIfNotFound: true);
         m_Gameplay_DropPiece = m_Gameplay.FindAction("Drop Piece", throwIfNotFound: true);
+        // Navigation
+        m_Navigation = asset.FindActionMap("Navigation", throwIfNotFound: true);
+        m_Navigation_ExitGame = m_Navigation.FindAction("Exit Game", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -378,6 +420,52 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
     }
     public GameplayActions @Gameplay => new GameplayActions(this);
+
+    // Navigation
+    private readonly InputActionMap m_Navigation;
+    private List<INavigationActions> m_NavigationActionsCallbackInterfaces = new List<INavigationActions>();
+    private readonly InputAction m_Navigation_ExitGame;
+    public struct NavigationActions
+    {
+        private @PlayerControls m_Wrapper;
+        public NavigationActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ExitGame => m_Wrapper.m_Navigation_ExitGame;
+        public InputActionMap Get() { return m_Wrapper.m_Navigation; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(NavigationActions set) { return set.Get(); }
+        public void AddCallbacks(INavigationActions instance)
+        {
+            if (instance == null || m_Wrapper.m_NavigationActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_NavigationActionsCallbackInterfaces.Add(instance);
+            @ExitGame.started += instance.OnExitGame;
+            @ExitGame.performed += instance.OnExitGame;
+            @ExitGame.canceled += instance.OnExitGame;
+        }
+
+        private void UnregisterCallbacks(INavigationActions instance)
+        {
+            @ExitGame.started -= instance.OnExitGame;
+            @ExitGame.performed -= instance.OnExitGame;
+            @ExitGame.canceled -= instance.OnExitGame;
+        }
+
+        public void RemoveCallbacks(INavigationActions instance)
+        {
+            if (m_Wrapper.m_NavigationActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(INavigationActions instance)
+        {
+            foreach (var item in m_Wrapper.m_NavigationActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_NavigationActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public NavigationActions @Navigation => new NavigationActions(this);
     private int m_GamepadSchemeIndex = -1;
     public InputControlScheme GamepadScheme
     {
@@ -401,5 +489,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnRotate(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
         void OnDropPiece(InputAction.CallbackContext context);
+    }
+    public interface INavigationActions
+    {
+        void OnExitGame(InputAction.CallbackContext context);
     }
 }
