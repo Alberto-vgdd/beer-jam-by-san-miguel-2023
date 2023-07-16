@@ -9,9 +9,13 @@ public class GameManager : Singleton<GameManager>
     [Header("Components")]
     [SerializeField]
     private UIManager uIManager;
-
+    [SerializeField]
+    private DifficultyManager difficultyManager;
 
     private PlayerControls playerControls;
+
+    [SerializeField]
+    private Level level;
 
     protected override void Awake()
     {
@@ -19,12 +23,15 @@ public class GameManager : Singleton<GameManager>
 
         playerControls = new PlayerControls();
         playerControls.Enable();
+    }
 
+    void Start()
+    {
+        uIManager.ShowTitleScreen();
     }
 
     void OnEnable()
     {
-        DifficultyManager.GameOver += OnGameOver;
         playerControls.Navigation.ExitGame.performed += OnExitGameButtonPressed;
     }
 
@@ -35,13 +42,22 @@ public class GameManager : Singleton<GameManager>
 
     private void OnGameOver(int newScore)
     {
+        InputManager.PauseGameplayInputs(true);
         DifficultyManager.GameOver -= OnGameOver;
         uIManager.ShowGameOverScreen(newScore);
+        level.StopGame();
+
+
     }
 
     public void StartNewGame()
     {
+        uIManager.ShowGameplayScreen();
+        level.StartGame();
+        difficultyManager.ResetProgress();
+        InputManager.PauseGameplayInputs(false);
 
+        DifficultyManager.GameOver += OnGameOver;
     }
 
     private void OnExitGameButtonPressed(InputAction.CallbackContext context)

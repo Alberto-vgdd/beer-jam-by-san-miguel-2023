@@ -11,7 +11,7 @@ public class PlayArea : MonoBehaviour
 {
     private const float PLAY_AREA_WIDTH = 1.8f;
     private const float PLAY_AREA_DEPTH = 1.8f;
-    private const float START_HEIGHT = 2.1f;
+    private const float START_HEIGHT = 1.8f;
     private static Vector3 START_PLANE_CENTER = new Vector3(PLAY_AREA_WIDTH / 2f, 0f, -PLAY_AREA_DEPTH / 2f);
     private static Vector3 POSITION_CENTER_OFFSET = new Vector3(BeerBottle.BOTTLE_HALF_WIDTH, 0f, BeerBottle.BOTTLE_HALF_WIDTH);
 
@@ -58,36 +58,10 @@ public class PlayArea : MonoBehaviour
     void Awake()
     {
         playerControls = new PlayerControls();
-        playerControls.Enable();
-    }
-
-    void Start()
-    {
-        StartCoroutine(HandleInputs());
-        StartCoroutine(HandleGravity());
     }
 
 
-    void OnEnable()
-    {
-        playerControls.Gameplay.Movement.performed += OnDpadPressed;
-        playerControls.Gameplay.Rotate.performed += OnRotateButtonPressed;
-        playerControls.Gameplay.DropPiece.performed += OnDropPieceButtonPressed;
 
-        DifficultyManager.DifficultyChanged += OnDifficultyChanged;
-        InputManager.InputEnabled += OnInputsEnabled;
-    }
-
-    void OnDisable()
-    {
-        playerControls.Gameplay.Movement.performed -= OnDpadPressed;
-        playerControls.Gameplay.Rotate.performed -= OnRotateButtonPressed;
-        playerControls.Gameplay.DropPiece.performed -= OnDropPieceButtonPressed;
-
-        DifficultyManager.DifficultyChanged -= OnDifficultyChanged;
-        InputManager.InputEnabled -= OnInputsEnabled;
-
-    }
 
 
     private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
@@ -332,5 +306,41 @@ public class PlayArea : MonoBehaviour
         return snappedPosition + POSITION_CENTER_OFFSET;
     }
 
+    internal void ClearPlayArea()
+    {
+        StopAllCoroutines();
+
+        playerControls.Disable();
+        playerControls.Gameplay.Movement.performed -= OnDpadPressed;
+        playerControls.Gameplay.Rotate.performed -= OnRotateButtonPressed;
+        playerControls.Gameplay.DropPiece.performed -= OnDropPieceButtonPressed;
+
+        DifficultyManager.DifficultyChanged -= OnDifficultyChanged;
+        InputManager.InputEnabled -= OnInputsEnabled;
+
+        if (bottlePiece != null)
+        {
+            Destroy(bottlePiece.gameObject);
+        }
+
+        gravityEnabled = true;
+        currentHeight = START_HEIGHT;
+        gravityTimer = 0f;
+        heightTransform.localPosition = Vector3.up * currentHeight;
+    }
+
+    internal void StartPlayArea()
+    {
+        playerControls.Enable();
+        playerControls.Gameplay.Movement.performed += OnDpadPressed;
+        playerControls.Gameplay.Rotate.performed += OnRotateButtonPressed;
+        playerControls.Gameplay.DropPiece.performed += OnDropPieceButtonPressed;
+
+        DifficultyManager.DifficultyChanged += OnDifficultyChanged;
+        InputManager.InputEnabled += OnInputsEnabled;
+
+        StartCoroutine(HandleInputs());
+        StartCoroutine(HandleGravity());
+    }
 
 }

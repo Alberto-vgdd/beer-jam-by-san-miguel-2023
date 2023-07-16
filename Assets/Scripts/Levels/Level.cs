@@ -52,8 +52,19 @@ public class Level : MonoBehaviour
 
     private BeerBox[] beerBoxes;
 
-    private void Awake()
+    private void InitliasiseBeerBoxes()
     {
+        if (beerBoxes != null)
+        {
+            for (int i = 0; i < beerBoxes.Length; i++)
+            {
+                if (beerBoxes[i] != null)
+                {
+                    Destroy(beerBoxes[i].gameObject);
+
+                }
+            }
+        }
         beerBoxes = new BeerBox[ROWS_OF_BOXES * COLUMNS_OF_BOXES];
 
         for (int i = 0; i < COLUMNS_OF_BOXES; i++)
@@ -70,24 +81,6 @@ public class Level : MonoBehaviour
                 beerBoxes[j * COLUMNS_OF_BOXES + i].Spawn(spawnDirection);
             }
         }
-    }
-
-    void Start()
-    {
-        playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece());
-    }
-
-
-    void OnEnable()
-    {
-        playArea.PieceDropped += OnPieceDropped;
-        DifficultyManager.DifficultyChanged += OnDifficultyChanged;
-    }
-
-    void OnDisable()
-    {
-        playArea.PieceDropped -= OnPieceDropped;
-        DifficultyManager.DifficultyChanged -= OnDifficultyChanged;
     }
 
     private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
@@ -285,5 +278,24 @@ public class Level : MonoBehaviour
         playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece());
 
         InputManager.PauseGameplayInputs(false);
+    }
+
+    internal void StartGame()
+    {
+        StopAllCoroutines();
+
+        InitliasiseBeerBoxes();
+        playArea.PieceDropped += OnPieceDropped;
+        DifficultyManager.DifficultyChanged += OnDifficultyChanged;
+        playArea.ClearPlayArea();
+        playArea.StartPlayArea();
+        playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece());
+    }
+
+    internal void StopGame()
+    {
+        StopAllCoroutines();
+        playArea.PieceDropped -= OnPieceDropped;
+        DifficultyManager.DifficultyChanged -= OnDifficultyChanged;
     }
 }

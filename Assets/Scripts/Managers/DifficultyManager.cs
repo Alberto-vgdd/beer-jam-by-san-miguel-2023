@@ -43,11 +43,6 @@ public class DifficultyManager : MonoBehaviour
     int livesLeft = 3;
 
 
-    void Start()
-    {
-        OnLevelChanged();
-    }
-
     void OnEnable()
     {
         Level.BeerBoxCompleted += OnBeerBoxCompleted;
@@ -115,6 +110,7 @@ public class DifficultyManager : MonoBehaviour
 
     private void OnBeerBoxRuined()
     {
+        CameraManager.ShakeCamera(0.2f, 0.15f, 2);
         livesLeft = Mathf.Max(0, livesLeft - 1);
 
         if (LifesLeftChanged != null)
@@ -126,5 +122,15 @@ public class DifficultyManager : MonoBehaviour
         {
             GameOver(totalScore);
         }
+    }
+
+    internal void ResetProgress()
+    {
+        difficulty = 0;
+        completedBoxes = 0;
+        objectiveCompletedBoxes = 0;
+        totalScore = 0;
+        livesLeft = 3;
+        OnLevelChanged();
     }
 }
