@@ -90,7 +90,7 @@ public class Level : MonoBehaviour
         DifficultyManager.DifficultyChanged -= OnDifficultyChanged;
     }
 
-    private void OnDifficultyChanged(float newDifficulty)
+    private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
     {
         difficulty = newDifficulty;
         beerBoxSpawnTime = beerBoxSpawnTimeProgression.Evaluate(difficulty);

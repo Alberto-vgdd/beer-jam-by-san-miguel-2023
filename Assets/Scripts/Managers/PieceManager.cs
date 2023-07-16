@@ -31,7 +31,7 @@ public class PieceManager : Singleton<PieceManager>
         DifficultyManager.DifficultyChanged -= OnDifficultyChanged;
     }
 
-    private void OnDifficultyChanged(float newDifficulty)
+    private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
     {
         difficulty = newDifficulty;
     }

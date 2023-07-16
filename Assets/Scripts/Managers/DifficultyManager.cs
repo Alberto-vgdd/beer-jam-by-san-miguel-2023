@@ -5,25 +5,31 @@ using UnityEngine;
 
 public class DifficultyManager : MonoBehaviour
 {
-    public delegate void DifficultyChangedHandler(float newDifficulty);
+    public delegate void DifficultyChangedHandler(float newDifficulty, int newDisplayLevelNumber);
     public static DifficultyChangedHandler DifficultyChanged;
+
+    public delegate void BoxesCompletedLeftChangedHandler(int newBoxesCompletedLeft);
+    public static BoxesCompletedLeftChangedHandler BoxesCompletedLeftChanged;
 
     [Header("Parameters")]
     [SerializeField]
-    [Range(0f, 1f)]
+    [Range(0, 9)]
+    private int levelNumber = 0;
+    [SerializeField]
+    private int[] levelToObjectiveBoxesCount = new int[10];
+    [SerializeField]
+    private int[] boxesCompletedToMultiplier;
+    private float difficultyIncrease = 1 / 9f;
+
+
+
     private float difficulty;
-    [SerializeField]
-    private int completedBoxesToIncreaseDifficulty = 10;
-    [SerializeField]
-    private float difficultyIncrease = 0.1f;
-    [SerializeField]
-    private int[] boxesCompletedToScore;
+    int completedBoxes = 0;
+    int objectiveCompletedBoxes = 0;
 
-
-    int currentCompletedBoxes = 0;
     void Start()
     {
-        OnDifficultyChanged();
+        OnLevelChanged();
     }
 
     void OnEnable()
@@ -36,22 +42,35 @@ public class DifficultyManager : MonoBehaviour
         Level.BeerBoxCompleted -= OnBeerBoxCompleted;
     }
 
-    private void OnDifficultyChanged()
+    private void OnLevelChanged()
     {
+        completedBoxes = 0;
+        objectiveCompletedBoxes = levelToObjectiveBoxesCount[levelNumber];
+        difficulty = difficultyIncrease * levelNumber;
         if (DifficultyChanged != null)
         {
-            DifficultyChanged(difficulty);
+            DifficultyChanged(difficulty, levelNumber + 1);
+        }
+
+        if (BoxesCompletedLeftChanged != null)
+        {
+            BoxesCompletedLeftChanged(objectiveCompletedBoxes);
         }
     }
 
     private void OnBeerBoxCompleted(int boxesCompleted)
     {
-        currentCompletedBoxes += boxesCompletedToScore[Mathf.Clamp(boxesCompleted, 1, boxesCompletedToScore.Length) - 1];
-        if (currentCompletedBoxes >= completedBoxesToIncreaseDifficulty)
+        completedBoxes += boxesCompletedToMultiplier[Mathf.Clamp(boxesCompleted, 1, boxesCompletedToMultiplier.Length) - 1];
+
+        if (BoxesCompletedLeftChanged != null)
         {
-            currentCompletedBoxes = 0;
-            difficulty = Mathf.Clamp01(difficulty + difficultyIncrease);
-            OnDifficultyChanged();
+            BoxesCompletedLeftChanged(Mathf.Max(0, objectiveCompletedBoxes - completedBoxes));
+        }
+
+        if (completedBoxes >= objectiveCompletedBoxes && levelNumber < 9)
+        {
+            levelNumber++;
+            OnLevelChanged();
         }
 
     }

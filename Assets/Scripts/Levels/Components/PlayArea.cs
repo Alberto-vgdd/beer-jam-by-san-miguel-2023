@@ -90,7 +90,7 @@ public class PlayArea : MonoBehaviour
     }
 
 
-    private void OnDifficultyChanged(float newDifficulty)
+    private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
     {
         difficulty = newDifficulty;
 

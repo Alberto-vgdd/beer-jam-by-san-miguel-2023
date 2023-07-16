@@ -2829,10 +2829,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daea18aed946b4f07a0d6b597a059712, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficulty: 0
-  completedBoxesToIncreaseDifficulty: 6
-  difficultyIncrease: 0.15
-  boxesCompletedToScore: 0100000003000000060000000a000000
+  levelNumber: 0
+  levelToObjectiveBoxesCount: 03000000050000000a0000000c00000012000000180000001e000000200000002400000028000000
+  boxesCompletedToMultiplier: 0100000003000000050000000a000000
 --- !u!224 &878721197 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6021234213375489239, guid: 97034dfc0b43e4ecf8f1d2802e3b9bb1,
