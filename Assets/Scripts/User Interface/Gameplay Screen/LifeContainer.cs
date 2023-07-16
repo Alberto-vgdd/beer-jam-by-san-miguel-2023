@@ -28,12 +28,13 @@ public class LifeContainer : MonoBehaviour
             isLifeUsed = true;
             DOTweenUtils.CompleteTween(lifeAnimation);
             lifeAnimation = DOTween.Sequence()
+                .AppendInterval(0.4f)
                .AppendCallback(() =>
                {
                    usedLife.SetActive(isLifeUsed);
                    unusedLife.SetActive(!isLifeUsed);
                })
-               .Append(animationPivot.DOPunchScale(Vector3.one * -0.4f, 0.2f, 5, 0.2f));
+               .Append(animationPivot.DOPunchScale(Vector3.one * -0.5f, 0.4f, 10, 0.6f).SetEase(Ease.InOutBack));
         }
 
     }
@@ -45,12 +46,13 @@ public class LifeContainer : MonoBehaviour
             isLifeUsed = false;
             DOTweenUtils.CompleteTween(lifeAnimation);
             lifeAnimation = DOTween.Sequence()
+                .AppendInterval(0.4f)
                 .AppendCallback(() =>
                 {
                     usedLife.SetActive(isLifeUsed);
                     unusedLife.SetActive(!isLifeUsed);
                 })
-                .Append(animationPivot.DOPunchScale(Vector3.one * 0.4f, 0.2f, 5, 0.2f));
+                .Append(animationPivot.DOPunchScale(Vector3.one * 0.4f, 0.4f, 5, 0.2f).SetEase(Ease.InOutBack));
         }
 
     }

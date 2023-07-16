@@ -11,6 +11,18 @@ public class DifficultyManager : MonoBehaviour
     public delegate void BoxesCompletedLeftChangedHandler(int newBoxesCompletedLeft);
     public static BoxesCompletedLeftChangedHandler BoxesCompletedLeftChanged;
 
+    public delegate void ScoreChangedHandler(int newScore);
+    public static ScoreChangedHandler ScoreChanged;
+
+    public delegate void LifesLeftChangedHandler(int newLifesLefts);
+    public static LifesLeftChangedHandler LifesLeftChanged;
+
+
+    public delegate void GameOverHandler(int newScore);
+    public static GameOverHandler GameOver;
+
+    private const int MAX_LIVES = 3;
+
     [Header("Parameters")]
     [SerializeField]
     [Range(0, 9)]
@@ -20,12 +32,16 @@ public class DifficultyManager : MonoBehaviour
     [SerializeField]
     private int[] boxesCompletedToMultiplier;
     private float difficultyIncrease = 1 / 9f;
+    private int scorePerBoxCompleted = 100;
 
 
 
-    private float difficulty;
+    private float difficulty = 0;
     int completedBoxes = 0;
     int objectiveCompletedBoxes = 0;
+    int totalScore = 0;
+    int livesLeft = 3;
+
 
     void Start()
     {
@@ -35,11 +51,13 @@ public class DifficultyManager : MonoBehaviour
     void OnEnable()
     {
         Level.BeerBoxCompleted += OnBeerBoxCompleted;
+        Level.BeerBoxRuined += OnBeerBoxRuined;
     }
 
     void OnDisable()
     {
         Level.BeerBoxCompleted -= OnBeerBoxCompleted;
+        Level.BeerBoxRuined -= OnBeerBoxRuined;
     }
 
     private void OnLevelChanged()
@@ -47,6 +65,9 @@ public class DifficultyManager : MonoBehaviour
         completedBoxes = 0;
         objectiveCompletedBoxes = levelToObjectiveBoxesCount[levelNumber];
         difficulty = difficultyIncrease * levelNumber;
+        livesLeft = Mathf.Min(MAX_LIVES, livesLeft + 1);
+
+
         if (DifficultyChanged != null)
         {
             DifficultyChanged(difficulty, levelNumber + 1);
@@ -56,15 +77,32 @@ public class DifficultyManager : MonoBehaviour
         {
             BoxesCompletedLeftChanged(objectiveCompletedBoxes);
         }
+
+        if (ScoreChanged != null)
+        {
+            ScoreChanged(totalScore);
+        }
+
+        if (LifesLeftChanged != null)
+        {
+            LifesLeftChanged(livesLeft);
+        }
     }
 
-    private void OnBeerBoxCompleted(int boxesCompleted)
+    private void OnBeerBoxCompleted(int newBoxesCompleted)
     {
-        completedBoxes += boxesCompletedToMultiplier[Mathf.Clamp(boxesCompleted, 1, boxesCompletedToMultiplier.Length) - 1];
+        int boxesCompleted = boxesCompletedToMultiplier[Mathf.Clamp(newBoxesCompleted, 1, boxesCompletedToMultiplier.Length) - 1];
+        completedBoxes += boxesCompleted;
+        totalScore += boxesCompleted * scorePerBoxCompleted;
 
         if (BoxesCompletedLeftChanged != null)
         {
             BoxesCompletedLeftChanged(Mathf.Max(0, objectiveCompletedBoxes - completedBoxes));
+        }
+
+        if (ScoreChanged != null)
+        {
+            ScoreChanged(totalScore);
         }
 
         if (completedBoxes >= objectiveCompletedBoxes && levelNumber < 9)
@@ -73,5 +111,20 @@ public class DifficultyManager : MonoBehaviour
             OnLevelChanged();
         }
 
+    }
+
+    private void OnBeerBoxRuined()
+    {
+        livesLeft = Mathf.Max(0, livesLeft - 1);
+
+        if (LifesLeftChanged != null)
+        {
+            LifesLeftChanged(livesLeft);
+        }
+
+        if (livesLeft <= 0 && GameOver != null)
+        {
+            GameOver(totalScore);
+        }
     }
 }
