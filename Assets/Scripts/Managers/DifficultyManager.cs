@@ -126,6 +126,7 @@ public class DifficultyManager : MonoBehaviour
 
     internal void ResetProgress()
     {
+        levelNumber = 0;
         difficulty = 0;
         completedBoxes = 0;
         objectiveCompletedBoxes = 0;
