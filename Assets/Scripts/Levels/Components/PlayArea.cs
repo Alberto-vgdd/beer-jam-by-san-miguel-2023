@@ -74,7 +74,9 @@ public class PlayArea : MonoBehaviour
         heightChangeTime = heightChangeTimeProgression.Evaluate(difficulty);
 
 
-        linearGravity = (gravityTime < 0.00f);
+        linearGravity = newLevelDisplayNumber > 4;
+
+
 
 
         if (bottlePiece != null)
@@ -205,6 +207,8 @@ public class PlayArea : MonoBehaviour
                 }
                 else
                 {
+                    heightTransform.localPosition = Vector3.Lerp(heightTransform.localPosition, Vector3.up * currentHeight, 0.2f);
+
                     if (gravityTimer >= gravityTime)
                     {
                         gravityTimer = 0f;
@@ -217,7 +221,6 @@ public class PlayArea : MonoBehaviour
                         else
                         {
                             currentHeight -= BeerBottle.BOTTLE_WIDTH;
-                            heightTransform.DOLocalMove(Vector3.up * currentHeight, heightChangeTime);
                         }
                     }
                 }
