@@ -58,6 +58,7 @@ public class PlayArea : MonoBehaviour
     void Awake()
     {
         playerControls = new PlayerControls();
+        playerControls.devices = new UnityEngine.InputSystem.Utilities.ReadOnlyArray<InputDevice>(new InputDevice[1] { InputSystem.GetDevice("SwitchProControllerHID") });
     }
 
 
