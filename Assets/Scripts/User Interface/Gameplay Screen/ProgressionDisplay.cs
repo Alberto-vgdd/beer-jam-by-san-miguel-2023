@@ -24,16 +24,16 @@ public class ProgressionDisplay : MonoBehaviour
 
     void OnEnable()
     {
-        DifficultyManager.BoxesCompletedLeftChanged += OnBoxesCompletedLeftChanged;
-        DifficultyManager.DifficultyChanged += OnDifficulty;
-        DifficultyManager.ScoreChanged += OnScoreChanged;
+        // DifficultyManager.BoxesCompletedLeftChanged += OnBoxesCompletedLeftChanged;
+        // DifficultyManager.PlayerDifficultyChanged += OnDifficulty;
+        // DifficultyManager.ScoreChanged += OnScoreChanged;
     }
 
     void OnDisable()
     {
-        DifficultyManager.BoxesCompletedLeftChanged -= OnBoxesCompletedLeftChanged;
-        DifficultyManager.DifficultyChanged -= OnDifficulty;
-        DifficultyManager.ScoreChanged -= OnScoreChanged;
+        // DifficultyManager.BoxesCompletedLeftChanged -= OnBoxesCompletedLeftChanged;
+        // DifficultyManager.PlayerDifficultyChanged -= OnDifficulty;
+        // DifficultyManager.ScoreChanged -= OnScoreChanged;
 
     }
 

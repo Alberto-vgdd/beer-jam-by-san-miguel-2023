@@ -9,7 +9,7 @@ public class BellAnimator : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField]
-    private Level level;
+    private PlayerTable level;
     [SerializeField]
     private Transform scalePivot;
     [SerializeField]

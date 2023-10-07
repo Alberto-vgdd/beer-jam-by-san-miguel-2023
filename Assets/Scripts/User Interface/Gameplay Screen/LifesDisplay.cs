@@ -10,13 +10,13 @@ public class LifesDisplay : MonoBehaviour
 
     void OnEnable()
     {
-        DifficultyManager.LifesLeftChanged += OnLifesLeftChanged;
+        // DifficultyManager.LifesLeftChanged += OnLifesLeftChanged;
 
     }
 
     void OnDisable()
     {
-        DifficultyManager.LifesLeftChanged -= OnLifesLeftChanged;
+        // DifficultyManager.LifesLeftChanged -= OnLifesLeftChanged;
 
     }
 

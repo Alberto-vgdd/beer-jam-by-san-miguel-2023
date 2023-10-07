@@ -12,7 +12,7 @@ public class PlayArea : MonoBehaviour
     private const float PLAY_AREA_WIDTH = 1.8f;
     private const float PLAY_AREA_DEPTH = 1.8f;
     private const float START_HEIGHT = 1.8f;
-    private static Vector3 START_PLANE_CENTER = new Vector3(PLAY_AREA_WIDTH / 2f, 0f, -PLAY_AREA_DEPTH / 2f);
+    private static Vector3 START_PLANE_CENTER_OFFSET = new Vector3(PLAY_AREA_WIDTH / 2f, 0f, -PLAY_AREA_DEPTH / 2f);
     private static Vector3 POSITION_CENTER_OFFSET = new Vector3(BeerBottle.BOTTLE_HALF_WIDTH, 0f, BeerBottle.BOTTLE_HALF_WIDTH);
 
     public delegate void PieceDroppedHandler(BottlePiece bottlePiece);
@@ -26,8 +26,6 @@ public class PlayArea : MonoBehaviour
     private Transform planeTransform;
 
     [Header("Parameters")]
-    [SerializeField]
-    private int playerId = 0;
     [SerializeField]
     private AnimationCurve gravityTimeProgression;
     [SerializeField]
@@ -44,6 +42,8 @@ public class PlayArea : MonoBehaviour
     [SerializeField]
     private AudioSource piecePlacedAudioSource;
 
+    private int playerNumber;
+
     private BottlePiece bottlePiece;
     private PlayerControls playerControls;
 
@@ -56,12 +56,16 @@ public class PlayArea : MonoBehaviour
     private float movementTime;
     private float rotationTime;
 
-    void Start()
+
+    internal void SetPlayerNumber(int newPlayerNumber)
     {
-        playerControls = InputManager.Instance.GetPlayerControls(playerId);
+        playerNumber = newPlayerNumber;
     }
 
-
+    void Start()
+    {
+        playerControls = InputManager.Instance.GetPlayerControls(playerNumber);
+    }
 
     private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
     {
@@ -294,7 +298,7 @@ public class PlayArea : MonoBehaviour
         bottlePiece = newBottlePiece;
         bottlePiece.transform.SetParent(planeTransform);
         bottlePiece.SetPieceTimes(movementTime, rotationTime);
-        bottlePiece.MoveToLocalPosition(WorldPositionToGridLocalPosition(START_PLANE_CENTER), false);
+        bottlePiece.MoveToLocalPosition(WorldPositionToGridLocalPosition(planeTransform.position + START_PLANE_CENTER_OFFSET), false);
         gravityEnabled = true;
         currentHeight = START_HEIGHT;
         gravityTimer = 0f;
@@ -317,7 +321,7 @@ public class PlayArea : MonoBehaviour
         playerControls.Gameplay.Rotate.performed -= OnRotateButtonPressed;
         playerControls.Gameplay.DropPiece.performed -= OnDropPieceButtonPressed;
 
-        DifficultyManager.DifficultyChanged -= OnDifficultyChanged;
+        DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficultyChanged;
         InputManager.InputEnabled -= OnInputsEnabled;
 
         if (bottlePiece != null)
@@ -338,7 +342,7 @@ public class PlayArea : MonoBehaviour
         playerControls.Gameplay.Rotate.performed += OnRotateButtonPressed;
         playerControls.Gameplay.DropPiece.performed += OnDropPieceButtonPressed;
 
-        DifficultyManager.DifficultyChanged += OnDifficultyChanged;
+        DifficultyManager.PlayerDifficultyChanged[playerNumber] += OnDifficultyChanged;
         InputManager.InputEnabled += OnInputsEnabled;
 
         StartCoroutine(HandleInputs());

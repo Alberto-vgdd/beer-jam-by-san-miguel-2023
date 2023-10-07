@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Level : MonoBehaviour
+public class PlayerTable : MonoBehaviour
 {
-    public delegate void BeerBoxCompletedHandler(int boxesCompleted);
+    public delegate void BeerBoxCompletedHandler(int playerNumber, int boxesCompleted);
     public static BeerBoxCompletedHandler BeerBoxCompleted;
+
+    public delegate void BeerBoxRuinedHandler(int playerNumber);
+    public static BeerBoxRuinedHandler BeerBoxRuined;
 
     public delegate void BellRingedHandler(int boxesCompleted, float boxCompletedTime);
     public BellRingedHandler BellRinged;
 
-    public delegate void BeerBoxRuinedHandler();
-    public static BeerBoxRuinedHandler BeerBoxRuined;
 
     private const int ROWS_OF_BOXES = 2;
     private const int COLUMNS_OF_BOXES = 3;
@@ -27,6 +28,8 @@ public class Level : MonoBehaviour
     private PlayArea playArea;
 
     [Header("Parameters")]
+    [SerializeField]
+    private int playerNumber = 0;
     [SerializeField]
     private AnimationCurve beerBoxSpawnTimeProgression;
     [SerializeField]
@@ -52,6 +55,11 @@ public class Level : MonoBehaviour
 
     private BeerBox[] beerBoxes;
 
+    void Awake()
+    {
+        playArea.SetPlayerNumber(playerNumber);
+    }
+
     private void InitliasiseBeerBoxes()
     {
         if (beerBoxes != null)
@@ -76,7 +84,7 @@ public class Level : MonoBehaviour
                 {
                     spawnDirection = Vector3.back;
                 }
-                Vector3 boxPosition = new Vector3(i * BeerBox.WIDTH, 0f, -j * BeerBox.DEPTH);
+                Vector3 boxPosition = beerBoxesParent.position + new Vector3(i * BeerBox.WIDTH, 0f, -j * BeerBox.DEPTH);
                 beerBoxes[j * COLUMNS_OF_BOXES + i] = Instantiate<BeerBox>(beerBoxPrefab, boxPosition, Quaternion.identity, beerBoxesParent);
                 beerBoxes[j * COLUMNS_OF_BOXES + i].Spawn(spawnDirection);
             }
@@ -207,17 +215,15 @@ public class Level : MonoBehaviour
                 }
             }
 
-            if (BeerBoxRuined != null)
-            {
-                BeerBoxRuined();
-            }
+            BeerBoxRuined?.Invoke(playerNumber);
+
             boxRuinedAudioSource.pitch = Random.Range(0.95f, 1.05f);
             boxRuinedAudioSource.Play();
             yield return new WaitForSeconds(beerBoxRuinTime);
 
             foreach (Vector3Int beerBoxIndex in newBeerBoxIndexToSpawnDirection.Keys)
             {
-                Vector3 boxPosition = new Vector3(beerBoxIndex.y * BeerBox.WIDTH, 0f, -beerBoxIndex.z * BeerBox.DEPTH);
+                Vector3 boxPosition = beerBoxesParent.position + new Vector3(beerBoxIndex.y * BeerBox.WIDTH, 0f, -beerBoxIndex.z * BeerBox.DEPTH);
                 beerBoxes[beerBoxIndex.x] = Instantiate<BeerBox>(beerBoxPrefab, boxPosition, Quaternion.identity, beerBoxesParent);
                 beerBoxes[beerBoxIndex.x].UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime, beerBoxRuinTime);
                 beerBoxes[beerBoxIndex.x].Spawn(newBeerBoxIndexToSpawnDirection[beerBoxIndex]);
@@ -256,14 +262,11 @@ public class Level : MonoBehaviour
                 }
             }
 
-            if (BeerBoxCompleted != null)
-            {
-                BeerBoxCompleted(fullBeerBoxes.Count);
-            }
+            BeerBoxCompleted?.Invoke(playerNumber, fullBeerBoxes.Count);
 
             foreach (Vector3Int beerBoxIndex in newBeerBoxesIndexToSpawnDirection.Keys)
             {
-                Vector3 boxPosition = new Vector3(beerBoxIndex.y * BeerBox.WIDTH, 0f, -beerBoxIndex.z * BeerBox.DEPTH);
+                Vector3 boxPosition = beerBoxesParent.position + new Vector3(beerBoxIndex.y * BeerBox.WIDTH, 0f, -beerBoxIndex.z * BeerBox.DEPTH);
                 beerBoxes[beerBoxIndex.x] = Instantiate<BeerBox>(beerBoxPrefab, boxPosition, Quaternion.identity, beerBoxesParent);
                 beerBoxes[beerBoxIndex.x].UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime, beerBoxRuinTime);
                 beerBoxes[beerBoxIndex.x].Spawn(newBeerBoxesIndexToSpawnDirection[beerBoxIndex]);
@@ -275,7 +278,7 @@ public class Level : MonoBehaviour
         fullBeerBoxes.Clear();
 
 
-        playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece());
+        playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece(playerNumber));
 
         InputManager.Instance.PauseInputs(false);
     }
@@ -286,16 +289,16 @@ public class Level : MonoBehaviour
 
         InitliasiseBeerBoxes();
         playArea.PieceDropped += OnPieceDropped;
-        DifficultyManager.DifficultyChanged += OnDifficultyChanged;
+        DifficultyManager.PlayerDifficultyChanged[playerNumber] += OnDifficultyChanged;
         playArea.ClearPlayArea();
         playArea.StartPlayArea();
-        playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece());
+        playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece(playerNumber));
     }
 
     internal void StopGame()
     {
         StopAllCoroutines();
         playArea.PieceDropped -= OnPieceDropped;
-        DifficultyManager.DifficultyChanged -= OnDifficultyChanged;
+        DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficultyChanged;
     }
 }

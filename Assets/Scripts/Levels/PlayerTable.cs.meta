@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: b73e08c5287494c919418ab1eae3b446
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - beerBoxesParent: {instanceID: 0}
+  - beerBoxPrefab: {fileID: 3494942324953876086, guid: 82b2f11cc0b4e408c9187e44478d159a,
+      type: 3}
+  - playArea: {instanceID: 0}
+  - boxRuinedAudioSource: {instanceID: 0}
+  - boxSpawnedAudioSource: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PieceManager : Singleton<PieceManager>
 {
-    public delegate void NextPieceChangedHandler(BottlePiece bottlePiece);
-    public static NextPieceChangedHandler NextPieceChanged;
+    public delegate void PlayerNextPieceChangedHandler(BottlePiece bottlePiece);
+    public static PlayerNextPieceChangedHandler[] PlayerNextPieceChanged = new PlayerNextPieceChangedHandler[InputManager.NUMBER_OF_PLAYERS];
 
     [Header("Components")]
     [SerializeField]
@@ -17,55 +17,66 @@ public class PieceManager : Singleton<PieceManager>
     [SerializeField]
     private AnimationCurve difficultPieceChancesCurve;
 
-    private float difficulty;
+    private PlayerPieceDifficulty[] playersPieceDifficulties;
 
-    private BottlePiece nextPiece;
+    protected override void Awake()
+    {
+        base.Awake();
+
+        playersPieceDifficulties = new PlayerPieceDifficulty[InputManager.NUMBER_OF_PLAYERS];
+        for (int playerNumber = 0; playerNumber < InputManager.NUMBER_OF_PLAYERS; playerNumber++)
+        {
+            playersPieceDifficulties[playerNumber] = new PlayerPieceDifficulty(playerNumber);
+        }
+    }
 
 
     void OnEnable()
     {
-        DifficultyManager.DifficultyChanged += OnDifficultyChanged;
+        foreach (PlayerPieceDifficulty playerPieceDifficulty in playersPieceDifficulties)
+        {
+            DifficultyManager.PlayerDifficultyChanged[playerPieceDifficulty.playerNumber] += playerPieceDifficulty.OnDifficultyChanged;
+        }
     }
     void OnDisable()
     {
-        DifficultyManager.DifficultyChanged -= OnDifficultyChanged;
-    }
-
-    private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
-    {
-        difficulty = newDifficulty;
+        foreach (PlayerPieceDifficulty playerPieceDifficulty in playersPieceDifficulties)
+        {
+            DifficultyManager.PlayerDifficultyChanged[playerPieceDifficulty.playerNumber] -= playerPieceDifficulty.OnDifficultyChanged;
+        }
     }
 
     void Start()
     {
-        UpdateNextPiece();
+        foreach (PlayerPieceDifficulty playerPieceDifficulty in playersPieceDifficulties)
+        {
+            UpdateNextPiece(playerPieceDifficulty);
+        }
     }
 
-    internal BottlePiece GetRandomPiece()
+    internal BottlePiece GetRandomPiece(int playerNumber)
     {
-        BottlePiece randomPiece = nextPiece;
-        randomPiece.gameObject.SetActive(true);
 
-        UpdateNextPiece();
+        PlayerPieceDifficulty playerPieceDifficulty = playersPieceDifficulties[playerNumber];
+        BottlePiece randomPiece = playerPieceDifficulty.nextPiece;
+        randomPiece.gameObject.SetActive(true);
+        UpdateNextPiece(playerPieceDifficulty);
 
         return randomPiece;
-
-
     }
 
-    internal void UpdateNextPiece()
+    internal void UpdateNextPiece(PlayerPieceDifficulty playerPieceDifficulty)
     {
+
         float randomValue = Random.value;
-        float floatIndex = Mathf.Lerp(easyPieceChancesCurve.Evaluate(randomValue), difficultPieceChancesCurve.Evaluate(randomValue), difficulty);
-        nextPiece = Instantiate<BottlePiece>(bottlePieces[Mathf.RoundToInt((bottlePieces.Length - 1) * floatIndex)]);
+        float floatIndex = Mathf.Lerp(easyPieceChancesCurve.Evaluate(randomValue), difficultPieceChancesCurve.Evaluate(randomValue), playerPieceDifficulty.difficulty);
+        BottlePiece nextPiece = Instantiate<BottlePiece>(bottlePieces[Mathf.RoundToInt((bottlePieces.Length - 1) * floatIndex)]);
         nextPiece.Initialise();
         int numberOfBottles = nextPiece.GetNumberOfBottles();
         nextPiece.SetBottlesVisuals(GetRandomBottles(numberOfBottles));
+        playerPieceDifficulty.nextPiece = nextPiece;
 
-        if (NextPieceChanged != null)
-        {
-            NextPieceChanged(nextPiece);
-        }
+        PlayerNextPieceChanged[playerPieceDifficulty.playerNumber]?.Invoke(nextPiece);
 
         nextPiece.gameObject.SetActive(false);
     }

@@ -15,7 +15,7 @@ public class GameManager : Singleton<GameManager>
     private PlayerControls playerControls;
 
     [SerializeField]
-    private Level level;
+    private PlayerTable[] playerTables;
 
     protected override void Awake()
     {
@@ -40,20 +40,26 @@ public class GameManager : Singleton<GameManager>
         playerControls.Navigation.ExitGame.performed -= OnExitGameButtonPressed;
     }
 
-    private void OnGameOver(int newScore)
+    // TODO FIX GAMEOVER STUFF
+    private void OnGameOver(int playerNumber, int newScore)
     {
         InputManager.Instance.PauseInputs(true);
         DifficultyManager.GameOver -= OnGameOver;
         uIManager.ShowGameOverScreen(newScore);
-        level.StopGame();
-
+        foreach (PlayerTable playerTable in playerTables)
+        {
+            playerTable.StopGame();
+        }
 
     }
 
     public void StartNewGame()
     {
         uIManager.ShowGameplayScreen();
-        level.StartGame();
+        foreach (PlayerTable playerTable in playerTables)
+        {
+            playerTable.StartGame();
+        }
         difficultyManager.ResetProgress();
         InputManager.Instance.PauseInputs(false);
 

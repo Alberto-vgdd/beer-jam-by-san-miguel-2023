@@ -19,12 +19,12 @@ public class NextPieceDisplay : MonoBehaviour
     private GameObject[] bottleVisualsGameObjects;
     void OnEnable()
     {
-        PieceManager.NextPieceChanged += OnNextPieceChanged;
+        // PieceManager.NextPieceChanged += OnNextPieceChanged;
     }
 
     void OnDisable()
     {
-        PieceManager.NextPieceChanged -= OnNextPieceChanged;
+        // PieceManager.NextPieceChanged -= OnNextPieceChanged;
     }
 
     private void OnNextPieceChanged(BottlePiece bottlePiece)

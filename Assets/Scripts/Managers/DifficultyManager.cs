@@ -1,24 +1,23 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DifficultyManager : MonoBehaviour
 {
     public delegate void DifficultyChangedHandler(float newDifficulty, int newDisplayLevelNumber);
-    public static DifficultyChangedHandler DifficultyChanged;
+    public static DifficultyChangedHandler[] PlayerDifficultyChanged = new DifficultyChangedHandler[InputManager.NUMBER_OF_PLAYERS];
 
     public delegate void BoxesCompletedLeftChangedHandler(int newBoxesCompletedLeft);
-    public static BoxesCompletedLeftChangedHandler BoxesCompletedLeftChanged;
+    public static BoxesCompletedLeftChangedHandler[] PlayerBoxesCompletedLeftChanged = new BoxesCompletedLeftChangedHandler[InputManager.NUMBER_OF_PLAYERS];
+
 
     public delegate void ScoreChangedHandler(int newScore);
-    public static ScoreChangedHandler ScoreChanged;
+    public static ScoreChangedHandler[] PlayerScoreChanged = new ScoreChangedHandler[InputManager.NUMBER_OF_PLAYERS];
 
     public delegate void LifesLeftChangedHandler(int newLifesLefts);
-    public static LifesLeftChangedHandler LifesLeftChanged;
+    public static LifesLeftChangedHandler[] PlayerLifesLeftChanged = new LifesLeftChangedHandler[InputManager.NUMBER_OF_PLAYERS];
 
 
-    public delegate void GameOverHandler(int newScore);
+    public delegate void GameOverHandler(int playerNumber, int newScore);
     public static GameOverHandler GameOver;
 
     private const int MAX_LIVES = 3;
@@ -35,103 +34,99 @@ public class DifficultyManager : MonoBehaviour
     private int scorePerBoxCompleted = 100;
 
 
+    private PlayerProgress[] playersProgresses;
 
-    private float difficulty = 0;
-    int completedBoxes = 0;
-    int objectiveCompletedBoxes = 0;
-    int totalScore = 0;
-    int livesLeft = 3;
 
+    void Awake()
+    {
+        playersProgresses = new PlayerProgress[InputManager.NUMBER_OF_PLAYERS];
+        for (int playerNumber = 0; playerNumber < InputManager.NUMBER_OF_PLAYERS; playerNumber++)
+        {
+            playersProgresses[playerNumber] = new PlayerProgress(playerNumber);
+        }
+    }
 
     void OnEnable()
     {
-        Level.BeerBoxCompleted += OnBeerBoxCompleted;
-        Level.BeerBoxRuined += OnBeerBoxRuined;
+        PlayerTable.BeerBoxCompleted += OnBeerBoxCompleted;
+        PlayerTable.BeerBoxRuined += OnBeerBoxRuined;
     }
 
     void OnDisable()
     {
-        Level.BeerBoxCompleted -= OnBeerBoxCompleted;
-        Level.BeerBoxRuined -= OnBeerBoxRuined;
+        PlayerTable.BeerBoxCompleted -= OnBeerBoxCompleted;
+        PlayerTable.BeerBoxRuined -= OnBeerBoxRuined;
     }
 
-    private void OnLevelChanged()
+    private void OnPlayerProgressLevelChanged(PlayerProgress playerProgress)
     {
-        completedBoxes = 0;
-        objectiveCompletedBoxes = levelToObjectiveBoxesCount[levelNumber];
-        difficulty = difficultyIncrease * levelNumber;
-        livesLeft = Mathf.Min(MAX_LIVES, livesLeft + 1);
+        playerProgress.completedBoxes = 0;
+        playerProgress.objectiveCompletedBoxes = levelToObjectiveBoxesCount[levelNumber];
+        playerProgress.difficulty = difficultyIncrease * levelNumber;
+        playerProgress.livesLeft = Mathf.Min(MAX_LIVES, playerProgress.livesLeft + 1);
 
 
-        if (DifficultyChanged != null)
+        if (PlayerDifficultyChanged[playerProgress.playerNumber] != null)
         {
-            DifficultyChanged(difficulty, levelNumber + 1);
+            PlayerDifficultyChanged[playerProgress.playerNumber](playerProgress.difficulty, playerProgress.levelNumber + 1);
         }
 
-        if (BoxesCompletedLeftChanged != null)
+        if (PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber] != null)
         {
-            BoxesCompletedLeftChanged(objectiveCompletedBoxes);
+            PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber](playerProgress.objectiveCompletedBoxes);
         }
 
-        if (ScoreChanged != null)
+        if (PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber] != null)
         {
-            ScoreChanged(totalScore);
+            PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber](playerProgress.totalScore);
         }
 
-        if (LifesLeftChanged != null)
+        if (PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber] != null)
         {
-            LifesLeftChanged(livesLeft);
+            PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber](playerProgress.livesLeft);
         }
     }
 
-    private void OnBeerBoxCompleted(int newBoxesCompleted)
+    private void OnBeerBoxCompleted(int playerNumber, int newBoxesCompleted)
     {
+        PlayerProgress playerProgress = playersProgresses[playerNumber];
+
         int boxesCompleted = boxesCompletedToMultiplier[Mathf.Clamp(newBoxesCompleted, 1, boxesCompletedToMultiplier.Length) - 1];
-        completedBoxes += boxesCompleted;
-        totalScore += boxesCompleted * scorePerBoxCompleted;
+        playerProgress.completedBoxes += boxesCompleted;
+        playerProgress.totalScore += boxesCompleted * scorePerBoxCompleted;
 
-        if (BoxesCompletedLeftChanged != null)
-        {
-            BoxesCompletedLeftChanged(Mathf.Max(0, objectiveCompletedBoxes - completedBoxes));
-        }
+        PlayerBoxesCompletedLeftChanged[playerNumber]?.Invoke(Mathf.Max(0, playerProgress.objectiveCompletedBoxes - playerProgress.completedBoxes));
+        PlayerScoreChanged[playerNumber]?.Invoke(playerProgress.totalScore);
 
-        if (ScoreChanged != null)
+        if (playerProgress.completedBoxes >= playerProgress.objectiveCompletedBoxes && playerProgress.levelNumber < 9)
         {
-            ScoreChanged(totalScore);
-        }
-
-        if (completedBoxes >= objectiveCompletedBoxes && levelNumber < 9)
-        {
-            levelNumber++;
-            OnLevelChanged();
+            playerProgress.levelNumber++;
+            OnPlayerProgressLevelChanged(playerProgress);
         }
 
     }
 
-    private void OnBeerBoxRuined()
+    private void OnBeerBoxRuined(int playerNumber)
     {
+        PlayerProgress playerProgress = playersProgresses[playerNumber];
+
         CameraManager.ShakeCamera(0.2f, 0.15f, 2);
-        livesLeft = Mathf.Max(0, livesLeft - 1);
 
-        if (LifesLeftChanged != null)
-        {
-            LifesLeftChanged(livesLeft);
-        }
+        playerProgress.livesLeft = Mathf.Max(0, playerProgress.livesLeft - 1);
+        PlayerLifesLeftChanged[playerNumber]?.Invoke(playerProgress.livesLeft);
 
-        if (livesLeft <= 0 && GameOver != null)
+        if (playerProgress.livesLeft <= 0 && GameOver != null)
         {
-            GameOver(totalScore);
+            GameOver(playerNumber, playerProgress.totalScore);
         }
     }
 
     internal void ResetProgress()
     {
-        levelNumber = 0;
-        difficulty = 0;
-        completedBoxes = 0;
-        objectiveCompletedBoxes = 0;
-        totalScore = 0;
-        livesLeft = 3;
-        OnLevelChanged();
+        foreach (PlayerProgress playerProgress in playersProgresses)
+        {
+            playerProgress.Reset();
+            OnPlayerProgressLevelChanged(playerProgress);
+        }
     }
 }
