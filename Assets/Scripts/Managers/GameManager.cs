@@ -42,7 +42,7 @@ public class GameManager : Singleton<GameManager>
 
     private void OnGameOver(int newScore)
     {
-        InputManager.PauseGameplayInputs(true);
+        InputManager.Instance.PauseInputs(true);
         DifficultyManager.GameOver -= OnGameOver;
         uIManager.ShowGameOverScreen(newScore);
         level.StopGame();
@@ -55,7 +55,7 @@ public class GameManager : Singleton<GameManager>
         uIManager.ShowGameplayScreen();
         level.StartGame();
         difficultyManager.ResetProgress();
-        InputManager.PauseGameplayInputs(false);
+        InputManager.Instance.PauseInputs(false);
 
         DifficultyManager.GameOver += OnGameOver;
     }

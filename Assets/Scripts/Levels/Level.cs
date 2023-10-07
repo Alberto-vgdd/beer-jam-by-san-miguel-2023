@@ -123,7 +123,7 @@ public class Level : MonoBehaviour
 
     private IEnumerator DropPieceAndSpawnNewOne(BottlePiece bottlePiece)
     {
-        InputManager.PauseGameplayInputs(true);
+        InputManager.Instance.PauseInputs(true);
 
 
         BeerBottle[] beerBottles = bottlePiece.GetBottles();
@@ -277,7 +277,7 @@ public class Level : MonoBehaviour
 
         playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece());
 
-        InputManager.PauseGameplayInputs(false);
+        InputManager.Instance.PauseInputs(false);
     }
 
     internal void StartGame()

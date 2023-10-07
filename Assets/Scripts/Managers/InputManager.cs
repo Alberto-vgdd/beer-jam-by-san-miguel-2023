@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour
+public class InputManager : Singleton<InputManager>
 {
     public const int NUMBER_OF_PLAYERS = 2;
     private const string PLAYER_1_DEVICE_NAME = "DualShock4GamepadHID";
@@ -12,44 +13,29 @@ public class InputManager : MonoBehaviour
     public delegate void InputEnabledHandler(bool newEnabled);
     public static InputEnabledHandler InputEnabled;
 
-    private delegate void GameplayInputsPausedHandler(bool newGameplayInputsPaused);
-    private static GameplayInputsPausedHandler GameplayInputsPaused;
 
-
-    [Header("Components")]
+    [Header("Parameters")]
     [SerializeField]
-    private PlayerInputManager playerInputManager;
-    [SerializeField]
-    private GameObject playerPrefab;
+    private string[] playerDeviceNames = { PLAYER_1_DEVICE_NAME, PLAYER_2_DEVICE_NAME };
 
     private bool inputsPaused = false;
     private PlayerControls[] playerControls;
 
-    public static void PauseGameplayInputs(bool newGameplayInputsPaused)
+
+    protected override void Awake()
     {
-        if (GameplayInputsPaused != null)
+        base.Awake();
+
+        playerControls = new PlayerControls[NUMBER_OF_PLAYERS];
+        for (int playerNumber = 0; playerNumber < NUMBER_OF_PLAYERS; playerNumber++)
         {
-            GameplayInputsPaused(newGameplayInputsPaused);
+            playerControls[playerNumber] = new PlayerControls();
+            playerControls[playerNumber].devices = new InputDevice[1] { InputSystem.GetDevice(playerDeviceNames[playerNumber]) };
         }
     }
 
 
-    void Awake()
-    {
-        InputManager.GameplayInputsPaused += PauseInputs;
-
-        // playerControls = new PlayerControls();
-        // playerControls.Enable();
-        // playerInputs = new PlayerInput[NUMBER_OF_PLAYERS];
-
-        // Debug.Log("Join Both players here");
-        // playerInputManager.playerPrefab = playerPrefab;
-        // playerInputManager.JoinPlayer(0, 0, playerControls.GamepadScheme.name, InputSystem.GetDevice(PLAYER_1_DEVICE_NAME));
-        // playerInputManager.JoinPlayer(1, 1, playerControls.GamepadScheme.name, InputSystem.GetDevice(PLAYER_2_DEVICE_NAME));
-    }
-
-
-    private void PauseInputs(bool newInputsPaused)
+    public void PauseInputs(bool newInputsPaused)
     {
         inputsPaused = newInputsPaused;
 
@@ -59,14 +45,13 @@ public class InputManager : MonoBehaviour
         }
     }
 
-
-    public void OnPlayerJoinedEvent(PlayerInput playerInput)
+    protected override InputManager GetThis()
     {
-        Debug.Log("Player joined");
+        return this;
     }
 
-    public void OnPlayerLeftEvent(PlayerInput playerInput)
+    internal PlayerControls GetPlayerControls(int playerId)
     {
-        Debug.Log("Player left");
+        return playerControls[playerId];
     }
 }

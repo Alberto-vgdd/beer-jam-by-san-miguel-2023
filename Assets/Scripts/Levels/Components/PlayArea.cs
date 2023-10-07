@@ -27,6 +27,8 @@ public class PlayArea : MonoBehaviour
 
     [Header("Parameters")]
     [SerializeField]
+    private int playerId = 0;
+    [SerializeField]
     private AnimationCurve gravityTimeProgression;
     [SerializeField]
     private AnimationCurve heightChangeTimeProgression;
@@ -54,14 +56,10 @@ public class PlayArea : MonoBehaviour
     private float movementTime;
     private float rotationTime;
 
-
-    void Awake()
+    void Start()
     {
-        playerControls = new PlayerControls();
-        playerControls.devices = new UnityEngine.InputSystem.Utilities.ReadOnlyArray<InputDevice>(new InputDevice[1] { InputSystem.GetDevice("SwitchProControllerHID") });
+        playerControls = InputManager.Instance.GetPlayerControls(playerId);
     }
-
-
 
 
 
