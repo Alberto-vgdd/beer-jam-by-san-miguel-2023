@@ -322,7 +322,7 @@ public class PlayArea : MonoBehaviour
         playerControls.Gameplay.DropPiece.performed -= OnDropPieceButtonPressed;
 
         DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficultyChanged;
-        InputManager.InputEnabled -= OnInputsEnabled;
+        InputManager.InputEnabled[playerNumber] -= OnInputsEnabled;
 
         if (bottlePiece != null)
         {
@@ -343,7 +343,7 @@ public class PlayArea : MonoBehaviour
         playerControls.Gameplay.DropPiece.performed += OnDropPieceButtonPressed;
 
         DifficultyManager.PlayerDifficultyChanged[playerNumber] += OnDifficultyChanged;
-        InputManager.InputEnabled += OnInputsEnabled;
+        InputManager.InputEnabled[playerNumber] += OnInputsEnabled;
 
         StartCoroutine(HandleInputs());
         StartCoroutine(HandleGravity());

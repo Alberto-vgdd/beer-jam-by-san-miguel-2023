@@ -22,19 +22,23 @@ public class ProgressionDisplay : MonoBehaviour
     private Tween boxesLeftAnimation;
     private Tween scoreAnimation;
 
+    [Header("Parameters")]
+    [SerializeField]
+    private int playerNumber;
+
+
     void OnEnable()
     {
-        // DifficultyManager.BoxesCompletedLeftChanged += OnBoxesCompletedLeftChanged;
-        // DifficultyManager.PlayerDifficultyChanged += OnDifficulty;
-        // DifficultyManager.ScoreChanged += OnScoreChanged;
+        DifficultyManager.PlayerBoxesCompletedLeftChanged[playerNumber] += OnBoxesCompletedLeftChanged;
+        DifficultyManager.PlayerDifficultyChanged[playerNumber] += OnDifficulty;
+        DifficultyManager.PlayerScoreChanged[playerNumber] += OnScoreChanged;
     }
 
     void OnDisable()
     {
-        // DifficultyManager.BoxesCompletedLeftChanged -= OnBoxesCompletedLeftChanged;
-        // DifficultyManager.PlayerDifficultyChanged -= OnDifficulty;
-        // DifficultyManager.ScoreChanged -= OnScoreChanged;
-
+        DifficultyManager.PlayerBoxesCompletedLeftChanged[playerNumber] -= OnBoxesCompletedLeftChanged;
+        DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficulty;
+        DifficultyManager.PlayerScoreChanged[playerNumber] -= OnScoreChanged;
     }
 
 

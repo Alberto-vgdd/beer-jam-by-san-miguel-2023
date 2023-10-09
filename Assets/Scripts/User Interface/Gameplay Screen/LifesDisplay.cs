@@ -8,15 +8,19 @@ public class LifesDisplay : MonoBehaviour
     [SerializeField]
     private LifeContainer[] lifes;
 
+    [Header("Parameters")]
+    [SerializeField]
+    private int playerNumber;
+
     void OnEnable()
     {
-        // DifficultyManager.LifesLeftChanged += OnLifesLeftChanged;
+        DifficultyManager.PlayerLifesLeftChanged[playerNumber] += OnLifesLeftChanged;
 
     }
 
     void OnDisable()
     {
-        // DifficultyManager.LifesLeftChanged -= OnLifesLeftChanged;
+        DifficultyManager.PlayerLifesLeftChanged[playerNumber] -= OnLifesLeftChanged;
 
     }
 

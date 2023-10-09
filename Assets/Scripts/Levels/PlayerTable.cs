@@ -30,6 +30,8 @@ public class PlayerTable : MonoBehaviour
     [Header("Parameters")]
     [SerializeField]
     private int playerNumber = 0;
+    public int PlayerNumber { get => playerNumber; }
+
     [SerializeField]
     private AnimationCurve beerBoxSpawnTimeProgression;
     [SerializeField]
@@ -62,6 +64,7 @@ public class PlayerTable : MonoBehaviour
 
     private void InitliasiseBeerBoxes()
     {
+        beerBoxes = beerBoxesParent.GetComponentsInChildren<BeerBox>();
         if (beerBoxes != null)
         {
             for (int i = 0; i < beerBoxes.Length; i++)
@@ -131,7 +134,7 @@ public class PlayerTable : MonoBehaviour
 
     private IEnumerator DropPieceAndSpawnNewOne(BottlePiece bottlePiece)
     {
-        InputManager.Instance.PauseInputs(true);
+        InputManager.Instance.PauseInputs(playerNumber, true);
 
 
         BeerBottle[] beerBottles = bottlePiece.GetBottles();
@@ -280,7 +283,7 @@ public class PlayerTable : MonoBehaviour
 
         playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece(playerNumber));
 
-        InputManager.Instance.PauseInputs(false);
+        InputManager.Instance.PauseInputs(playerNumber, false);
     }
 
     internal void StartGame()

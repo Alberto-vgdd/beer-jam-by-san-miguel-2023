@@ -17,9 +17,15 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private PlayerTable[] playerTables;
 
+    private bool[] arePlayersGameOver;
+    private PlayerProgress[] playersGameProgresses;
+
     protected override void Awake()
     {
         base.Awake();
+
+        arePlayersGameOver = new bool[InputManager.NUMBER_OF_PLAYERS];
+        playersGameProgresses = new PlayerProgress[InputManager.NUMBER_OF_PLAYERS];
 
         playerControls = new PlayerControls();
         playerControls.Enable();
@@ -40,30 +46,47 @@ public class GameManager : Singleton<GameManager>
         playerControls.Navigation.ExitGame.performed -= OnExitGameButtonPressed;
     }
 
-    // TODO FIX GAMEOVER STUFF
-    private void OnGameOver(int playerNumber, int newScore)
+    private void OnGameOver(PlayerProgress playerProgress)
     {
-        InputManager.Instance.PauseInputs(true);
-        DifficultyManager.GameOver -= OnGameOver;
-        uIManager.ShowGameOverScreen(newScore);
-        foreach (PlayerTable playerTable in playerTables)
+        int playerNumber = playerProgress.playerNumber;
+
+        DifficultyManager.GameOver[playerNumber] -= OnGameOver;
+        InputManager.Instance.PauseInputs(playerNumber, true);
+
+        arePlayersGameOver[playerNumber] = true;
+        playersGameProgresses[playerNumber] = playerProgress;
+        playerTables[playerNumber].StopGame();
+
+        bool allPlayersAreGameOver = true;
+        foreach (bool isPlayerGameOver in arePlayersGameOver)
         {
-            playerTable.StopGame();
+            allPlayersAreGameOver &= isPlayerGameOver;
         }
 
+        if (allPlayersAreGameOver)
+        {
+            // TODO : FIX UI.
+            int winnerPlayerNumber = GetWinnerPlayerNumber();
+            uIManager.ShowGameOverScreen(winnerPlayerNumber, playersGameProgresses);
+        }
     }
 
     public void StartNewGame()
     {
         uIManager.ShowGameplayScreen();
+
         foreach (PlayerTable playerTable in playerTables)
         {
-            playerTable.StartGame();
-        }
-        difficultyManager.ResetProgress();
-        InputManager.Instance.PauseInputs(false);
+            int playerNumber = playerTable.PlayerNumber;
 
-        DifficultyManager.GameOver += OnGameOver;
+            playerTable.StartGame();
+            arePlayersGameOver[playerNumber] = false;
+            playersGameProgresses[playerNumber] = null;
+            DifficultyManager.GameOver[playerNumber] += OnGameOver;
+            InputManager.Instance.PauseInputs(playerNumber, false);
+        }
+
+        difficultyManager.ResetProgress();
     }
 
     private void OnExitGameButtonPressed(InputAction.CallbackContext context)
@@ -78,6 +101,22 @@ public class GameManager : Singleton<GameManager>
     }
 
 
+    private int GetWinnerPlayerNumber()
+    {
+        int highestScore = 0;
+        int playerWithHighestScore = 0;
+
+        foreach (PlayerProgress playerProgress in playersGameProgresses)
+        {
+            if (playerProgress.totalScore > highestScore)
+            {
+                highestScore = playerProgress.totalScore;
+                playerWithHighestScore = playerProgress.playerNumber;
+            }
+        }
+
+        return playerWithHighestScore;
+    }
 
 
     protected override GameManager GetThis()

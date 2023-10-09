@@ -9,16 +9,14 @@ public class DifficultyManager : MonoBehaviour
     public delegate void BoxesCompletedLeftChangedHandler(int newBoxesCompletedLeft);
     public static BoxesCompletedLeftChangedHandler[] PlayerBoxesCompletedLeftChanged = new BoxesCompletedLeftChangedHandler[InputManager.NUMBER_OF_PLAYERS];
 
-
     public delegate void ScoreChangedHandler(int newScore);
     public static ScoreChangedHandler[] PlayerScoreChanged = new ScoreChangedHandler[InputManager.NUMBER_OF_PLAYERS];
 
     public delegate void LifesLeftChangedHandler(int newLifesLefts);
     public static LifesLeftChangedHandler[] PlayerLifesLeftChanged = new LifesLeftChangedHandler[InputManager.NUMBER_OF_PLAYERS];
 
-
-    public delegate void GameOverHandler(int playerNumber, int newScore);
-    public static GameOverHandler GameOver;
+    public delegate void GameOverHandler(PlayerProgress playerProgress);
+    public static GameOverHandler[] GameOver = new GameOverHandler[InputManager.NUMBER_OF_PLAYERS];
 
     private const int MAX_LIVES = 3;
 
@@ -46,6 +44,11 @@ public class DifficultyManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        ResetProgress();
+    }
+
     void OnEnable()
     {
         PlayerTable.BeerBoxCompleted += OnBeerBoxCompleted;
@@ -66,25 +69,10 @@ public class DifficultyManager : MonoBehaviour
         playerProgress.livesLeft = Mathf.Min(MAX_LIVES, playerProgress.livesLeft + 1);
 
 
-        if (PlayerDifficultyChanged[playerProgress.playerNumber] != null)
-        {
-            PlayerDifficultyChanged[playerProgress.playerNumber](playerProgress.difficulty, playerProgress.levelNumber + 1);
-        }
-
-        if (PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber] != null)
-        {
-            PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber](playerProgress.objectiveCompletedBoxes);
-        }
-
-        if (PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber] != null)
-        {
-            PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber](playerProgress.totalScore);
-        }
-
-        if (PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber] != null)
-        {
-            PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber](playerProgress.livesLeft);
-        }
+        PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty, playerProgress.levelNumber + 1);
+        PlayerBoxesCompletedLeftChanged[playerProgress.playerNumber]?.Invoke(playerProgress.objectiveCompletedBoxes);
+        PlayerScoreChanged[playerProgress.playerNumber]?.Invoke(playerProgress.totalScore);
+        PlayerLifesLeftChanged[playerProgress.playerNumber]?.Invoke(playerProgress.livesLeft);
     }
 
     private void OnBeerBoxCompleted(int playerNumber, int newBoxesCompleted)
@@ -115,9 +103,9 @@ public class DifficultyManager : MonoBehaviour
         playerProgress.livesLeft = Mathf.Max(0, playerProgress.livesLeft - 1);
         PlayerLifesLeftChanged[playerNumber]?.Invoke(playerProgress.livesLeft);
 
-        if (playerProgress.livesLeft <= 0 && GameOver != null)
+        if (playerProgress.livesLeft <= 0)
         {
-            GameOver(playerNumber, playerProgress.totalScore);
+            GameOver[playerNumber]?.Invoke(playerProgress);
         }
     }
 

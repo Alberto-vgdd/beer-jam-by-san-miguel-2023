@@ -21,11 +21,11 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public void ShowGameOverScreen(int totalScore)
+    public void ShowGameOverScreen(int winnerPlayerNumber, PlayerProgress[] playersGameProgresses)
     {
         gameOverScreenGameObject.SetActive(true);
         titleScreenGameObject.SetActive(false);
-        gameOverScreen.SetTotalScore(totalScore);
+        gameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore);
     }
 
     internal void ShowGameplayScreen()

@@ -17,14 +17,19 @@ public class NextPieceDisplay : MonoBehaviour
     private RectTransform[] bottleVisualsRectTransforms;
     [SerializeField]
     private GameObject[] bottleVisualsGameObjects;
+
+    [Header("Parameters")]
+    [SerializeField]
+    private int playerNumber;
+
     void OnEnable()
     {
-        // PieceManager.NextPieceChanged += OnNextPieceChanged;
+        PieceManager.PlayerNextPieceChanged[playerNumber] += OnNextPieceChanged;
     }
 
     void OnDisable()
     {
-        // PieceManager.NextPieceChanged -= OnNextPieceChanged;
+        PieceManager.PlayerNextPieceChanged[playerNumber] -= OnNextPieceChanged;
     }
 
     private void OnNextPieceChanged(BottlePiece bottlePiece)

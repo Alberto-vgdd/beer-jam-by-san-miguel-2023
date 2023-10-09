@@ -11,7 +11,7 @@ public class InputManager : Singleton<InputManager>
     private const string PLAYER_2_DEVICE_NAME = "SwitchProControllerHID";
 
     public delegate void InputEnabledHandler(bool newEnabled);
-    public static InputEnabledHandler InputEnabled;
+    public static InputEnabledHandler[] InputEnabled = new InputEnabledHandler[NUMBER_OF_PLAYERS];
 
 
     [Header("Parameters")]
@@ -35,14 +35,10 @@ public class InputManager : Singleton<InputManager>
     }
 
 
-    public void PauseInputs(bool newInputsPaused)
+    public void PauseInputs(int playerNumber, bool newInputsPaused)
     {
         inputsPaused = newInputsPaused;
-
-        if (InputEnabled != null)
-        {
-            InputEnabled(!inputsPaused);
-        }
+        InputEnabled[playerNumber]?.Invoke(!inputsPaused);
     }
 
     protected override InputManager GetThis()
