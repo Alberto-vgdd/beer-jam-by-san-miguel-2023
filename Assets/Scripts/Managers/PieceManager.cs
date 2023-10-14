@@ -16,29 +16,40 @@ public class PieceManager : Singleton<PieceManager>
     private AnimationCurve easyPieceChancesCurve;
     [SerializeField]
     private AnimationCurve difficultPieceChancesCurve;
+    [SerializeField]
+    private Transform nextPiecedParent;
 
     private PlayerPieceDifficulty[] playersPieceDifficulties;
 
     protected override void Awake()
     {
         base.Awake();
+    }
+
+    internal void OnGameStarted()
+    {
+        if (playersPieceDifficulties != null)
+        {
+            foreach (PlayerPieceDifficulty playerPieceDifficulty in playersPieceDifficulties)
+            {
+                Destroy(playerPieceDifficulty.nextPiece.gameObject);
+            }
+        }
 
         playersPieceDifficulties = new PlayerPieceDifficulty[InputManager.NUMBER_OF_PLAYERS];
         for (int playerNumber = 0; playerNumber < InputManager.NUMBER_OF_PLAYERS; playerNumber++)
         {
             playersPieceDifficulties[playerNumber] = new PlayerPieceDifficulty(playerNumber);
         }
-    }
 
-
-    void OnEnable()
-    {
         foreach (PlayerPieceDifficulty playerPieceDifficulty in playersPieceDifficulties)
         {
+            UpdateNextPiece(playerPieceDifficulty);
             DifficultyManager.PlayerDifficultyChanged[playerPieceDifficulty.playerNumber] += playerPieceDifficulty.OnDifficultyChanged;
         }
     }
-    void OnDisable()
+
+    internal void OnGameFinished()
     {
         foreach (PlayerPieceDifficulty playerPieceDifficulty in playersPieceDifficulties)
         {
@@ -46,17 +57,8 @@ public class PieceManager : Singleton<PieceManager>
         }
     }
 
-    void Start()
-    {
-        foreach (PlayerPieceDifficulty playerPieceDifficulty in playersPieceDifficulties)
-        {
-            UpdateNextPiece(playerPieceDifficulty);
-        }
-    }
-
     internal BottlePiece GetRandomPiece(int playerNumber)
     {
-
         PlayerPieceDifficulty playerPieceDifficulty = playersPieceDifficulties[playerNumber];
         BottlePiece randomPiece = playerPieceDifficulty.nextPiece;
         randomPiece.gameObject.SetActive(true);
@@ -70,7 +72,7 @@ public class PieceManager : Singleton<PieceManager>
 
         float randomValue = Random.value;
         float floatIndex = Mathf.Lerp(easyPieceChancesCurve.Evaluate(randomValue), difficultPieceChancesCurve.Evaluate(randomValue), playerPieceDifficulty.difficulty);
-        BottlePiece nextPiece = Instantiate<BottlePiece>(bottlePieces[Mathf.RoundToInt((bottlePieces.Length - 1) * floatIndex)]);
+        BottlePiece nextPiece = Instantiate<BottlePiece>(bottlePieces[Mathf.RoundToInt((bottlePieces.Length - 1) * floatIndex)], nextPiecedParent);
         nextPiece.Initialise();
         int numberOfBottles = nextPiece.GetNumberOfBottles();
         nextPiece.SetBottlesVisuals(GetRandomBottles(numberOfBottles));

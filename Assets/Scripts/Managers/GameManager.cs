@@ -48,36 +48,12 @@ public class GameManager : Singleton<GameManager>
         playerControls.Navigation.ExitGame.performed -= OnExitGameButtonPressed;
     }
 
-    private void OnGameOver(PlayerProgress playerProgress)
-    {
-        int playerNumber = playerProgress.playerNumber;
-
-        DifficultyManager.GameOver[playerNumber] -= OnGameOver;
-        InputManager.Instance.PauseInputs(playerNumber, true);
-
-        arePlayersGameOver[playerNumber] = true;
-        playersGameProgresses[playerNumber] = playerProgress;
-        playerTables[playerNumber].StopGame();
-
-        bool allPlayersAreGameOver = true;
-        foreach (bool isPlayerGameOver in arePlayersGameOver)
-        {
-            allPlayersAreGameOver &= isPlayerGameOver;
-        }
-
-        if (allPlayersAreGameOver)
-        {
-            int winnerPlayerNumber = GetWinnerPlayerNumber();
-            uIManager.ShowGameOverScreen(winnerPlayerNumber, playersGameProgresses);
-        }
-    }
-
     public void StartNewGame(int numberOfPlayers)
     {
-        StartCoroutine(SetUpGameFor(numberOfPlayers));
+        StartCoroutine(LoadGameFor(numberOfPlayers));
     }
 
-    private IEnumerator SetUpGameFor(int numberOfPlayers)
+    private IEnumerator LoadGameFor(int numberOfPlayers)
     {
         InputManager.NUMBER_OF_PLAYERS = numberOfPlayers;
 
@@ -91,6 +67,12 @@ public class GameManager : Singleton<GameManager>
 
         PlayerTable.PlayerJoined -= OnPlayerJoined;
 
+        StartGame();
+    }
+
+    private void StartGame()
+    {
+        PieceManager.Instance.OnGameStarted();
         cameraManager.FrameGameplayArea();
         uIManager.ShowGameplayScreen();
 
@@ -115,15 +97,34 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    private void OnExitGameButtonPressed(InputAction.CallbackContext context)
+    public void PlayAgain()
     {
-        ExitGame();
+        StartGame();
     }
 
-
-    public void ExitGame()
+    private void OnGameOver(PlayerProgress playerProgress)
     {
-        Application.Quit();
+        int playerNumber = playerProgress.playerNumber;
+
+        DifficultyManager.GameOver[playerNumber] -= OnGameOver;
+        InputManager.Instance.PauseInputs(playerNumber, true);
+
+        arePlayersGameOver[playerNumber] = true;
+        playersGameProgresses[playerNumber] = playerProgress;
+        playerTables[playerNumber].StopGame();
+
+        bool allPlayersAreGameOver = true;
+        foreach (bool isPlayerGameOver in arePlayersGameOver)
+        {
+            allPlayersAreGameOver &= isPlayerGameOver;
+        }
+
+        if (allPlayersAreGameOver)
+        {
+            PieceManager.Instance.OnGameFinished();
+            int winnerPlayerNumber = GetWinnerPlayerNumber();
+            uIManager.ShowGameOverScreen(winnerPlayerNumber, playersGameProgresses);
+        }
     }
 
 
@@ -144,6 +145,27 @@ public class GameManager : Singleton<GameManager>
         return playerWithHighestScore;
     }
 
+
+    private void OnExitGameButtonPressed(InputAction.CallbackContext context)
+    {
+        ExitGame();
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void GoBackToMainMenu()
+    {
+        StartCoroutine(UnloadGameFor(InputManager.NUMBER_OF_PLAYERS));
+    }
+    private IEnumerator UnloadGameFor(int numberOfPlayers)
+    {
+        yield return SceneManager.UnloadSceneAsync(numberOfPlayers);
+        uIManager.ShowTitleScreen();
+
+    }
 
     protected override GameManager GetThis()
     {
