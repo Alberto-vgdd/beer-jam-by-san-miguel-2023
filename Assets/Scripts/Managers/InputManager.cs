@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class InputManager : Singleton<InputManager>
 {
-    public const int NUMBER_OF_PLAYERS = 2;
+    public static int NUMBER_OF_PLAYERS = 2;
     private const string PLAYER_1_DEVICE_NAME = "DualShock4GamepadHID";
     private const string PLAYER_2_DEVICE_NAME = "SwitchProControllerHID";
 

@@ -12,10 +12,30 @@ public class CameraManager : MonoBehaviour
     [Header("Components")]
     [SerializeField]
     private CameraShaker cameraShaker;
+    [SerializeField]
+    private Transform cameraPosition;
+
+    [Header("Parameters")]
+    [SerializeField]
+    private Vector3 singlePlayerCameraPosition;
+    [SerializeField]
+    private Vector3 multiplayerCameraPosition;
 
     private void Awake()
     {
         ShakeCameraTriggered += OnShakeCameraTriggered;
+    }
+
+    internal void FrameGameplayArea()
+    {
+        if (InputManager.NUMBER_OF_PLAYERS > 1)
+        {
+            cameraPosition.position = multiplayerCameraPosition;
+        }
+        else
+        {
+            cameraPosition.position = singlePlayerCameraPosition;
+        }
     }
 
     public static void ShakeCamera(float duration, float magnitude, int numberOfBounces)

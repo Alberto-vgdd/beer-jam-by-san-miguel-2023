@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -11,21 +13,21 @@ public class GameManager : Singleton<GameManager>
     private UIManager uIManager;
     [SerializeField]
     private DifficultyManager difficultyManager;
+    [SerializeField]
+    private CameraManager cameraManager;
+
+
 
     private PlayerControls playerControls;
-
-    [SerializeField]
     private PlayerTable[] playerTables;
-
     private bool[] arePlayersGameOver;
     private PlayerProgress[] playersGameProgresses;
+
+
 
     protected override void Awake()
     {
         base.Awake();
-
-        arePlayersGameOver = new bool[InputManager.NUMBER_OF_PLAYERS];
-        playersGameProgresses = new PlayerProgress[InputManager.NUMBER_OF_PLAYERS];
 
         playerControls = new PlayerControls();
         playerControls.Enable();
@@ -65,14 +67,31 @@ public class GameManager : Singleton<GameManager>
 
         if (allPlayersAreGameOver)
         {
-            // TODO : FIX UI.
             int winnerPlayerNumber = GetWinnerPlayerNumber();
             uIManager.ShowGameOverScreen(winnerPlayerNumber, playersGameProgresses);
         }
     }
 
-    public void StartNewGame()
+    public void StartNewGame(int numberOfPlayers)
     {
+        StartCoroutine(SetUpGameFor(numberOfPlayers));
+    }
+
+    private IEnumerator SetUpGameFor(int numberOfPlayers)
+    {
+        InputManager.NUMBER_OF_PLAYERS = numberOfPlayers;
+
+        arePlayersGameOver = new bool[numberOfPlayers];
+        playersGameProgresses = new PlayerProgress[numberOfPlayers];
+        playerTables = new PlayerTable[numberOfPlayers];
+
+        PlayerTable.PlayerJoined += OnPlayerJoined;
+
+        yield return SceneManager.LoadSceneAsync(numberOfPlayers, LoadSceneMode.Additive);
+
+        PlayerTable.PlayerJoined -= OnPlayerJoined;
+
+        cameraManager.FrameGameplayArea();
         uIManager.ShowGameplayScreen();
 
         foreach (PlayerTable playerTable in playerTables)
@@ -87,6 +106,13 @@ public class GameManager : Singleton<GameManager>
         }
 
         difficultyManager.ResetProgress();
+    }
+
+    private void OnPlayerJoined(int playerNumber, PlayerTable playerTable)
+    {
+        playerTable.SetPlayerControls(InputManager.Instance.GetPlayerControls(playerNumber));
+        playerTables[playerNumber] = playerTable;
+
     }
 
     private void OnExitGameButtonPressed(InputAction.CallbackContext context)

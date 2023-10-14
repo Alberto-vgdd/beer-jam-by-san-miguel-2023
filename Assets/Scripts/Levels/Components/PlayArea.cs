@@ -57,15 +57,6 @@ public class PlayArea : MonoBehaviour
     private float rotationTime;
 
 
-    internal void SetPlayerNumber(int newPlayerNumber)
-    {
-        playerNumber = newPlayerNumber;
-    }
-
-    void Start()
-    {
-        playerControls = InputManager.Instance.GetPlayerControls(playerNumber);
-    }
 
     private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
     {
@@ -349,4 +340,13 @@ public class PlayArea : MonoBehaviour
         StartCoroutine(HandleGravity());
     }
 
+    internal void SetPlayerNumber(int newPlayerNumber)
+    {
+        playerNumber = newPlayerNumber;
+    }
+
+    internal void SetPlayerControls(PlayerControls newPlayerControls)
+    {
+        playerControls = newPlayerControls;
+    }
 }

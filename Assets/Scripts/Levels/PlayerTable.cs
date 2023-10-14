@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 
 public class PlayerTable : MonoBehaviour
 {
+    public delegate void PlayerJoinedHandler(int playerNumber, PlayerTable playerTable);
+    public static PlayerJoinedHandler PlayerJoined;
     public delegate void BeerBoxCompletedHandler(int playerNumber, int boxesCompleted);
     public static BeerBoxCompletedHandler BeerBoxCompleted;
 
@@ -60,6 +62,7 @@ public class PlayerTable : MonoBehaviour
     void Awake()
     {
         playArea.SetPlayerNumber(playerNumber);
+        PlayerJoined?.Invoke(playerNumber, this);
     }
 
     private void InitliasiseBeerBoxes()
@@ -303,5 +306,10 @@ public class PlayerTable : MonoBehaviour
         StopAllCoroutines();
         playArea.PieceDropped -= OnPieceDropped;
         DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficultyChanged;
+    }
+
+    internal void SetPlayerControls(PlayerControls playerControls)
+    {
+        playArea.SetPlayerControls(playerControls);
     }
 }
