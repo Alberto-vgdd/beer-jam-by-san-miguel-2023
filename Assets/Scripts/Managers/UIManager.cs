@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class UIManager : MonoBehaviour
     private GameObject soloGameplayScreenGameObject;
     [SerializeField]
     private GameObject multiplayerGameplayScreenGameObject;
+    [SerializeField]
+    private EventSystem eventSystem;
 
     private GameOverScreen soloGameOverScreen;
     private GameOverScreen multiGameOverScreen;
@@ -26,6 +29,16 @@ public class UIManager : MonoBehaviour
         multiGameOverScreen = multiGameOverScreenGameObject.GetComponent<GameOverScreen>();
     }
 
+    void OnEnable()
+    {
+        BaseScreen.SelectGameObjectRequested += OnSelectGameObjectRequested;
+    }
+
+
+    void OnDisable()
+    {
+        BaseScreen.SelectGameObjectRequested -= OnSelectGameObjectRequested;
+    }
 
     public void ShowGameOverScreen(int winnerPlayerNumber, PlayerProgress[] playersGameProgresses)
     {
@@ -65,5 +78,10 @@ public class UIManager : MonoBehaviour
         titleScreenGameObject.SetActive(true);
         soloGameplayScreenGameObject.SetActive(false);
         multiplayerGameplayScreenGameObject.SetActive(false);
+    }
+
+    private void OnSelectGameObjectRequested(GameObject newGameObjectToSelect)
+    {
+        eventSystem.SetSelectedGameObject(newGameObjectToSelect);
     }
 }
