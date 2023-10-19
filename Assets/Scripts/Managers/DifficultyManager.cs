@@ -23,7 +23,7 @@ public class DifficultyManager : MonoBehaviour
     [Header("Parameters")]
     [SerializeField]
     [Range(0, 9)]
-    private int levelNumber = 0;
+    private int startLevelNumber = 0;
     [SerializeField]
     private int[] levelToObjectiveBoxesCount = new int[10];
     [SerializeField]
@@ -64,8 +64,8 @@ public class DifficultyManager : MonoBehaviour
     private void OnPlayerProgressLevelChanged(PlayerProgress playerProgress)
     {
         playerProgress.completedBoxes = 0;
-        playerProgress.objectiveCompletedBoxes = levelToObjectiveBoxesCount[levelNumber];
-        playerProgress.difficulty = difficultyIncrease * levelNumber;
+        playerProgress.objectiveCompletedBoxes = levelToObjectiveBoxesCount[playerProgress.levelNumber];
+        playerProgress.difficulty = difficultyIncrease * playerProgress.levelNumber;
         playerProgress.livesLeft = Mathf.Min(MAX_LIVES, playerProgress.livesLeft + 1);
 
 
@@ -114,6 +114,7 @@ public class DifficultyManager : MonoBehaviour
         foreach (PlayerProgress playerProgress in playersProgresses)
         {
             playerProgress.Reset();
+            playerProgress.levelNumber = startLevelNumber;
             OnPlayerProgressLevelChanged(playerProgress);
         }
     }
