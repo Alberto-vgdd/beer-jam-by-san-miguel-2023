@@ -28,6 +28,8 @@ public class PlayerTable : MonoBehaviour
     private BeerBox beerBoxPrefab;
     [SerializeField]
     private PlayArea playArea;
+    [SerializeField]
+    private BottlePieceProjectionPreview bottlePieceProjectionPreview;
 
     [Header("Parameters")]
     [SerializeField]
@@ -120,11 +122,10 @@ public class PlayerTable : MonoBehaviour
     }
 
 
-    private bool TryGetBeerBox(BeerBottle beerBottle, out BeerBox beerBox)
+    private bool TryGetBeerBox(Vector3 position, out BeerBox beerBox)
     {
-        Vector3 origin = beerBottle.GetPosition();
         beerBox = null;
-        if (Physics.Raycast(origin, Vector3.down, out RaycastHit RaycastHit, 100f, LayerManager.PieceDropLayerMask, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(position, Vector3.down, out RaycastHit RaycastHit, 100f, LayerManager.PieceDropLayerMask, QueryTriggerInteraction.Collide))
         {
             if (RaycastHit.collider.TryGetComponent<BeerBox>(out beerBox))
             {
@@ -148,7 +149,7 @@ public class PlayerTable : MonoBehaviour
 
         foreach (BeerBottle beerBottle in beerBottles)
         {
-            if (TryGetBeerBox(beerBottle, out BeerBox beerBox))
+            if (TryGetBeerBox(beerBottle.GetPosition(), out BeerBox beerBox))
             {
                 Vector2Int localCoordinatesInBeerBox = beerBox.GetLocalCoordinatesFromPoint(beerBottle.GetPosition());
 
@@ -177,6 +178,8 @@ public class PlayerTable : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(addBottleTime);
+        bottlePieceProjectionPreview.DisableAllProjections();
+        bottlePieceProjectionPreview.DisableNextProjectionUpdateAnimation();
 
         Destroy(bottlePiece.gameObject);
 
@@ -295,6 +298,7 @@ public class PlayerTable : MonoBehaviour
 
         InitliasiseBeerBoxes();
         playArea.PieceDropped += OnPieceDropped;
+        playArea.PieceMoved += OnPieceMoved;
         DifficultyManager.PlayerDifficultyChanged[playerNumber] += OnDifficultyChanged;
         playArea.ClearPlayArea();
         playArea.StartPlayArea();
@@ -305,7 +309,38 @@ public class PlayerTable : MonoBehaviour
     {
         StopAllCoroutines();
         playArea.PieceDropped -= OnPieceDropped;
+        playArea.PieceMoved -= OnPieceMoved;
         DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficultyChanged;
+    }
+
+    private void OnPieceMoved(BottlePiece movedPiece, Vector3 newPiecePosition, float movementTime)
+    {
+
+        bool isInAValidPosition = true;
+        Vector3 positionOffset = newPiecePosition - movedPiece.GetPosition();
+        List<Vector3> bottlesPositions = new List<Vector3>();
+        BeerBottle[] beerBottles = movedPiece.GetBottles();
+        foreach (BeerBottle beerBottle in beerBottles)
+        {
+            Vector3 offesetBottlePosition = beerBottle.GetPosition() + positionOffset;
+            bottlesPositions.Add(offesetBottlePosition);
+
+            if (TryGetBeerBox(offesetBottlePosition, out BeerBox beerBox))
+            {
+                Vector2Int localCoordinatesInBeerBox = beerBox.GetLocalCoordinatesFromPoint(offesetBottlePosition);
+
+                if (!beerBox.IsClosestPositionEmpty(localCoordinatesInBeerBox))
+                {
+                    isInAValidPosition = false;
+                }
+            }
+            else
+            {
+                isInAValidPosition = false;
+            }
+        }
+
+        bottlePieceProjectionPreview.UpdateProjection(isInAValidPosition, bottlesPositions, movementTime);
     }
 
     internal void SetPlayerControls(PlayerControls playerControls)

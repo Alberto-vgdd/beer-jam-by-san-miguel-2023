@@ -10,10 +10,21 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5164081751216445978, guid: 0e838a305144a4eb285aaa865daceee6,
         type: 3}
+      propertyPath: mesh
+      value: 
+      objectReference: {fileID: 6890517479039288191, guid: a12365a2ede8342fd97c2ab667381bd9,
+        type: 3}
+    - target: {fileID: 5164081751216445978, guid: 0e838a305144a4eb285aaa865daceee6,
+        type: 3}
       propertyPath: sprite
       value: 
       objectReference: {fileID: 838008405, guid: ad4e584e6fdca47a8abb3f36819fcdb5,
         type: 3}
+    - target: {fileID: 5164081751216445978, guid: 0e838a305144a4eb285aaa865daceee6,
+        type: 3}
+      propertyPath: meshTransform
+      value: 
+      objectReference: {fileID: 6400288548105500484}
     - target: {fileID: 5192118786267702669, guid: 0e838a305144a4eb285aaa865daceee6,
         type: 3}
       propertyPath: m_RootOrder
@@ -72,7 +83,7 @@ PrefabInstance:
     - target: {fileID: 7142842923689711718, guid: 0e838a305144a4eb285aaa865daceee6,
         type: 3}
       propertyPath: m_Name
-      value: Pinchos Visuals Variant
+      value: Pinchos Visuals
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

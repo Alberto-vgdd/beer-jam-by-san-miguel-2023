@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -38,6 +39,11 @@ public class BeerBottle : MonoBehaviour
         transform.localPosition = newLocalPosition;
     }
 
+    internal Quaternion GetRotation()
+    {
+        return transform.rotation;
+    }
+
     internal void EnableBoxCollider(bool enabled)
     {
         boxCollider.enabled = enabled;
@@ -63,8 +69,8 @@ public class BeerBottle : MonoBehaviour
         bottleVisuals.SetParent(bottleVisualsParent);
     }
 
-    internal Sprite GetBottleVisualsSprite()
+    internal BottleVisuals GetBottleVisuals()
     {
-        return bottleVisuals.GetSprite();
+        return bottleVisuals;
     }
 }

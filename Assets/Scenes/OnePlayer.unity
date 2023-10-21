@@ -9010,21 +9010,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player 1 Table
       objectReference: {fileID: 0}
-    - target: {fileID: 4550825438233519345, guid: c079537a4af0a4d1db9f5507c788d3cc,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.277
-      objectReference: {fileID: 0}
-    - target: {fileID: 4550825438233519345, guid: c079537a4af0a4d1db9f5507c788d3cc,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4550825438233519345, guid: c079537a4af0a4d1db9f5507c788d3cc,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.305
-      objectReference: {fileID: 0}
     - target: {fileID: 7798814008199113014, guid: c079537a4af0a4d1db9f5507c788d3cc,
         type: 3}
       propertyPath: m_LocalPosition.x

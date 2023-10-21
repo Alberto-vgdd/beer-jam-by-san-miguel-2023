@@ -19,6 +19,10 @@ public class PlayArea : MonoBehaviour
     public PieceDroppedHandler PieceDropped;
 
 
+    public delegate void PieceMovedHandler(BottlePiece movedPiece, Vector3 newPiecePosition, float movementTime);
+    public PieceMovedHandler PieceMoved;
+
+
     [Header("Components")]
     [SerializeField]
     private Transform heightTransform;
@@ -55,7 +59,6 @@ public class PlayArea : MonoBehaviour
     private float heightChangeTime;
     private float movementTime;
     private float rotationTime;
-
 
 
     private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
@@ -115,6 +118,7 @@ public class PlayArea : MonoBehaviour
 
     IEnumerator HandleInputs()
     {
+
         while (true)
         {
             if (pendingRotation)
@@ -129,11 +133,10 @@ public class PlayArea : MonoBehaviour
 
                 bottlePiece.Rotate();
 
-
                 pieceRotatedAudioSource.pitch = Random.Range(0.95f, 1.05f);
                 pieceRotatedAudioSource.Play();
                 yield return new WaitForSeconds(bottlePiece.GetRotationTime());
-
+                OnPieceMoved(bottlePiece.GetPosition());
             }
 
 
@@ -147,7 +150,9 @@ public class PlayArea : MonoBehaviour
                 {
                     if (PieceCanBeMovedTo(bottlePiece, Vector3.right * Mathf.Sign(input.x), out Vector3 candidatePosition))
                     {
+                        OnPieceMoved(candidatePosition);
                         bottlePiece.MoveToLocalPosition(WorldPositionToGridLocalPosition(candidatePosition), true);
+
                         yield return new WaitForSeconds(bottlePiece.GetMovementTime());
                     }
                 }
@@ -156,22 +161,27 @@ public class PlayArea : MonoBehaviour
                 {
                     if (PieceCanBeMovedTo(bottlePiece, Vector3.forward * Mathf.Sign(input.y), out Vector3 candidatePosition))
                     {
+                        OnPieceMoved(candidatePosition);
                         bottlePiece.MoveToLocalPosition(WorldPositionToGridLocalPosition(candidatePosition), true);
+
                         yield return new WaitForSeconds(bottlePiece.GetMovementTime());
                     }
                 }
             }
 
-            if (pendingDropPiece && PieceDropped != null)
+            if (pendingDropPiece)
             {
                 pendingDropPiece = false;
                 pendingRotation = false;
                 pendingInputs.Clear();
                 DropPiece();
             }
+
             yield return new WaitForEndOfFrame();
         }
     }
+
+
     bool linearGravity = false;
     bool rotationCooldwon = false;
     private IEnumerator HandleGravity()
@@ -294,6 +304,7 @@ public class PlayArea : MonoBehaviour
         currentHeight = START_HEIGHT;
         gravityTimer = 0f;
         heightTransform.localPosition = Vector3.up * currentHeight;
+        OnPieceMoved(bottlePiece.GetPosition());
     }
 
     private Vector3 WorldPositionToGridLocalPosition(Vector3 position)
@@ -301,6 +312,12 @@ public class PlayArea : MonoBehaviour
         Vector3 positionOnPlayArea = planeTransform.InverseTransformPoint(position);
         Vector3 snappedPosition = new Vector3(MathF.Floor(positionOnPlayArea.x / BeerBottle.BOTTLE_WIDTH) * BeerBottle.BOTTLE_WIDTH, 0f, Mathf.Floor(positionOnPlayArea.z / BeerBottle.BOTTLE_WIDTH) * BeerBottle.BOTTLE_WIDTH);
         return snappedPosition + POSITION_CENTER_OFFSET;
+    }
+
+
+    private void OnPieceMoved(Vector3 newPiecePosition)
+    {
+        PieceMoved?.Invoke(bottlePiece, newPiecePosition, movementTime);
     }
 
     internal void ClearPlayArea()

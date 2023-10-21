@@ -94,10 +94,21 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5164081751216445978, guid: 0e838a305144a4eb285aaa865daceee6,
         type: 3}
+      propertyPath: mesh
+      value: 
+      objectReference: {fileID: -8404932825788046844, guid: 86f2d485e539f459c9cbe0f02c31c7f5,
+        type: 3}
+    - target: {fileID: 5164081751216445978, guid: 0e838a305144a4eb285aaa865daceee6,
+        type: 3}
       propertyPath: sprite
       value: 
       objectReference: {fileID: 1696885440, guid: ad4e584e6fdca47a8abb3f36819fcdb5,
         type: 3}
+    - target: {fileID: 5164081751216445978, guid: 0e838a305144a4eb285aaa865daceee6,
+        type: 3}
+      propertyPath: meshTransform
+      value: 
+      objectReference: {fileID: 3460433775734806794}
     - target: {fileID: 5192118786267702669, guid: 0e838a305144a4eb285aaa865daceee6,
         type: 3}
       propertyPath: m_RootOrder

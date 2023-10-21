@@ -159,7 +159,7 @@ public class BottlePiece : MonoBehaviour
         IDictionary<Vector2Int, Sprite> localCoordinatesToSprites = new Dictionary<Vector2Int, Sprite>();
         foreach (BeerBottle beerBottle in beerBottles)
         {
-            localCoordinatesToSprites[GetLocalCoordinatesFromPoint(beerBottle.GetPosition())] = beerBottle.GetBottleVisualsSprite();
+            localCoordinatesToSprites[GetLocalCoordinatesFromPoint(beerBottle.GetPosition())] = beerBottle.GetBottleVisuals().GetSprite();
         }
         return localCoordinatesToSprites;
     }
