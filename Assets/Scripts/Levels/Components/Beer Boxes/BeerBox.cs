@@ -33,6 +33,11 @@ public class BeerBox : MonoBehaviour
     private float addBottleTime;
 
 
+    public TypeOfBox boxType = TypeOfBox.Default;
+
+    public enum TypeOfBox { Default, SlowDownTime,  SpeedUpTime}
+
+
 
     void Awake()
     {

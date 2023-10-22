@@ -13,6 +13,9 @@ public class PlayerTable : MonoBehaviour
 
     public delegate void BeerBoxRuinedHandler(int playerNumber);
     public static BeerBoxRuinedHandler BeerBoxRuined;
+    
+    public delegate void BeerBoxPowerUpHandler(int playerNumber, int increase);
+    public static BeerBoxPowerUpHandler BeerBoxPowerUp;
 
     public delegate void BellRingedHandler(int boxesCompleted, float boxCompletedTime);
     public BellRingedHandler BellRinged;
@@ -61,6 +64,8 @@ public class PlayerTable : MonoBehaviour
 
     private BeerBox[] beerBoxes;
 
+    public bool nextBoxIsPowerUp = false;
+
     void Awake()
     {
         playArea.SetPlayerNumber(playerNumber);
@@ -100,6 +105,29 @@ public class PlayerTable : MonoBehaviour
     }
 
     private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
+    {
+        difficulty = newDifficulty;
+        beerBoxSpawnTime = beerBoxSpawnTimeProgression.Evaluate(difficulty);
+        beerBoxDestroyTime = beerBoxDestroyTimeProgression.Evaluate(difficulty);
+        beerBoxRuinTime = beerBoxRuinTimeProgression.Evaluate(difficulty);
+        addBottleTime = addBottleTimeProgression.Evaluate(difficulty);
+
+        if (difficulty > 0) 
+        {
+            nextBoxIsPowerUp = true;
+        }
+
+        foreach (BeerBox beerBox in beerBoxes)
+        {
+            if (beerBox != null)
+            {
+                beerBox.UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime, beerBoxRuinTime);
+            }
+        }
+    }
+    
+    
+    private void OnDifficultyChangedByPowerUp(float newDifficulty)
     {
         difficulty = newDifficulty;
         beerBoxSpawnTime = beerBoxSpawnTimeProgression.Evaluate(difficulty);
@@ -159,6 +187,22 @@ public class PlayerTable : MonoBehaviour
                     if (beerBox.IsFull())
                     {
                         fullBeerBoxes.Add(beerBox);
+                        if (beerBox.boxType == BeerBox.TypeOfBox.SlowDownTime)
+                        {
+                            BeerBoxPowerUp?.Invoke(playerNumber, -1);
+                        }
+                        else if (beerBox.boxType == BeerBox.TypeOfBox.SpeedUpTime)
+                        {
+                            if (PlayerNumber == 0)
+                            {
+                                BeerBoxPowerUp?.Invoke(1, +1);
+                            }
+                            else 
+                            {
+                                BeerBoxPowerUp?.Invoke(0, +1);
+                            }
+
+                        }
                     }
                 }
                 else
@@ -235,7 +279,27 @@ public class PlayerTable : MonoBehaviour
                 Vector3 boxPosition = beerBoxesParent.position + new Vector3(beerBoxIndex.y * BeerBox.WIDTH, 0f, -beerBoxIndex.z * BeerBox.DEPTH);
                 beerBoxes[beerBoxIndex.x] = Instantiate<BeerBox>(beerBoxPrefab, boxPosition, Quaternion.identity, beerBoxesParent);
                 beerBoxes[beerBoxIndex.x].UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime, beerBoxRuinTime);
+                if (nextBoxIsPowerUp)
+                {
+                    nextBoxIsPowerUp = false;
+                    if (InputManager.NUMBER_OF_PLAYERS > 1)
+                    {
+                        if (Random.Range(0, 100.0f) <= 50)
+                        {
+                            beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SlowDownTime;
+                        }
+                        else
+                        {
+                            beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SpeedUpTime;
+                        }
+                    }
+                    else 
+                    {
+                        beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SlowDownTime;
+                    }
+                }
                 beerBoxes[beerBoxIndex.x].Spawn(newBeerBoxIndexToSpawnDirection[beerBoxIndex]);
+
             }
 
             yield return new WaitForSeconds(beerBoxSpawnTime);
@@ -300,6 +364,7 @@ public class PlayerTable : MonoBehaviour
         playArea.PieceDropped += OnPieceDropped;
         playArea.PieceMoved += OnPieceMoved;
         DifficultyManager.PlayerDifficultyChanged[playerNumber] += OnDifficultyChanged;
+        DifficultyManager.PlayerDifficultyChangedByPowerUp[playerNumber] += OnDifficultyChangedByPowerUp;
         playArea.ClearPlayArea();
         playArea.StartPlayArea();
         playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece(playerNumber));
@@ -311,6 +376,8 @@ public class PlayerTable : MonoBehaviour
         playArea.PieceDropped -= OnPieceDropped;
         playArea.PieceMoved -= OnPieceMoved;
         DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficultyChanged;
+        DifficultyManager.PlayerDifficultyChangedByPowerUp[playerNumber] -= OnDifficultyChangedByPowerUp;
+
     }
 
     private void OnPieceMoved(BottlePiece movedPiece, Vector3 newPiecePosition, float movementTime)

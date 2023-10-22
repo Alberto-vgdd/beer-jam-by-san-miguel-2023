@@ -1,10 +1,14 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class DifficultyManager : MonoBehaviour
 {
     public delegate void DifficultyChangedHandler(float newDifficulty, int newDisplayLevelNumber);
     public static DifficultyChangedHandler[] PlayerDifficultyChanged = new DifficultyChangedHandler[InputManager.NUMBER_OF_PLAYERS];
+    
+    public delegate void DifficultyChangedByPowerUpHandler(float newDifficulty);
+    public static DifficultyChangedByPowerUpHandler[] PlayerDifficultyChangedByPowerUp = new DifficultyChangedByPowerUpHandler[InputManager.NUMBER_OF_PLAYERS];
 
     public delegate void BoxesCompletedLeftChangedHandler(int newBoxesCompletedLeft);
     public static BoxesCompletedLeftChangedHandler[] PlayerBoxesCompletedLeftChanged = new BoxesCompletedLeftChangedHandler[InputManager.NUMBER_OF_PLAYERS];
@@ -53,12 +57,15 @@ public class DifficultyManager : MonoBehaviour
     {
         PlayerTable.BeerBoxCompleted += OnBeerBoxCompleted;
         PlayerTable.BeerBoxRuined += OnBeerBoxRuined;
+        PlayerTable.BeerBoxPowerUp += OnBeerBoxPowerUp;
     }
 
     void OnDisable()
     {
         PlayerTable.BeerBoxCompleted -= OnBeerBoxCompleted;
         PlayerTable.BeerBoxRuined -= OnBeerBoxRuined;
+        PlayerTable.BeerBoxPowerUp -= OnBeerBoxPowerUp;
+
     }
 
     private void OnPlayerProgressLevelChanged(PlayerProgress playerProgress)
@@ -107,6 +114,27 @@ public class DifficultyManager : MonoBehaviour
         {
             GameOver[playerNumber]?.Invoke(playerProgress);
         }
+    }
+
+    private void OnBeerBoxPowerUp(int playerNumber, int increase) 
+    {
+        PlayerProgress playerProgress = playersProgresses[playerNumber];
+        playerProgress.difficulty = difficultyIncrease * (playerProgress.levelNumber + increase);
+
+        PlayerDifficultyChangedByPowerUp[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty);
+
+        StartCoroutine(BeerBoxRestorePowerUp(playerNumber));
+    }
+
+    IEnumerator BeerBoxRestorePowerUp(int playerNumber) 
+    {
+
+        yield return new WaitForSeconds(15f);
+
+        PlayerProgress playerProgress = playersProgresses[playerNumber];
+        playerProgress.difficulty = difficultyIncrease * playerProgress.levelNumber;
+
+        PlayerDifficultyChangedByPowerUp[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty);
     }
 
     internal void ResetProgress()
