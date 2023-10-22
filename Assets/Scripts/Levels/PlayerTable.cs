@@ -279,25 +279,6 @@ public class PlayerTable : MonoBehaviour
                 Vector3 boxPosition = beerBoxesParent.position + new Vector3(beerBoxIndex.y * BeerBox.WIDTH, 0f, -beerBoxIndex.z * BeerBox.DEPTH);
                 beerBoxes[beerBoxIndex.x] = Instantiate<BeerBox>(beerBoxPrefab, boxPosition, Quaternion.identity, beerBoxesParent);
                 beerBoxes[beerBoxIndex.x].UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime, beerBoxRuinTime);
-                if (nextBoxIsPowerUp)
-                {
-                    nextBoxIsPowerUp = false;
-                    if (InputManager.NUMBER_OF_PLAYERS > 1)
-                    {
-                        if (Random.Range(0, 100.0f) <= 50)
-                        {
-                            beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SlowDownTime;
-                        }
-                        else
-                        {
-                            beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SpeedUpTime;
-                        }
-                    }
-                    else 
-                    {
-                        beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SlowDownTime;
-                    }
-                }
                 beerBoxes[beerBoxIndex.x].Spawn(newBeerBoxIndexToSpawnDirection[beerBoxIndex]);
 
             }
@@ -342,6 +323,25 @@ public class PlayerTable : MonoBehaviour
                 Vector3 boxPosition = beerBoxesParent.position + new Vector3(beerBoxIndex.y * BeerBox.WIDTH, 0f, -beerBoxIndex.z * BeerBox.DEPTH);
                 beerBoxes[beerBoxIndex.x] = Instantiate<BeerBox>(beerBoxPrefab, boxPosition, Quaternion.identity, beerBoxesParent);
                 beerBoxes[beerBoxIndex.x].UpdateProgressionTimes(beerBoxSpawnTime, beerBoxDestroyTime, addBottleTime, beerBoxRuinTime);
+                if (nextBoxIsPowerUp)
+                {
+                    nextBoxIsPowerUp = false;
+                    if (InputManager.NUMBER_OF_PLAYERS > 1)
+                    {
+                        if (Random.Range(0, 100.0f) <= 50)
+                        {
+                            beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SlowDownTime;
+                        }
+                        else
+                        {
+                            beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SpeedUpTime;
+                        }
+                    }
+                    else
+                    {
+                        beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SlowDownTime;
+                    }
+                }
                 beerBoxes[beerBoxIndex.x].Spawn(newBeerBoxesIndexToSpawnDirection[beerBoxIndex]);
             }
             boxSpawnedAudioSource.pitch = Random.Range(0.95f, 1.05f);
