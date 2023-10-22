@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         soloGameOverScreen = soloGameOverScreenGameObject.GetComponent<GameOverScreen>();
-        multiGameOverScreen = multiGameOverScreenGameObject.GetComponent<GameOverScreen>();
+        // multiGameOverScreen = multiGameOverScreenGameObject.GetComponent<GameOverScreen>();
     }
 
     void OnEnable()
@@ -48,13 +48,13 @@ public class UIManager : MonoBehaviour
         if (InputManager.NUMBER_OF_PLAYERS > 1)
         {
             soloGameOverScreenGameObject.SetActive(false);
-            multiGameOverScreenGameObject.SetActive(true);
-            multiGameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore);
+            // multiGameOverScreenGameObject.SetActive(true);
+            // multiGameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore);
         }
         else
         {
             soloGameOverScreenGameObject.SetActive(true);
-            multiGameOverScreenGameObject.SetActive(false);
+            // multiGameOverScreenGameObject.SetActive(false);
             soloGameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore);
         }
 
@@ -66,12 +66,12 @@ public class UIManager : MonoBehaviour
     internal void ShowGameplayScreen()
     {
         soloGameOverScreenGameObject.SetActive(false);
-        multiGameOverScreenGameObject.SetActive(false);
+        // multiGameOverScreenGameObject.SetActive(false);
 
         titleScreenGameObject.SetActive(false);
 
         soloGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 1);
-        multiplayerGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 2);
+        // multiplayerGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 2);
 
         gameFinishedDisplays[InputManager.NUMBER_OF_PLAYERS - 1].Reset();
 
@@ -80,10 +80,10 @@ public class UIManager : MonoBehaviour
     internal void ShowTitleScreen()
     {
         soloGameOverScreenGameObject.SetActive(false);
-        multiGameOverScreenGameObject.SetActive(false);
+        // multiGameOverScreenGameObject.SetActive(false);
         titleScreenGameObject.SetActive(true);
         soloGameplayScreenGameObject.SetActive(false);
-        multiplayerGameplayScreenGameObject.SetActive(false);
+        // multiplayerGameplayScreenGameObject.SetActive(false);
     }
 
     private void OnSelectGameObjectRequested(GameObject newGameObjectToSelect)

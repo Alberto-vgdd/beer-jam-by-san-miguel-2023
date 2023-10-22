@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class InputManager : Singleton<InputManager>
 {
-    public static int NUMBER_OF_PLAYERS = 2;
+    public static int NUMBER_OF_PLAYERS = 1;
     private const string PLAYER_1_DEVICE_NAME = "DualShock4GamepadHID";
     private const string PLAYER_2_DEVICE_NAME = "SwitchProControllerHID";
 
@@ -16,7 +16,7 @@ public class InputManager : Singleton<InputManager>
 
     [Header("Parameters")]
     [SerializeField]
-    private string[] playerDeviceNames = { PLAYER_1_DEVICE_NAME, PLAYER_2_DEVICE_NAME };
+    private string[] playerDeviceNames = { PLAYER_1_DEVICE_NAME };
 
     private bool inputsPaused = false;
     private PlayerControls[] playerControls;
@@ -30,7 +30,7 @@ public class InputManager : Singleton<InputManager>
         for (int playerNumber = 0; playerNumber < NUMBER_OF_PLAYERS; playerNumber++)
         {
             playerControls[playerNumber] = new PlayerControls();
-            playerControls[playerNumber].devices = new InputDevice[1] { InputSystem.GetDevice(playerDeviceNames[playerNumber]) };
+            // playerControls[playerNumber].devices = new InputDevice[1] { InputSystem.GetDevice(playerDeviceNames[playerNumber]) };
         }
     }
 
