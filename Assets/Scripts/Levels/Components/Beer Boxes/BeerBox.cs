@@ -32,6 +32,9 @@ public class BeerBox : MonoBehaviour
     private float beerBoxRuinTime;
     private float addBottleTime;
 
+    public List<MeshRenderer> meshesToChangeWithPowerUp;
+    public List<Material> powerUpMaterials;
+
 
     public TypeOfBox boxType = TypeOfBox.Default;
 
@@ -47,6 +50,7 @@ public class BeerBox : MonoBehaviour
         {
             coordinatesToOrigin.Add(GetLocalCoordinatesFromPoint(beerBottleOrigin.position), beerBottleOrigin);
         }
+        Debug.Log("New piece");
     }
 
     internal Vector2Int GetLocalCoordinatesFromPoint(Vector3 position)
@@ -98,6 +102,27 @@ public class BeerBox : MonoBehaviour
 
     internal void Spawn(Vector3 spawnDirection)
     {
+        switch (boxType)
+        {
+            case TypeOfBox.Default:
+                foreach (MeshRenderer renderer in meshesToChangeWithPowerUp) 
+                {
+                    renderer.material = powerUpMaterials[0];
+                }
+                break;
+            case TypeOfBox.SlowDownTime:
+                foreach (MeshRenderer renderer in meshesToChangeWithPowerUp)
+                {
+                    renderer.material = powerUpMaterials[1];
+                }
+                break;
+            case TypeOfBox.SpeedUpTime:
+                foreach (MeshRenderer renderer in meshesToChangeWithPowerUp)
+                {
+                    renderer.material = powerUpMaterials[2];
+                }
+                break;
+        }
         beerBoxAnimator.MoveFrom(spawnDirection * -DEPTH, beerBoxSpawnTime);
     }
 

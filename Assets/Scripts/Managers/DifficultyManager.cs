@@ -118,23 +118,28 @@ public class DifficultyManager : MonoBehaviour
 
     private void OnBeerBoxPowerUp(int playerNumber, int increase) 
     {
+        
         PlayerProgress playerProgress = playersProgresses[playerNumber];
-        playerProgress.difficulty = difficultyIncrease * (playerProgress.levelNumber + increase);
+        PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(increase, playerProgress.levelNumber+1);
 
-        PlayerDifficultyChangedByPowerUp[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty);
+        int time = 10;
+        if (increase > 0)
+        {
+            time = 5;
+        }
 
-        StartCoroutine(BeerBoxRestorePowerUp(playerNumber));
+        StartCoroutine(BeerBoxRestorePowerUp(playerNumber, time));
     }
 
-    IEnumerator BeerBoxRestorePowerUp(int playerNumber) 
+    IEnumerator BeerBoxRestorePowerUp(int playerNumber, float time) 
     {
 
-        yield return new WaitForSeconds(15f);
+        yield return new WaitForSeconds(time);
 
         PlayerProgress playerProgress = playersProgresses[playerNumber];
         playerProgress.difficulty = difficultyIncrease * playerProgress.levelNumber;
 
-        PlayerDifficultyChangedByPowerUp[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty);
+        PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty, playerProgress.levelNumber+1);
     }
 
     internal void ResetProgress()

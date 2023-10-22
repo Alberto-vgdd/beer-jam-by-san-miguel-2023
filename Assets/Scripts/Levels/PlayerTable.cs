@@ -65,6 +65,7 @@ public class PlayerTable : MonoBehaviour
     private BeerBox[] beerBoxes;
 
     public bool nextBoxIsPowerUp = false;
+    int lastPowerUpLevel = 0;
 
     void Awake()
     {
@@ -112,9 +113,10 @@ public class PlayerTable : MonoBehaviour
         beerBoxRuinTime = beerBoxRuinTimeProgression.Evaluate(difficulty);
         addBottleTime = addBottleTimeProgression.Evaluate(difficulty);
 
-        if (difficulty > 0) 
+        if (difficulty > 0 && newLevelDisplayNumber > lastPowerUpLevel) 
         {
             nextBoxIsPowerUp = true;
+            lastPowerUpLevel = newLevelDisplayNumber;
         }
 
         foreach (BeerBox beerBox in beerBoxes)
@@ -187,22 +189,7 @@ public class PlayerTable : MonoBehaviour
                     if (beerBox.IsFull())
                     {
                         fullBeerBoxes.Add(beerBox);
-                        if (beerBox.boxType == BeerBox.TypeOfBox.SlowDownTime)
-                        {
-                            BeerBoxPowerUp?.Invoke(playerNumber, -1);
-                        }
-                        else if (beerBox.boxType == BeerBox.TypeOfBox.SpeedUpTime)
-                        {
-                            if (PlayerNumber == 0)
-                            {
-                                BeerBoxPowerUp?.Invoke(1, +1);
-                            }
-                            else 
-                            {
-                                BeerBoxPowerUp?.Invoke(0, +1);
-                            }
-
-                        }
+                       
                     }
                 }
                 else
@@ -310,6 +297,22 @@ public class PlayerTable : MonoBehaviour
 
                     newBeerBoxesIndexToSpawnDirection[new Vector3Int(i, columnIndex, rowIndex)] = -clearingBoxDirection;
                     beerBoxes[i].CompleteAndDestroy(clearingBoxDirection);
+                    if (beerBoxes[i].boxType == BeerBox.TypeOfBox.SlowDownTime)
+                    {
+                        BeerBoxPowerUp?.Invoke(playerNumber, 0);
+                    }
+                    else if (beerBoxes[i].boxType == BeerBox.TypeOfBox.SpeedUpTime)
+                    {
+                        if (PlayerNumber == 0)
+                        {
+                            BeerBoxPowerUp?.Invoke(1, 1);
+                        }
+                        else
+                        {
+                            BeerBoxPowerUp?.Invoke(0, 1);
+                        }
+
+                    }
                     beerBoxes[i] = null;
 
                     yield return new WaitForSeconds(beerBoxDestroyTime);
