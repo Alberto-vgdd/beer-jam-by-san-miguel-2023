@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TutorialScreen : BaseScreen
+public class GameModeSelectionScreen : BaseScreen
 {
     [Header("Components")]
     [SerializeField]
-    private GameObject continueButton;
+    private GameObject onePlayerGameButton;
 
     void OnEnable()
     {
-        SelectGameObjectRequested?.Invoke(continueButton);
+        SelectGameObjectRequested?.Invoke(onePlayerGameButton);
     }
 }

@@ -8,7 +8,7 @@ public class TitleScreen : BaseScreen
     [SerializeField]
     private GameObject startButton;
 
-    void OnEnable()
+    public void OnAnimationFinished()
     {
         SelectGameObjectRequested?.Invoke(startButton);
     }

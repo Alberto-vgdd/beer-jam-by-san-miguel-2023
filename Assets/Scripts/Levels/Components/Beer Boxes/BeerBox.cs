@@ -38,7 +38,7 @@ public class BeerBox : MonoBehaviour
 
     public TypeOfBox boxType = TypeOfBox.Default;
 
-    public enum TypeOfBox { Default, SlowDownTime,  SpeedUpTime}
+    public enum TypeOfBox { Default, SlowDownTime, SpeedUpTime }
 
 
 
@@ -50,7 +50,6 @@ public class BeerBox : MonoBehaviour
         {
             coordinatesToOrigin.Add(GetLocalCoordinatesFromPoint(beerBottleOrigin.position), beerBottleOrigin);
         }
-        Debug.Log("New piece");
     }
 
     internal Vector2Int GetLocalCoordinatesFromPoint(Vector3 position)
@@ -105,7 +104,7 @@ public class BeerBox : MonoBehaviour
         switch (boxType)
         {
             case TypeOfBox.Default:
-                foreach (MeshRenderer renderer in meshesToChangeWithPowerUp) 
+                foreach (MeshRenderer renderer in meshesToChangeWithPowerUp)
                 {
                     renderer.material = powerUpMaterials[0];
                 }
