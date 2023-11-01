@@ -12,11 +12,13 @@ public class GameOverScreen : BaseScreen
     [SerializeField]
     private GameObject playAgainButton;
 
+    [SerializeField]
+    private int scoreTextFontWeight = 900;
+
     internal void SetTotalScore(int newTotalScore)
     {
-        totalScoreText.text = newTotalScore.ToString();
+        totalScoreText.text = StringUtils.FormatStringWithFontWeight(newTotalScore.ToString(), scoreTextFontWeight);
     }
-
 
     public void OnGameOverAnimationFinished()
     {
