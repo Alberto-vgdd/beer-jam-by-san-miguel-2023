@@ -6,10 +6,10 @@ public class TutorialScreen : BaseScreen
 {
     [Header("Components")]
     [SerializeField]
-    private GameObject onePlayerGame;
+    private GameObject continueButton;
 
     void OnEnable()
     {
-        SelectGameObjectRequested?.Invoke(onePlayerGame);
+        SelectGameObjectRequested?.Invoke(continueButton);
     }
 }

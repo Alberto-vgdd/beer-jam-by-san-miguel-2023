@@ -16,7 +16,9 @@ public class InputManager : Singleton<InputManager>
 
     [Header("Parameters")]
     [SerializeField]
-    private string[] playerDeviceNames = { PLAYER_1_DEVICE_NAME };
+    private bool developmentMode = false;
+    [SerializeField]
+    private string[] playerDeviceNames = { PLAYER_1_DEVICE_NAME, PLAYER_2_DEVICE_NAME };
 
     private bool inputsPaused = false;
     private PlayerControls[] playerControls;
@@ -30,7 +32,10 @@ public class InputManager : Singleton<InputManager>
         for (int playerNumber = 0; playerNumber < NUMBER_OF_PLAYERS; playerNumber++)
         {
             playerControls[playerNumber] = new PlayerControls();
-            // playerControls[playerNumber].devices = new InputDevice[1] { InputSystem.GetDevice(playerDeviceNames[playerNumber]) };
+            if (!developmentMode)
+            {
+                // playerControls[playerNumber].devices = new InputDevice[1] { InputSystem.GetDevice(playerDeviceNames[playerNumber]) };
+            }
         }
     }
 
