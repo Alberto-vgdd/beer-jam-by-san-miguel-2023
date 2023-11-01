@@ -25,6 +25,8 @@ public class ProgressionDisplay : MonoBehaviour
     [Header("Parameters")]
     [SerializeField]
     private int playerNumber;
+    [SerializeField]
+    private int textFontWeight = 700;
 
 
     void OnEnable()
@@ -45,7 +47,7 @@ public class ProgressionDisplay : MonoBehaviour
 
     private void OnDifficulty(float newDifficulty, int newDisplayLevelNumber)
     {
-        levelNumberText.text = newDisplayLevelNumber.ToString();
+        levelNumberText.text = StringUtils.FormatStringWithFontWeight(newDisplayLevelNumber.ToString(), textFontWeight);
         if (newDisplayLevelNumber > 1)
         {
             DOTweenUtils.CompleteTween(levelNumberAnimation);
@@ -55,7 +57,7 @@ public class ProgressionDisplay : MonoBehaviour
 
     private void OnBoxesCompletedLeftChanged(int newBoxesCompletedLeft)
     {
-        boxesLeftText.text = newBoxesCompletedLeft.ToString();
+        boxesLeftText.text = StringUtils.FormatStringWithFontWeight(newBoxesCompletedLeft.ToString(), textFontWeight);
         if (newBoxesCompletedLeft < previousBoxesLeft)
         {
             DOTweenUtils.CompleteTween(boxesLeftAnimation);
@@ -66,7 +68,7 @@ public class ProgressionDisplay : MonoBehaviour
 
     private void OnScoreChanged(int newScore)
     {
-        scoreText.text = newScore.ToString();
+        scoreText.text = StringUtils.FormatStringWithFontWeight(newScore.ToString(), textFontWeight);
         if (newScore > 0 && previousScore != newScore)
         {
             DOTweenUtils.CompleteTween(scoreAnimation);

@@ -23,8 +23,8 @@ public class UIManager : MonoBehaviour
     private GameOverScreen soloGameOverScreen;
     private GameOverScreen multiGameOverScreen;
 
-    [SerializeField]
-    private GameFinishedDisplay[] gameFinishedDisplays;
+    // [SerializeField]
+    // private GameFinishedDisplay[] gameFinishedDisplays;
 
     void Awake()
     {
@@ -73,7 +73,7 @@ public class UIManager : MonoBehaviour
         soloGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 1);
         // multiplayerGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 2);
 
-        gameFinishedDisplays[InputManager.NUMBER_OF_PLAYERS - 1].Reset();
+        // gameFinishedDisplays[InputManager.NUMBER_OF_PLAYERS - 1].Reset();
 
     }
 
