@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -123,6 +120,7 @@ public class GameManager : Singleton<GameManager>
         {
             PieceManager.Instance.OnGameFinished();
             int winnerPlayerNumber = GetWinnerPlayerNumber();
+            InputManager.Instance.SetWinnerPlayer(winnerPlayerNumber);
             uIManager.ShowGameOverScreen(winnerPlayerNumber, playersGameProgresses);
         }
     }

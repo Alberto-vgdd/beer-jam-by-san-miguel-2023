@@ -24,6 +24,9 @@ public class InputManager : Singleton<InputManager>
     private PlayerControls[] playerControls;
 
 
+    private PlayerControls winnerPlayerControls;
+    public PlayerControls WinnerPlayerControls { get => winnerPlayerControls; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -37,6 +40,7 @@ public class InputManager : Singleton<InputManager>
                 playerControls[playerNumber].devices = new InputDevice[1] { InputSystem.GetDevice(playerDeviceNames[playerNumber]) };
             }
         }
+        winnerPlayerControls = playerControls[0];
     }
 
 
@@ -54,5 +58,10 @@ public class InputManager : Singleton<InputManager>
     internal PlayerControls GetPlayerControls(int playerId)
     {
         return playerControls[playerId];
+    }
+
+    internal void SetWinnerPlayer(int winnerPlayerNumber)
+    {
+        winnerPlayerControls = playerControls[winnerPlayerNumber];
     }
 }
