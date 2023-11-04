@@ -62,7 +62,6 @@ public class UIManager : MonoBehaviour
         titleScreenGameObject.SetActive(false);
 
         soloGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 1);
-        // multiplayerGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 2);
 
         if (InputManager.NUMBER_OF_PLAYERS == 2)
         {
