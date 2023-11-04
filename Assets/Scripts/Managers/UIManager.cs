@@ -8,9 +8,7 @@ public class UIManager : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField]
-    private GameObject soloGameOverScreenGameObject;
-    [SerializeField]
-    private GameObject multiGameOverScreenGameObject;
+    private GameObject gameOverScreenGameObject;
     [SerializeField]
     private GameObject titleScreenGameObject;
     [SerializeField]
@@ -20,16 +18,14 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private EventSystem eventSystem;
 
-    private GameOverScreen soloGameOverScreen;
-    private GameOverScreen multiGameOverScreen;
+    private GameOverScreen gameOverScreen;
 
-    // [SerializeField]
-    // private GameFinishedDisplay[] gameFinishedDisplays;
+    [SerializeField]
+    private GameFinishedDisplay gameFinishedDisplay;
 
     void Awake()
     {
-        soloGameOverScreen = soloGameOverScreenGameObject.GetComponent<GameOverScreen>();
-        // multiGameOverScreen = multiGameOverScreenGameObject.GetComponent<GameOverScreen>();
+        gameOverScreen = gameOverScreenGameObject.GetComponent<GameOverScreen>();
     }
 
     void OnEnable()
@@ -45,42 +41,39 @@ public class UIManager : MonoBehaviour
 
     public void ShowGameOverScreen(int winnerPlayerNumber, PlayerProgress[] playersGameProgresses)
     {
+        gameOverScreenGameObject.SetActive(true);
+
         if (InputManager.NUMBER_OF_PLAYERS > 1)
         {
-            soloGameOverScreenGameObject.SetActive(false);
-            // multiGameOverScreenGameObject.SetActive(true);
-            // multiGameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore);
+            gameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore, winnerPlayerNumber, true);
         }
         else
         {
-            soloGameOverScreenGameObject.SetActive(true);
-            // multiGameOverScreenGameObject.SetActive(false);
-            soloGameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore);
+            gameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore, winnerPlayerNumber, false);
         }
 
         titleScreenGameObject.SetActive(false);
-
-
     }
 
     internal void ShowGameplayScreen()
     {
-        soloGameOverScreenGameObject.SetActive(false);
-        // multiGameOverScreenGameObject.SetActive(false);
+        gameOverScreenGameObject.SetActive(false);
 
         titleScreenGameObject.SetActive(false);
 
         soloGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 1);
         // multiplayerGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 2);
 
-        // gameFinishedDisplays[InputManager.NUMBER_OF_PLAYERS - 1].Reset();
+        if (InputManager.NUMBER_OF_PLAYERS == 2)
+        {
+            gameFinishedDisplay.Reset();
+        }
 
     }
 
     internal void ShowTitleScreen()
     {
-        soloGameOverScreenGameObject.SetActive(false);
-        // multiGameOverScreenGameObject.SetActive(false);
+        gameOverScreenGameObject.SetActive(false);
         titleScreenGameObject.SetActive(true);
         soloGameplayScreenGameObject.SetActive(false);
         // multiplayerGameplayScreenGameObject.SetActive(false);
