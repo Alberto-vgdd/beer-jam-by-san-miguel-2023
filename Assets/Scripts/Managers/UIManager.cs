@@ -20,6 +20,8 @@ public class UIManager : Singleton<UIManager>
     private GameObject multiplayerGameplayScreenGameObject;
     [SerializeField]
     private EventSystem eventSystem;
+    [SerializeField]
+    private InputSystemUIInputModule inputSystemUIInputModule;
 
     [SerializeField]
     private GameFinishedDisplay gameFinishedDisplay;
@@ -47,18 +49,11 @@ public class UIManager : Singleton<UIManager>
         BaseScreen.SelectGameObjectRequested -= OnSelectGameObjectRequested;
     }
 
-    public void ShowGameOverScreen(int winnerPlayerNumber, PlayerProgress[] playersGameProgresses)
+    public void ShowGameOverScreen(int winnerPlayerNumber, PlayerProgress[] playersGameProgresses, bool isNewRecord)
     {
         gameOverScreenGameObject.SetActive(true);
 
-        if (InputManager.NUMBER_OF_PLAYERS > 1)
-        {
-            gameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore, winnerPlayerNumber, true);
-        }
-        else
-        {
-            gameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore, winnerPlayerNumber, false);
-        }
+        gameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore, winnerPlayerNumber, InputManager.NUMBER_OF_PLAYERS > 1, isNewRecord);
 
         titleScreenGameObject.SetActive(false);
         enterNewNameScreenGameObject.SetActive(false);
@@ -120,5 +115,10 @@ public class UIManager : Singleton<UIManager>
         multiplayerGameplayScreenGameObject.SetActive(false);
         enterNewNameScreenGameObject.SetActive(true);
         leaderBoardsScreenGameObject.SetActive(false);
+    }
+
+    internal void OnlyReadInputsFrom(PlayerControls playerControls)
+    {
+        inputSystemUIInputModule.actionsAsset.devices = playerControls.devices;
     }
 }

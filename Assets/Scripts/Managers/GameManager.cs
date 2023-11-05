@@ -12,6 +12,8 @@ public class GameManager : Singleton<GameManager>
     private DifficultyManager difficultyManager;
     [SerializeField]
     private CameraManager cameraManager;
+    [SerializeField]
+    private LeaderboardsManager leaderboardsManager;
 
 
 
@@ -32,17 +34,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        uIManager.ShowTitleScreen();
-    }
-
-    void OnEnable()
-    {
-        playerControls.Navigation.ExitGame.performed += OnExitGameButtonPressed;
-    }
-
-    void OnDisable()
-    {
-        playerControls.Navigation.ExitGame.performed -= OnExitGameButtonPressed;
+        ShowTitleScreen();
     }
 
     public void StartNewGame(int numberOfPlayers)
@@ -89,7 +81,9 @@ public class GameManager : Singleton<GameManager>
 
     private void OnPlayerJoined(int playerNumber, PlayerTable playerTable)
     {
-        playerTable.SetPlayerControls(InputManager.Instance.GetPlayerControls(playerNumber));
+        PlayerControls playerJoinedControls = InputManager.Instance.GetPlayerControls(playerNumber);
+        playerJoinedControls.Enable();
+        playerTable.SetPlayerControls(playerJoinedControls);
         playerTables[playerNumber] = playerTable;
 
     }
@@ -119,9 +113,19 @@ public class GameManager : Singleton<GameManager>
         if (allPlayersAreGameOver)
         {
             PieceManager.Instance.OnGameFinished();
+
             int winnerPlayerNumber = GetWinnerPlayerNumber();
-            InputManager.Instance.SetWinnerPlayer(winnerPlayerNumber);
-            uIManager.ShowGameOverScreen(winnerPlayerNumber, playersGameProgresses);
+            int winnerPlayerScore = GetPlayerScore(winnerPlayerNumber);
+            InputManager.Instance.WinnerPlayerNumber = winnerPlayerNumber;
+
+            bool isNewRecord = leaderboardsManager.CheckForNewScore(winnerPlayerScore) >= 0;
+
+            if (isNewRecord)
+            {
+                RestrictUIInputsTo(winnerPlayerNumber);
+            }
+
+            uIManager.ShowGameOverScreen(winnerPlayerNumber, playersGameProgresses, isNewRecord);
         }
     }
 
@@ -143,10 +147,9 @@ public class GameManager : Singleton<GameManager>
         return playerWithHighestScore;
     }
 
-
-    private void OnExitGameButtonPressed(InputAction.CallbackContext context)
+    private int GetPlayerScore(int playerNumber)
     {
-        ExitGame();
+        return playersGameProgresses[playerNumber].totalScore;
     }
 
     public void ExitGame()
@@ -156,13 +159,35 @@ public class GameManager : Singleton<GameManager>
 
     public void GoBackToMainMenu()
     {
+        UnloadGameInTheBackground();
+        ShowTitleScreen();
+    }
+
+    private void ShowTitleScreen()
+    {
+        RestrictUIInputsTo(0);
+        uIManager.ShowTitleScreen();
+    }
+    private void RestrictUIInputsTo(int playerNumber)
+    {
+        playerControls.devices = InputManager.Instance.GetPlayerControls(playerNumber).devices;
+        UIManager.Instance.OnlyReadInputsFrom(playerControls);
+    }
+
+    internal void UnloadGameInTheBackground()
+    {
         StartCoroutine(UnloadGameFor(InputManager.NUMBER_OF_PLAYERS));
+
     }
     private IEnumerator UnloadGameFor(int numberOfPlayers)
     {
-        yield return SceneManager.UnloadSceneAsync(numberOfPlayers);
-        uIManager.ShowTitleScreen();
+        for (int playerNumber = 0; playerNumber < numberOfPlayers; playerNumber++)
+        {
+            PlayerControls playerLeftControls = InputManager.Instance.GetPlayerControls(playerNumber);
+            playerLeftControls.Disable();
+        }
 
+        yield return SceneManager.UnloadSceneAsync(numberOfPlayers);
     }
 
     protected override GameManager GetThis()

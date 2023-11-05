@@ -1,6 +1,8 @@
+using System;
 using System.Text;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 
 public class EnterNewNameScreen : BaseScreen
@@ -19,7 +21,7 @@ public class EnterNewNameScreen : BaseScreen
     [SerializeField]
     private InputLetter[] inputLetters;
     [SerializeField]
-    private GameObject continueButton;
+    private Button continueButton;
     private int selectedLetter = 0;
 
 
@@ -44,6 +46,7 @@ public class EnterNewNameScreen : BaseScreen
 
         if (input.x != 0f)
         {
+            SelectGameObjectRequested?.Invoke(continueButton.gameObject);
             inputLetters[selectedLetter].Highlight(false);
             selectedLetter += (int)Mathf.Sign(input.x);
             selectedLetter = Mathf.Clamp(selectedLetter, 0, numberOfLetters - 1);
@@ -51,6 +54,7 @@ public class EnterNewNameScreen : BaseScreen
         }
         if (input.y != 0f)
         {
+            SelectGameObjectRequested?.Invoke(continueButton.gameObject);
             inputLetters[selectedLetter].ChangeLetter((int)Mathf.Sign(-input.y));
         }
     }
@@ -58,7 +62,15 @@ public class EnterNewNameScreen : BaseScreen
     private void OnEnable()
     {
         InputManager.Instance.WinnerPlayerControls.Gameplay.Movement.performed += OnNavigate;
-        SelectGameObjectRequested?.Invoke(continueButton);
+        SelectGameObjectRequested?.Invoke(continueButton.gameObject);
+
+        continueButton.interactable = false;
+        Invoke("EnableContinueButton", 5f);
+    }
+
+    private void EnableContinueButton()
+    {
+        continueButton.interactable = true;
     }
 
     private void OnDisable()
@@ -74,6 +86,7 @@ public class EnterNewNameScreen : BaseScreen
             stringBuilder.Append(inputLetter.GetLetter());
         }
         Reset();
+        GameManager.Instance.UnloadGameInTheBackground();
         LeaderboardsManager.Instance.SetNewRecordPlayerName(stringBuilder.ToString());
         UIManager.Instance.ShowLeaderboardsScreen();
     }
