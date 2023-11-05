@@ -4250,6 +4250,7 @@ MonoBehaviour:
   difficultyManager: {fileID: 849490227}
   cameraManager: {fileID: 1626329560}
   leaderboardsManager: {fileID: 853972693}
+  enableLeaderboardSystem: 1
 --- !u!1001 &474593254
 PrefabInstance:
   m_ObjectHideFlags: 0

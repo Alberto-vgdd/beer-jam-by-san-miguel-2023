@@ -15,7 +15,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private LeaderboardsManager leaderboardsManager;
 
-
+    [Header("Paramerters")]
+    [SerializeField]
+    private bool enableLeaderboardSystem;
 
     private PlayerControls playerControls;
     private PlayerTable[] playerTables;
@@ -117,12 +119,16 @@ public class GameManager : Singleton<GameManager>
             int winnerPlayerNumber = GetWinnerPlayerNumber();
             int winnerPlayerScore = GetPlayerScore(winnerPlayerNumber);
             InputManager.Instance.WinnerPlayerNumber = winnerPlayerNumber;
+            bool isNewRecord = false;
 
-            bool isNewRecord = leaderboardsManager.CheckForNewScore(winnerPlayerScore) >= 0;
-
-            if (isNewRecord)
+            if (enableLeaderboardSystem)
             {
-                RestrictUIInputsTo(winnerPlayerNumber);
+                isNewRecord = leaderboardsManager.CheckForNewScore(winnerPlayerScore) >= 0;
+
+                if (isNewRecord)
+                {
+                    RestrictUIInputsTo(winnerPlayerNumber);
+                }
             }
 
             uIManager.ShowGameOverScreen(winnerPlayerNumber, playersGameProgresses, isNewRecord);
