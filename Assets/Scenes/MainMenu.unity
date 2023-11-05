@@ -9218,7 +9218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db9e9f55e40054f068cc550f24db397f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  developmentMode: 0
+  developmentMode: 1
   playerDeviceNames:
   - DualShock4GamepadHID
   - SwitchProControllerHID
