@@ -86,11 +86,17 @@ public class PlayArea : MonoBehaviour
     {
         if (newEnabled)
         {
-            playerControls.Enable();
+            // playerControls.Enable();
+            playerControls.Gameplay.Movement.performed += OnDpadPressed;
+            playerControls.Gameplay.Rotate.performed += OnRotateButtonPressed;
+            playerControls.Gameplay.DropPiece.performed += OnDropPieceButtonPressed;
         }
         else
         {
-            playerControls.Disable();
+            // playerControls.Disable();
+            playerControls.Gameplay.Movement.performed -= OnDpadPressed;
+            playerControls.Gameplay.Rotate.performed -= OnRotateButtonPressed;
+            playerControls.Gameplay.DropPiece.performed -= OnDropPieceButtonPressed;
         }
     }
 
@@ -324,13 +330,7 @@ public class PlayArea : MonoBehaviour
     {
         StopAllCoroutines();
 
-        playerControls.Disable();
-        playerControls.Gameplay.Movement.performed -= OnDpadPressed;
-        playerControls.Gameplay.Rotate.performed -= OnRotateButtonPressed;
-        playerControls.Gameplay.DropPiece.performed -= OnDropPieceButtonPressed;
-
         DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficultyChanged;
-        InputManager.InputEnabled[playerNumber] -= OnInputsEnabled;
 
         if (bottlePiece != null)
         {
@@ -345,16 +345,23 @@ public class PlayArea : MonoBehaviour
 
     internal void StartPlayArea()
     {
-        playerControls.Enable();
-        playerControls.Gameplay.Movement.performed += OnDpadPressed;
-        playerControls.Gameplay.Rotate.performed += OnRotateButtonPressed;
-        playerControls.Gameplay.DropPiece.performed += OnDropPieceButtonPressed;
 
         DifficultyManager.PlayerDifficultyChanged[playerNumber] += OnDifficultyChanged;
-        InputManager.InputEnabled[playerNumber] += OnInputsEnabled;
 
         StartCoroutine(HandleInputs());
         StartCoroutine(HandleGravity());
+    }
+
+    internal void ListenToInputsEnableEvents(bool listen)
+    {
+        if (listen)
+        {
+            InputManager.InputEnabled[playerNumber] += OnInputsEnabled;
+        }
+        else
+        {
+            InputManager.InputEnabled[playerNumber] -= OnInputsEnabled;
+        }
     }
 
     internal void SetPlayerNumber(int newPlayerNumber)

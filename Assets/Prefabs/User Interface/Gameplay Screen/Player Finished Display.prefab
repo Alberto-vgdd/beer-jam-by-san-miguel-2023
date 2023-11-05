@@ -65,10 +65,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (Espera a que al Jugador 2 acabe)
+  m_text: <font-weight=200>(Espera a que al Jugador 2 acabe)</font-weight>
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f364aa6d4dd404c66abf0a155bdc92a6, type: 2}
-  m_sharedMaterial: {fileID: 5871795621591551391, guid: f364aa6d4dd404c66abf0a155bdc92a6,
+  m_fontAsset: {fileID: 11400000, guid: 6c0dfdd9484f3493fb5786abd216fa14, type: 2}
+  m_sharedMaterial: {fileID: -3648377738301063150, guid: 6c0dfdd9484f3493fb5786abd216fa14,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -2.5
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -200,10 +200,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Fin de la partida!
+  m_text: <font-weight=900>Fin de la partida!</font-weight>
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f364aa6d4dd404c66abf0a155bdc92a6, type: 2}
-  m_sharedMaterial: {fileID: 5871795621591551391, guid: f364aa6d4dd404c66abf0a155bdc92a6,
+  m_fontAsset: {fileID: 11400000, guid: 6c0dfdd9484f3493fb5786abd216fa14, type: 2}
+  m_sharedMaterial: {fileID: -3648377738301063150, guid: 6c0dfdd9484f3493fb5786abd216fa14,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -234,11 +234,11 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -2.5
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

@@ -13,7 +13,7 @@ public class PlayerTable : MonoBehaviour
 
     public delegate void BeerBoxRuinedHandler(int playerNumber);
     public static BeerBoxRuinedHandler BeerBoxRuined;
-    
+
     public delegate void BeerBoxPowerUpHandler(int playerNumber, int increase);
     public static BeerBoxPowerUpHandler BeerBoxPowerUp;
 
@@ -113,7 +113,7 @@ public class PlayerTable : MonoBehaviour
         beerBoxRuinTime = beerBoxRuinTimeProgression.Evaluate(difficulty);
         addBottleTime = addBottleTimeProgression.Evaluate(difficulty);
 
-        if (difficulty > 0 && newLevelDisplayNumber > lastPowerUpLevel) 
+        if (difficulty > 0 && newLevelDisplayNumber > lastPowerUpLevel)
         {
             nextBoxIsPowerUp = true;
             lastPowerUpLevel = newLevelDisplayNumber;
@@ -127,8 +127,8 @@ public class PlayerTable : MonoBehaviour
             }
         }
     }
-    
-    
+
+
     private void OnDifficultyChangedByPowerUp(float newDifficulty)
     {
         difficulty = newDifficulty;
@@ -189,7 +189,7 @@ public class PlayerTable : MonoBehaviour
                     if (beerBox.IsFull())
                     {
                         fullBeerBoxes.Add(beerBox);
-                       
+
                     }
                 }
                 else
@@ -368,6 +368,7 @@ public class PlayerTable : MonoBehaviour
         playArea.PieceMoved += OnPieceMoved;
         DifficultyManager.PlayerDifficultyChanged[playerNumber] += OnDifficultyChanged;
         DifficultyManager.PlayerDifficultyChangedByPowerUp[playerNumber] += OnDifficultyChangedByPowerUp;
+        playArea.ListenToInputsEnableEvents(true);
         playArea.ClearPlayArea();
         playArea.StartPlayArea();
         playArea.SpawnNewPiece(PieceManager.Instance.GetRandomPiece(playerNumber));
@@ -378,6 +379,7 @@ public class PlayerTable : MonoBehaviour
         StopAllCoroutines();
         playArea.PieceDropped -= OnPieceDropped;
         playArea.PieceMoved -= OnPieceMoved;
+        playArea.ListenToInputsEnableEvents(false);
         DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficultyChanged;
         DifficultyManager.PlayerDifficultyChangedByPowerUp[playerNumber] -= OnDifficultyChangedByPowerUp;
 

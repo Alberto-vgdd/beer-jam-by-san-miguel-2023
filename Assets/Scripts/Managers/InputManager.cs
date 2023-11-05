@@ -23,6 +23,9 @@ public class InputManager : Singleton<InputManager>
     private bool inputsPaused = false;
     private PlayerControls[] playerControls;
 
+    private int winnerPlayerNumber;
+    public PlayerControls WinnerPlayerControls { get => playerControls[winnerPlayerNumber]; }
+    public int WinnerPlayerNumber { get => winnerPlayerNumber; set => winnerPlayerNumber = value; }
 
     protected override void Awake()
     {
