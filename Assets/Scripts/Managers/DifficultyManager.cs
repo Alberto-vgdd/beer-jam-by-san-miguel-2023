@@ -38,6 +38,8 @@ public class DifficultyManager : MonoBehaviour
 
     private PlayerProgress[] playersProgresses;
 
+    Coroutine[] powerUpCoroutine = new Coroutine[2];
+
 
     void Awake()
     {
@@ -120,15 +122,24 @@ public class DifficultyManager : MonoBehaviour
     {
         
         PlayerProgress playerProgress = playersProgresses[playerNumber];
-        PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(increase, playerProgress.levelNumber+1);
-
-        int time = 10;
         if (increase > 0)
         {
-            time = 5;
+            PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty * 2, playerProgress.levelNumber + 1);
+
+        }
+        else 
+        {
+            PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(increase, playerProgress.levelNumber + 1);
         }
 
-        StartCoroutine(BeerBoxRestorePowerUp(playerNumber, time));
+        int time = 10;
+
+        if (powerUpCoroutine[playerNumber] != null) 
+        {
+            StopCoroutine(powerUpCoroutine[playerNumber]);
+        }
+
+        powerUpCoroutine[playerNumber] = StartCoroutine(BeerBoxRestorePowerUp(playerNumber, time));
     }
 
     IEnumerator BeerBoxRestorePowerUp(int playerNumber, float time) 
