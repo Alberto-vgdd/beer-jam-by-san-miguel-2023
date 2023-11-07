@@ -61,6 +61,9 @@ public class PlayArea : MonoBehaviour
     private float rotationTime;
 
 
+    private Coroutine dpadHeldCoroutine;
+
+
     private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
     {
         difficulty = newDifficulty;
@@ -88,13 +91,20 @@ public class PlayArea : MonoBehaviour
         {
             // playerControls.Enable();
             playerControls.Gameplay.Movement.performed += OnDpadPressed;
+            playerControls.Gameplay.Movement.canceled += OnDpadReleased;
             playerControls.Gameplay.Rotate.performed += OnRotateButtonPressed;
             playerControls.Gameplay.DropPiece.performed += OnDropPieceButtonPressed;
         }
         else
         {
+            if (dpadHeldCoroutine != null)
+            {
+                StopCoroutine(dpadHeldCoroutine);
+            }
+
             // playerControls.Disable();
             playerControls.Gameplay.Movement.performed -= OnDpadPressed;
+            playerControls.Gameplay.Movement.canceled -= OnDpadReleased;
             playerControls.Gameplay.Rotate.performed -= OnRotateButtonPressed;
             playerControls.Gameplay.DropPiece.performed -= OnDropPieceButtonPressed;
         }
@@ -115,6 +125,30 @@ public class PlayArea : MonoBehaviour
     {
         Vector2 input = context.ReadValue<Vector2>();
         pendingInputs.Add(input);
+
+        if (dpadHeldCoroutine != null)
+        {
+            StopCoroutine(dpadHeldCoroutine);
+        }
+        dpadHeldCoroutine = StartCoroutine(HoldDpad(input));
+    }
+
+    private void OnDpadReleased(CallbackContext context)
+    {
+        if (dpadHeldCoroutine != null)
+        {
+            StopCoroutine(dpadHeldCoroutine);
+        }
+    }
+
+    private IEnumerator HoldDpad(Vector2 lastInput)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.2f);
+            pendingInputs.Add(lastInput);
+
+        }
     }
 
     bool pendingRotation = false;
