@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Lofelt.NiceVibrations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
@@ -192,8 +193,8 @@ public class PlayArea : MonoBehaviour
                     {
                         OnPieceMoved(candidatePosition);
                         bottlePiece.MoveToLocalPosition(WorldPositionToGridLocalPosition(candidatePosition), true);
-
                         yield return new WaitForSeconds(bottlePiece.GetMovementTime());
+                        HapticPatterns.PlayPreset(HapticPatterns.PresetType.Selection);
                     }
                 }
 
