@@ -411,16 +411,18 @@ public class PlayerTable : MonoBehaviour
         playArea.ListenToInputsEnableEvents(false);
         DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficultyChanged;
         DifficultyManager.PlayerDifficultyChangedByPowerUp[playerNumber] -= OnDifficultyChangedByPowerUp;
-        if (playerNumber == 0)
-        {
-            DifficultyManager.PlayerLifesLeftChanged[1] -= OnRivalPlayerLifesChanged;
-        }
-        else
-        {
-            DifficultyManager.PlayerLifesLeftChanged[0] -= OnRivalPlayerLifesChanged;
 
+        if (InputManager.NUMBER_OF_PLAYERS > 1)
+        {
+            if (playerNumber == 0)
+            {
+                DifficultyManager.PlayerLifesLeftChanged[1] -= OnRivalPlayerLifesChanged;
+            }
+            else
+            {
+                DifficultyManager.PlayerLifesLeftChanged[0] -= OnRivalPlayerLifesChanged;
+            }
         }
-
     }
 
     private void OnPieceMoved(BottlePiece movedPiece, Vector3 newPiecePosition, float movementTime)
