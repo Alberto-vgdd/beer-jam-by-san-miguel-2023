@@ -34,7 +34,6 @@ RectTransform:
   - {fileID: 2128860750499304874}
   - {fileID: 4337578930558810661}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -113,7 +112,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8853687180621937740}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -246,7 +244,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8853687180621937740}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -352,6 +349,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2128860750499304874}
     m_Modifications:
     - target: {fileID: 7223218986885267653, guid: 08c2c5a10d4104405b00d7a9329ed8e5,
@@ -490,7 +488,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08c2c5a10d4104405b00d7a9329ed8e5, type: 3}
+--- !u!224 &4268327648879570610 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7223218986885267658, guid: 08c2c5a10d4104405b00d7a9329ed8e5,
+    type: 3}
+  m_PrefabInstance: {fileID: 6846071784808558200}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4268327648879570611 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7223218986885267659, guid: 08c2c5a10d4104405b00d7a9329ed8e5,
@@ -502,6 +509,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 8853687180621937740}
     m_Modifications:
     - target: {fileID: 7223218986885267653, guid: 08c2c5a10d4104405b00d7a9329ed8e5,
@@ -635,6 +643,13 @@ PrefabInstance:
       value: Red Text
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7223218986885267658, guid: 08c2c5a10d4104405b00d7a9329ed8e5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4268327648879570610}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08c2c5a10d4104405b00d7a9329ed8e5, type: 3}
 --- !u!114 &2128860750499304869 stripped
 MonoBehaviour:
