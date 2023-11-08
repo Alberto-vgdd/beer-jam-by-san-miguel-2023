@@ -157,7 +157,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.EquipoB.ExcelenteServicio
+    Android: es.comunidadmsm.BEERJAM2023
     Standalone: com.EquipoB.ExcelenteServicio
     iPhone: es.comunidadmsm.BEERJAM2023
   buildNumber:
