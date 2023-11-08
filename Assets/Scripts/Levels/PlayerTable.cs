@@ -74,7 +74,7 @@ public class PlayerTable : MonoBehaviour
         PlayerJoined?.Invoke(playerNumber, this);
     }
 
-    private void OnRivalPlayerLifesChanged(int livesLeft) 
+    private void OnRivalPlayerLifesChanged(int livesLeft)
     {
         rivalPlayerLives = livesLeft;
     }
@@ -348,7 +348,7 @@ public class PlayerTable : MonoBehaviour
                                 beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SlowDownTime;
 
                             }
-                            else 
+                            else
                             {
                                 beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SpeedUpTime;
                             }
@@ -382,15 +382,20 @@ public class PlayerTable : MonoBehaviour
         playArea.PieceMoved += OnPieceMoved;
         DifficultyManager.PlayerDifficultyChanged[playerNumber] += OnDifficultyChanged;
         DifficultyManager.PlayerDifficultyChangedByPowerUp[playerNumber] += OnDifficultyChangedByPowerUp;
-        if (playerNumber == 0)
-        {
-            DifficultyManager.PlayerLifesLeftChanged[1] += OnRivalPlayerLifesChanged;
-        }
-        else 
-        {
-            DifficultyManager.PlayerLifesLeftChanged[0] += OnRivalPlayerLifesChanged;
 
+        if (InputManager.NUMBER_OF_PLAYERS > 1)
+        {
+            if (playerNumber == 0)
+            {
+                DifficultyManager.PlayerLifesLeftChanged[1] += OnRivalPlayerLifesChanged;
+            }
+            else
+            {
+                DifficultyManager.PlayerLifesLeftChanged[0] += OnRivalPlayerLifesChanged;
+
+            }
         }
+
         playArea.ListenToInputsEnableEvents(true);
         playArea.ClearPlayArea();
         playArea.StartPlayArea();
