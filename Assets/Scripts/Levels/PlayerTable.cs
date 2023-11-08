@@ -66,11 +66,17 @@ public class PlayerTable : MonoBehaviour
 
     public bool nextBoxIsPowerUp = false;
     int lastPowerUpLevel = 0;
+    int rivalPlayerLives = 3;
 
     void Awake()
     {
         playArea.SetPlayerNumber(playerNumber);
         PlayerJoined?.Invoke(playerNumber, this);
+    }
+
+    private void OnRivalPlayerLifesChanged(int livesLeft) 
+    {
+        rivalPlayerLives = livesLeft;
     }
 
     private void InitliasiseBeerBoxes()
@@ -337,7 +343,15 @@ public class PlayerTable : MonoBehaviour
                         }
                         else
                         {
-                            beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SpeedUpTime;
+                            if (rivalPlayerLives <= 0)
+                            {
+                                beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SlowDownTime;
+
+                            }
+                            else 
+                            {
+                                beerBoxes[beerBoxIndex.x].boxType = BeerBox.TypeOfBox.SpeedUpTime;
+                            }
                         }
                     }
                     else
@@ -368,6 +382,15 @@ public class PlayerTable : MonoBehaviour
         playArea.PieceMoved += OnPieceMoved;
         DifficultyManager.PlayerDifficultyChanged[playerNumber] += OnDifficultyChanged;
         DifficultyManager.PlayerDifficultyChangedByPowerUp[playerNumber] += OnDifficultyChangedByPowerUp;
+        if (playerNumber == 0)
+        {
+            DifficultyManager.PlayerLifesLeftChanged[1] += OnRivalPlayerLifesChanged;
+        }
+        else 
+        {
+            DifficultyManager.PlayerLifesLeftChanged[0] += OnRivalPlayerLifesChanged;
+
+        }
         playArea.ListenToInputsEnableEvents(true);
         playArea.ClearPlayArea();
         playArea.StartPlayArea();
@@ -379,9 +402,19 @@ public class PlayerTable : MonoBehaviour
         StopAllCoroutines();
         playArea.PieceDropped -= OnPieceDropped;
         playArea.PieceMoved -= OnPieceMoved;
+
         playArea.ListenToInputsEnableEvents(false);
         DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficultyChanged;
         DifficultyManager.PlayerDifficultyChangedByPowerUp[playerNumber] -= OnDifficultyChangedByPowerUp;
+        if (playerNumber == 0)
+        {
+            DifficultyManager.PlayerLifesLeftChanged[1] -= OnRivalPlayerLifesChanged;
+        }
+        else
+        {
+            DifficultyManager.PlayerLifesLeftChanged[0] -= OnRivalPlayerLifesChanged;
+
+        }
 
     }
 
