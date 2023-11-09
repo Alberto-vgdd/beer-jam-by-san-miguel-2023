@@ -1356,7 +1356,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &196081926
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5940,8 +5940,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Ver Puntuaciones
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6c0dfdd9484f3493fb5786abd216fa14, type: 2}
-  m_sharedMaterial: {fileID: -3648377738301063150, guid: 6c0dfdd9484f3493fb5786abd216fa14,
+  m_fontAsset: {fileID: 11400000, guid: da6995e0290ba4717b9b62eb652a722f, type: 2}
+  m_sharedMaterial: {fileID: -3648377738301063150, guid: da6995e0290ba4717b9b62eb652a722f,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -9841,8 +9841,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Cr\xE9ditos :)"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6c0dfdd9484f3493fb5786abd216fa14, type: 2}
-  m_sharedMaterial: {fileID: -3648377738301063150, guid: 6c0dfdd9484f3493fb5786abd216fa14,
+  m_fontAsset: {fileID: 11400000, guid: da6995e0290ba4717b9b62eb652a722f, type: 2}
+  m_sharedMaterial: {fileID: -3648377738301063150, guid: da6995e0290ba4717b9b62eb652a722f,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -14331,8 +14331,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: A jugar!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 48cc0908d17d0483dad79445fe0e77d5, type: 2}
-  m_sharedMaterial: {fileID: -3648377738301063150, guid: 6c0dfdd9484f3493fb5786abd216fa14,
+  m_fontAsset: {fileID: 11400000, guid: da6995e0290ba4717b9b62eb652a722f, type: 2}
+  m_sharedMaterial: {fileID: -3648377738301063150, guid: da6995e0290ba4717b9b62eb652a722f,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
