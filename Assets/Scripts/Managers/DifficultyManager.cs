@@ -6,7 +6,7 @@ public class DifficultyManager : MonoBehaviour
 {
     public delegate void DifficultyChangedHandler(float newDifficulty, int newDisplayLevelNumber);
     public static DifficultyChangedHandler[] PlayerDifficultyChanged = new DifficultyChangedHandler[InputManager.NUMBER_OF_PLAYERS];
-    
+
     public delegate void DifficultyChangedByPowerUpHandler(float newDifficulty);
     public static DifficultyChangedByPowerUpHandler[] PlayerDifficultyChangedByPowerUp = new DifficultyChangedByPowerUpHandler[InputManager.NUMBER_OF_PLAYERS];
 
@@ -39,6 +39,11 @@ public class DifficultyManager : MonoBehaviour
     private PlayerProgress[] playersProgresses;
 
     Coroutine[] powerUpCoroutine = new Coroutine[2];
+
+    bool[] powerUpActivated = new bool[2] { false, false };
+
+    bool isPowerUpDiff = false;
+
 
 
     void Awake()
@@ -74,8 +79,18 @@ public class DifficultyManager : MonoBehaviour
     {
         playerProgress.completedBoxes = 0;
         playerProgress.objectiveCompletedBoxes = levelToObjectiveBoxesCount[playerProgress.levelNumber];
-        playerProgress.difficulty = difficultyIncrease * playerProgress.levelNumber;
-        playerProgress.livesLeft = Mathf.Min(MAX_LIVES, playerProgress.livesLeft + 1);
+        if (!powerUpActivated[playerProgress.playerNumber]) 
+        {
+            playerProgress.difficulty = difficultyIncrease * playerProgress.levelNumber;
+        }
+        if (!isPowerUpDiff)
+        {
+            playerProgress.livesLeft = Mathf.Min(MAX_LIVES, playerProgress.livesLeft + 1);
+        }
+        else 
+        {
+            isPowerUpDiff = false;
+        }
 
 
         PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty, playerProgress.levelNumber + 1);
@@ -120,7 +135,7 @@ public class DifficultyManager : MonoBehaviour
 
     private void OnBeerBoxPowerUp(int playerNumber, int increase) 
     {
-        
+        isPowerUpDiff = true;
         PlayerProgress playerProgress = playersProgresses[playerNumber];
         if (increase > 0)
         {
@@ -133,6 +148,7 @@ public class DifficultyManager : MonoBehaviour
         }
 
         int time = 10;
+        powerUpActivated[playerNumber] = true;
 
         if (powerUpCoroutine[playerNumber] != null) 
         {
@@ -144,13 +160,21 @@ public class DifficultyManager : MonoBehaviour
 
     IEnumerator BeerBoxRestorePowerUp(int playerNumber, float time) 
     {
+        float counter = time;
 
-        yield return new WaitForSeconds(time);
+        while (counter > 0) 
+        {
+            yield return new WaitForSeconds(0.25f);
+            counter -= 0.25f;
+        }
+
+       
 
         PlayerProgress playerProgress = playersProgresses[playerNumber];
         playerProgress.difficulty = difficultyIncrease * playerProgress.levelNumber;
 
         PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty, playerProgress.levelNumber+1);
+        powerUpActivated[playerNumber] = false;
     }
 
     internal void ResetProgress()
