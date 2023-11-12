@@ -423,6 +423,8 @@ public class PlayerTable : MonoBehaviour
                 DifficultyManager.PlayerLifesLeftChanged[0] -= OnRivalPlayerLifesChanged;
             }
         }
+
+        lastPowerUpLevel = 0;
     }
 
     private void OnPieceMoved(BottlePiece movedPiece, Vector3 newPiecePosition, float movementTime)
