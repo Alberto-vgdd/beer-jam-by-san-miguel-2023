@@ -29,6 +29,38 @@ public class HapticManager : Singleton<HapticManager>
         }
     }
 
+    public void PlayLightImpact()
+    {
+        if (hapticsEnabled)
+        {
+            HapticPatterns.PlayPreset(HapticPatterns.PresetType.LightImpact);
+        }
+    }
+
+    public void PlayMediumImpact()
+    {
+        if (hapticsEnabled)
+        {
+            HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
+        }
+    }
+
+    public void PlayHeavyImpact()
+    {
+        if (hapticsEnabled)
+        {
+            HapticPatterns.PlayPreset(HapticPatterns.PresetType.HeavyImpact);
+        }
+    }
+
+    public void PlayFailure()
+    {
+        if (hapticsEnabled)
+        {
+            HapticPatterns.PlayPreset(HapticPatterns.PresetType.Failure);
+        }
+    }
+
     public void EnableHaptics(bool newHapticsEnabled)
     {
         hapticsEnabled = newHapticsEnabled;
