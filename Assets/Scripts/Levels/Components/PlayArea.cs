@@ -178,7 +178,6 @@ public class PlayArea : MonoBehaviour
                 pieceRotatedAudioSource.Play();
                 yield return new WaitForSeconds(bottlePiece.GetRotationTime());
                 OnPieceMoved(bottlePiece.GetPosition());
-                HapticManager.Instance.PlaySelection();
             }
 
 
@@ -195,7 +194,6 @@ public class PlayArea : MonoBehaviour
                         OnPieceMoved(candidatePosition);
                         bottlePiece.MoveToLocalPosition(WorldPositionToGridLocalPosition(candidatePosition), true);
                         yield return new WaitForSeconds(bottlePiece.GetMovementTime());
-                        HapticManager.Instance.PlaySelection();
                     }
                 }
 
@@ -207,7 +205,6 @@ public class PlayArea : MonoBehaviour
                         bottlePiece.MoveToLocalPosition(WorldPositionToGridLocalPosition(candidatePosition), true);
 
                         yield return new WaitForSeconds(bottlePiece.GetMovementTime());
-                        HapticManager.Instance.PlaySelection();
                     }
                 }
             }
@@ -218,7 +215,6 @@ public class PlayArea : MonoBehaviour
                 pendingRotation = false;
                 pendingInputs.Clear();
                 DropPiece();
-                HapticManager.Instance.PlaySelection();
             }
 
             yield return new WaitForEndOfFrame();

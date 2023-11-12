@@ -31,6 +31,8 @@ public class OnScreenDpad : OnScreenControl, IPointerDownHandler, IPointerUpHand
 
         if (newInput != currentInput)
         {
+            HapticManager.Instance.PlaySelection();
+
             currentInput = newInput;
             SendValueToControl(newInput);
         }
@@ -42,6 +44,8 @@ public class OnScreenDpad : OnScreenControl, IPointerDownHandler, IPointerUpHand
 
         if (newInput != currentInput)
         {
+            HapticManager.Instance.PlaySelection();
+
             currentInput = newInput;
             SendValueToControl(newInput);
         }

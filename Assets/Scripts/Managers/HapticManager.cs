@@ -61,6 +61,14 @@ public class HapticManager : Singleton<HapticManager>
         }
     }
 
+    public void PlayRigidImpact()
+    {
+        if (hapticsEnabled)
+        {
+            HapticPatterns.PlayPreset(HapticPatterns.PresetType.RigidImpact);
+        }
+    }
+
     public void EnableHaptics(bool newHapticsEnabled)
     {
         hapticsEnabled = newHapticsEnabled;

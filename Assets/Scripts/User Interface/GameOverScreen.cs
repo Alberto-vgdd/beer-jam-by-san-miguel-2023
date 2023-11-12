@@ -48,6 +48,8 @@ public class GameOverScreen : BaseScreen
 
     public void OnGameOverAnimationFinished()
     {
+        HapticManager.Instance.PlayFailure();
+
         if (isNewRecord)
         {
             SelectGameObjectRequested?.Invoke(toEnterNewNameScreenButton);

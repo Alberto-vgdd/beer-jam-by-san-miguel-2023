@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class SettingsScreen : BaseScreen
 {
+    private const string HIDE_POP_UP_STRING = "Hide Pop Up";
+
     [Header("Haptics Components")]
     [SerializeField]
     private GameObject hapticsToggleSprite;
     [Header("Audio Components")]
     [SerializeField]
     private GameObject audioToggleSprite;
+    [SerializeField]
+    private Animator popUpAnimator;
 
     void OnEnable()
     {
@@ -29,5 +33,15 @@ public class SettingsScreen : BaseScreen
         bool newAudioEnabled = !AudioManager.Instance.AudioEnabled;
         AudioManager.Instance.EnableAudio(newAudioEnabled);
         audioToggleSprite.SetActive(newAudioEnabled);
+    }
+
+    public void ClosePopUpButtonPressed()
+    {
+        popUpAnimator.SetTrigger(HIDE_POP_UP_STRING);
+    }
+
+    public void OnHidePopUpAnimationFinished()
+    {
+        this.gameObject.SetActive(false);
     }
 }
