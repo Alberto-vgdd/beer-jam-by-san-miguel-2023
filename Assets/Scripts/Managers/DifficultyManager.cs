@@ -22,6 +22,11 @@ public class DifficultyManager : MonoBehaviour
     public delegate void GameOverHandler(PlayerProgress playerProgress);
     public static GameOverHandler[] GameOver = new GameOverHandler[InputManager.NUMBER_OF_PLAYERS];
 
+
+    public delegate void BeerBoxPowerUpHandler(float time, int increase);
+    public static BeerBoxPowerUpHandler[] BeerBoxPowerUp = new BeerBoxPowerUpHandler[InputManager.NUMBER_OF_PLAYERS];
+
+
     private const int MAX_LIVES = 3;
 
     [Header("Parameters")]
@@ -72,7 +77,6 @@ public class DifficultyManager : MonoBehaviour
         PlayerTable.BeerBoxCompleted -= OnBeerBoxCompleted;
         PlayerTable.BeerBoxRuined -= OnBeerBoxRuined;
         PlayerTable.BeerBoxPowerUp -= OnBeerBoxPowerUp;
-
     }
 
     private void OnPlayerProgressLevelChanged(PlayerProgress playerProgress)
@@ -150,6 +154,8 @@ public class DifficultyManager : MonoBehaviour
         int time = 10;
         powerUpActivated[playerNumber] = true;
 
+        BeerBoxPowerUp[playerNumber]?.Invoke(time, increase);
+
         if (powerUpCoroutine[playerNumber] != null) 
         {
             StopCoroutine(powerUpCoroutine[playerNumber]);
@@ -160,15 +166,10 @@ public class DifficultyManager : MonoBehaviour
 
     IEnumerator BeerBoxRestorePowerUp(int playerNumber, float time) 
     {
-        float counter = time;
 
-        while (counter > 0) 
-        {
-            yield return new WaitForSeconds(0.25f);
-            counter -= 0.25f;
-        }
+        yield return new WaitForSeconds(time);
 
-       
+
 
         PlayerProgress playerProgress = playersProgresses[playerNumber];
         playerProgress.difficulty = difficultyIncrease * playerProgress.levelNumber;
