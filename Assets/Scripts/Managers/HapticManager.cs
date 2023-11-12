@@ -25,7 +25,7 @@ public class HapticManager : Singleton<HapticManager>
     {
         if (hapticsEnabled)
         {
-            HapticPatterns.PlayPreset(HapticPatterns.PresetType.Selection);
+            HapticPatterns.PlayPreset(HapticPatterns.PresetType.LightImpact);
         }
     }
 
@@ -61,13 +61,6 @@ public class HapticManager : Singleton<HapticManager>
         }
     }
 
-    public void PlayRigidImpact()
-    {
-        if (hapticsEnabled)
-        {
-            HapticPatterns.PlayPreset(HapticPatterns.PresetType.RigidImpact);
-        }
-    }
 
     public void EnableHaptics(bool newHapticsEnabled)
     {

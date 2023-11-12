@@ -265,7 +265,7 @@ public class PlayerTable : MonoBehaviour
 
             boxRuinedAudioSource.pitch = Random.Range(0.95f, 1.05f);
             boxRuinedAudioSource.Play();
-            HapticManager.Instance.PlayRigidImpact();
+            HapticManager.Instance.PlayHeavyImpact();
             yield return new WaitForSeconds(beerBoxRuinTime);
 
             foreach (Vector3Int beerBoxIndex in newBeerBoxIndexToSpawnDirection.Keys)
