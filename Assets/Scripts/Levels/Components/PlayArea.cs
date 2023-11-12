@@ -46,7 +46,8 @@ public class PlayArea : MonoBehaviour
     private AudioSource pieceRotatedAudioSource;
     [SerializeField]
     private AudioSource piecePlacedAudioSource;
-
+    [SerializeField]
+    private AudioSource pieceMovedAudioSource;
     private int playerNumber;
 
     private BottlePiece bottlePiece;
@@ -193,6 +194,7 @@ public class PlayArea : MonoBehaviour
                     {
                         OnPieceMoved(candidatePosition);
                         bottlePiece.MoveToLocalPosition(WorldPositionToGridLocalPosition(candidatePosition), true);
+                        pieceMovedAudioSource.Play();
                         yield return new WaitForSeconds(bottlePiece.GetMovementTime());
                     }
                 }
@@ -203,7 +205,7 @@ public class PlayArea : MonoBehaviour
                     {
                         OnPieceMoved(candidatePosition);
                         bottlePiece.MoveToLocalPosition(WorldPositionToGridLocalPosition(candidatePosition), true);
-
+                        pieceMovedAudioSource.Play();
                         yield return new WaitForSeconds(bottlePiece.GetMovementTime());
                     }
                 }

@@ -11197,10 +11197,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -8976292402247246633, guid: 70b7da75a94d745f1b584fd7d4ecf3d1,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: fadb07e8551cd4db2a081ec1b9702af6, type: 3}
+  m_audioClip: {fileID: 8300000, guid: c7d89bbadfd754c7ea2ea52539b80feb, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.7
-  m_Pitch: 2
+  m_Pitch: 1.7
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -13112,7 +13112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf51cc602e1ab436f9033b7c4dd1d350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tapAudioSource: {fileID: 1702077742}
   deadzone: 50
   m_ControlPath: <Gamepad>/dpad
 --- !u!114 &2071964151
