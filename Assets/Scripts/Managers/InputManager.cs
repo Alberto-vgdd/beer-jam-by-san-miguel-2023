@@ -31,13 +31,22 @@ public class InputManager : Singleton<InputManager>
     {
         base.Awake();
 
+        if (developmentMode)
+        {
+            foreach (InputDevice inputDevice in InputSystem.devices)
+            {
+                Debug.Log(inputDevice.name);
+            }
+        }
+
         playerControls = new PlayerControls[NUMBER_OF_PLAYERS];
         for (int playerNumber = 0; playerNumber < NUMBER_OF_PLAYERS; playerNumber++)
         {
             playerControls[playerNumber] = new PlayerControls();
             if (!developmentMode)
             {
-                playerControls[playerNumber].devices = new InputDevice[1] { InputSystem.GetDevice(playerDeviceNames[playerNumber]) };
+                InputDevice inputDevice = InputSystem.GetDevice(playerDeviceNames[playerNumber]);
+                playerControls[playerNumber].devices = new InputDevice[1] { inputDevice };
             }
         }
     }

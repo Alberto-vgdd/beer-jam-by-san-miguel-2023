@@ -9218,10 +9218,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db9e9f55e40054f068cc550f24db397f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  developmentMode: 1
+  developmentMode: 0
   playerDeviceNames:
-  - DualShock4GamepadHID
-  - SwitchProControllerHID
+  - 'DragonRise Inc.   Generic   USB  Joystick  '
+  - DragonRise Inc.   Generic   USB  Joystick  1
 --- !u!1 &1311561367
 GameObject:
   m_ObjectHideFlags: 0
