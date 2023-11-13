@@ -43,6 +43,8 @@ public class PowerUpIconController : MonoBehaviour
         background.gameObject.SetActive(true);
         filledImage.gameObject.SetActive(true);
 
+        GetComponent<AudioSource>().Play();
+
         filledImage.DOFillAmount(0, time).OnComplete(DeactivateIcon);
     }
 
@@ -50,8 +52,9 @@ public class PowerUpIconController : MonoBehaviour
     {
         background.gameObject.SetActive(false);
         filledImage.gameObject.SetActive(false);
+        GetComponent<AudioSource>().Stop();
     }
 
 
-    
+
 }
