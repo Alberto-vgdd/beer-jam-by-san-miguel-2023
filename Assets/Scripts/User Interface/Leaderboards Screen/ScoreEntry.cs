@@ -12,6 +12,14 @@ public class ScoreEntry : MonoBehaviour
     private TextMeshProUGUI moneyAmountText;
 
 
+    [SerializeField]
+    private int scorePositionTextFontWeight = 900;
+    [SerializeField]
+    private int playerNameTextFontWeight = 300;
+    [SerializeField]
+    private int moneyAmountNameTextFontWeight = 900;
+
+
     private int scorePosition = -1;
     private int moneyAmount = 0;
     private string playerName = "NLL";
@@ -19,19 +27,19 @@ public class ScoreEntry : MonoBehaviour
     internal void SetScorePosition(int newPosition)
     {
         scorePosition = newPosition;
-        scorePositionText.text = newPosition + ".";
+        scorePositionText.text = StringUtils.FormatStringWithFontWeight(newPosition + ".", scorePositionTextFontWeight);
     }
 
     internal void SetPlayerName(string newPlayerName)
     {
         playerName = newPlayerName;
-        playerNameText.text = newPlayerName;
+        playerNameText.text = StringUtils.FormatStringWithFontWeight(newPlayerName, playerNameTextFontWeight);
     }
 
     internal void SetMoneyAmount(int newMoneyAmount)
     {
         moneyAmount = newMoneyAmount;
-        moneyAmountText.text = newMoneyAmount + " $";
+        moneyAmountText.text = StringUtils.FormatStringWithFontWeight(newMoneyAmount + " $", moneyAmountNameTextFontWeight);
     }
 
 
