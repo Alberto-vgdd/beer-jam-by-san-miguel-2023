@@ -11745,7 +11745,7 @@ PrefabInstance:
     - target: {fileID: 571827345342083000, guid: 2f816a19b3597436885615c59130aa8e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 959.36176
+      value: 960.1256
       objectReference: {fileID: 0}
     - target: {fileID: 571827345342083000, guid: 2f816a19b3597436885615c59130aa8e,
         type: 3}
@@ -11765,7 +11765,7 @@ PrefabInstance:
     - target: {fileID: 2593485436169864190, guid: 2f816a19b3597436885615c59130aa8e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 959.36176
+      value: 960.1256
       objectReference: {fileID: 0}
     - target: {fileID: 2593485436169864190, guid: 2f816a19b3597436885615c59130aa8e,
         type: 3}
@@ -11882,6 +11882,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6458049243005589826, guid: 2f816a19b3597436885615c59130aa8e,
+        type: 3}
+      propertyPath: m_VertexColorAlwaysGammaSpace
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8077601411463802338, guid: 2f816a19b3597436885615c59130aa8e,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -11895,7 +11900,7 @@ PrefabInstance:
     - target: {fileID: 8077601411463802338, guid: 2f816a19b3597436885615c59130aa8e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 959.36176
+      value: 960.1256
       objectReference: {fileID: 0}
     - target: {fileID: 8077601411463802338, guid: 2f816a19b3597436885615c59130aa8e,
         type: 3}
