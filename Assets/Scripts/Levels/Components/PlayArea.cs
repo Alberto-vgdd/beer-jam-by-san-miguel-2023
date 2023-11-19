@@ -45,7 +45,8 @@ public class PlayArea : MonoBehaviour
     private AudioSource pieceRotatedAudioSource;
     [SerializeField]
     private AudioSource piecePlacedAudioSource;
-
+    [SerializeField]
+    private AudioSource pieceMovedAudioSource;
     private int playerNumber;
 
     private BottlePiece bottlePiece;
@@ -59,6 +60,9 @@ public class PlayArea : MonoBehaviour
     private float heightChangeTime;
     private float movementTime;
     private float rotationTime;
+
+
+    private Coroutine dpadHeldCoroutine;
 
 
     private void OnDifficultyChanged(float newDifficulty, int newLevelDisplayNumber)
@@ -86,11 +90,24 @@ public class PlayArea : MonoBehaviour
     {
         if (newEnabled)
         {
-            playerControls.Enable();
+            // playerControls.Enable();
+            playerControls.Gameplay.Movement.performed += OnDpadPressed;
+            playerControls.Gameplay.Movement.canceled += OnDpadReleased;
+            playerControls.Gameplay.Rotate.performed += OnRotateButtonPressed;
+            playerControls.Gameplay.DropPiece.performed += OnDropPieceButtonPressed;
         }
         else
         {
-            playerControls.Disable();
+            if (dpadHeldCoroutine != null)
+            {
+                StopCoroutine(dpadHeldCoroutine);
+            }
+
+            // playerControls.Disable();
+            playerControls.Gameplay.Movement.performed -= OnDpadPressed;
+            playerControls.Gameplay.Movement.canceled -= OnDpadReleased;
+            playerControls.Gameplay.Rotate.performed -= OnRotateButtonPressed;
+            playerControls.Gameplay.DropPiece.performed -= OnDropPieceButtonPressed;
         }
     }
 
@@ -109,6 +126,30 @@ public class PlayArea : MonoBehaviour
     {
         Vector2 input = context.ReadValue<Vector2>();
         pendingInputs.Add(input);
+
+        if (dpadHeldCoroutine != null)
+        {
+            StopCoroutine(dpadHeldCoroutine);
+        }
+        dpadHeldCoroutine = StartCoroutine(HoldDpad(input));
+    }
+
+    private void OnDpadReleased(CallbackContext context)
+    {
+        if (dpadHeldCoroutine != null)
+        {
+            StopCoroutine(dpadHeldCoroutine);
+        }
+    }
+
+    private IEnumerator HoldDpad(Vector2 lastInput)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.2f);
+            pendingInputs.Add(lastInput);
+
+        }
     }
 
     bool pendingRotation = false;
@@ -152,7 +193,7 @@ public class PlayArea : MonoBehaviour
                     {
                         OnPieceMoved(candidatePosition);
                         bottlePiece.MoveToLocalPosition(WorldPositionToGridLocalPosition(candidatePosition), true);
-
+                        pieceMovedAudioSource.Play();
                         yield return new WaitForSeconds(bottlePiece.GetMovementTime());
                     }
                 }
@@ -163,7 +204,7 @@ public class PlayArea : MonoBehaviour
                     {
                         OnPieceMoved(candidatePosition);
                         bottlePiece.MoveToLocalPosition(WorldPositionToGridLocalPosition(candidatePosition), true);
-
+                        pieceMovedAudioSource.Play();
                         yield return new WaitForSeconds(bottlePiece.GetMovementTime());
                     }
                 }
@@ -324,13 +365,7 @@ public class PlayArea : MonoBehaviour
     {
         StopAllCoroutines();
 
-        playerControls.Disable();
-        playerControls.Gameplay.Movement.performed -= OnDpadPressed;
-        playerControls.Gameplay.Rotate.performed -= OnRotateButtonPressed;
-        playerControls.Gameplay.DropPiece.performed -= OnDropPieceButtonPressed;
-
         DifficultyManager.PlayerDifficultyChanged[playerNumber] -= OnDifficultyChanged;
-        InputManager.InputEnabled[playerNumber] -= OnInputsEnabled;
 
         if (bottlePiece != null)
         {
@@ -345,16 +380,23 @@ public class PlayArea : MonoBehaviour
 
     internal void StartPlayArea()
     {
-        playerControls.Enable();
-        playerControls.Gameplay.Movement.performed += OnDpadPressed;
-        playerControls.Gameplay.Rotate.performed += OnRotateButtonPressed;
-        playerControls.Gameplay.DropPiece.performed += OnDropPieceButtonPressed;
 
         DifficultyManager.PlayerDifficultyChanged[playerNumber] += OnDifficultyChanged;
-        InputManager.InputEnabled[playerNumber] += OnInputsEnabled;
 
         StartCoroutine(HandleInputs());
         StartCoroutine(HandleGravity());
+    }
+
+    internal void ListenToInputsEnableEvents(bool listen)
+    {
+        if (listen)
+        {
+            InputManager.InputEnabled[playerNumber] += OnInputsEnabled;
+        }
+        else
+        {
+            InputManager.InputEnabled[playerNumber] -= OnInputsEnabled;
+        }
     }
 
     internal void SetPlayerNumber(int newPlayerNumber)

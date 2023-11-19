@@ -16,21 +16,38 @@ public class InputManager : Singleton<InputManager>
 
     [Header("Parameters")]
     [SerializeField]
+    private bool developmentMode = false;
+    [SerializeField]
     private string[] playerDeviceNames = { PLAYER_1_DEVICE_NAME, PLAYER_2_DEVICE_NAME };
 
     private bool inputsPaused = false;
     private PlayerControls[] playerControls;
 
+    private int winnerPlayerNumber;
+    public PlayerControls WinnerPlayerControls { get => playerControls[winnerPlayerNumber]; }
+    public int WinnerPlayerNumber { get => winnerPlayerNumber; set => winnerPlayerNumber = value; }
 
     protected override void Awake()
     {
         base.Awake();
 
+        if (developmentMode)
+        {
+            foreach (InputDevice inputDevice in InputSystem.devices)
+            {
+                Debug.Log(inputDevice.name);
+            }
+        }
+
         playerControls = new PlayerControls[NUMBER_OF_PLAYERS];
         for (int playerNumber = 0; playerNumber < NUMBER_OF_PLAYERS; playerNumber++)
         {
             playerControls[playerNumber] = new PlayerControls();
-            playerControls[playerNumber].devices = new InputDevice[1] { InputSystem.GetDevice(playerDeviceNames[playerNumber]) };
+            if (!developmentMode)
+            {
+                InputDevice inputDevice = InputSystem.GetDevice(playerDeviceNames[playerNumber]);
+                playerControls[playerNumber].devices = new InputDevice[1] { inputDevice };
+            }
         }
     }
 

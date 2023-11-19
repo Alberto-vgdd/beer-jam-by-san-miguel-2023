@@ -1,10 +1,14 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class DifficultyManager : MonoBehaviour
 {
     public delegate void DifficultyChangedHandler(float newDifficulty, int newDisplayLevelNumber);
     public static DifficultyChangedHandler[] PlayerDifficultyChanged = new DifficultyChangedHandler[InputManager.NUMBER_OF_PLAYERS];
+
+    public delegate void DifficultyChangedByPowerUpHandler(float newDifficulty);
+    public static DifficultyChangedByPowerUpHandler[] PlayerDifficultyChangedByPowerUp = new DifficultyChangedByPowerUpHandler[InputManager.NUMBER_OF_PLAYERS];
 
     public delegate void BoxesCompletedLeftChangedHandler(int newBoxesCompletedLeft);
     public static BoxesCompletedLeftChangedHandler[] PlayerBoxesCompletedLeftChanged = new BoxesCompletedLeftChangedHandler[InputManager.NUMBER_OF_PLAYERS];
@@ -17,6 +21,11 @@ public class DifficultyManager : MonoBehaviour
 
     public delegate void GameOverHandler(PlayerProgress playerProgress);
     public static GameOverHandler[] GameOver = new GameOverHandler[InputManager.NUMBER_OF_PLAYERS];
+
+
+    public delegate void BeerBoxPowerUpHandler(float time, int increase);
+    public static BeerBoxPowerUpHandler[] BeerBoxPowerUp = new BeerBoxPowerUpHandler[InputManager.NUMBER_OF_PLAYERS];
+
 
     private const int MAX_LIVES = 3;
 
@@ -33,6 +42,13 @@ public class DifficultyManager : MonoBehaviour
 
 
     private PlayerProgress[] playersProgresses;
+
+    Coroutine[] powerUpCoroutine = new Coroutine[2];
+
+    bool[] powerUpActivated = new bool[2] { false, false };
+
+    bool isPowerUpDiff = false;
+
 
 
     void Awake()
@@ -53,20 +69,32 @@ public class DifficultyManager : MonoBehaviour
     {
         PlayerTable.BeerBoxCompleted += OnBeerBoxCompleted;
         PlayerTable.BeerBoxRuined += OnBeerBoxRuined;
+        PlayerTable.BeerBoxPowerUp += OnBeerBoxPowerUp;
     }
 
     void OnDisable()
     {
         PlayerTable.BeerBoxCompleted -= OnBeerBoxCompleted;
         PlayerTable.BeerBoxRuined -= OnBeerBoxRuined;
+        PlayerTable.BeerBoxPowerUp -= OnBeerBoxPowerUp;
     }
 
     private void OnPlayerProgressLevelChanged(PlayerProgress playerProgress)
     {
         playerProgress.completedBoxes = 0;
         playerProgress.objectiveCompletedBoxes = levelToObjectiveBoxesCount[playerProgress.levelNumber];
-        playerProgress.difficulty = difficultyIncrease * playerProgress.levelNumber;
-        playerProgress.livesLeft = Mathf.Min(MAX_LIVES, playerProgress.livesLeft + 1);
+        if (!powerUpActivated[playerProgress.playerNumber]) 
+        {
+            playerProgress.difficulty = difficultyIncrease * playerProgress.levelNumber;
+        }
+        if (!isPowerUpDiff)
+        {
+            playerProgress.livesLeft = Mathf.Min(MAX_LIVES, playerProgress.livesLeft + 1);
+        }
+        else 
+        {
+            isPowerUpDiff = false;
+        }
 
 
         PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty, playerProgress.levelNumber + 1);
@@ -107,6 +135,47 @@ public class DifficultyManager : MonoBehaviour
         {
             GameOver[playerNumber]?.Invoke(playerProgress);
         }
+    }
+
+    private void OnBeerBoxPowerUp(int playerNumber, int increase) 
+    {
+        isPowerUpDiff = true;
+        PlayerProgress playerProgress = playersProgresses[playerNumber];
+        if (increase > 0)
+        {
+            PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty * 2, playerProgress.levelNumber + 1);
+
+        }
+        else 
+        {
+            PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(increase, playerProgress.levelNumber + 1);
+        }
+
+        int time = 10;
+        powerUpActivated[playerNumber] = true;
+
+        BeerBoxPowerUp[playerNumber]?.Invoke(time, increase);
+
+        if (powerUpCoroutine[playerNumber] != null) 
+        {
+            StopCoroutine(powerUpCoroutine[playerNumber]);
+        }
+
+        powerUpCoroutine[playerNumber] = StartCoroutine(BeerBoxRestorePowerUp(playerNumber, time));
+    }
+
+    IEnumerator BeerBoxRestorePowerUp(int playerNumber, float time) 
+    {
+
+        yield return new WaitForSeconds(time);
+
+
+
+        PlayerProgress playerProgress = playersProgresses[playerNumber];
+        playerProgress.difficulty = difficultyIncrease * playerProgress.levelNumber;
+
+        PlayerDifficultyChanged[playerProgress.playerNumber]?.Invoke(playerProgress.difficulty, playerProgress.levelNumber+1);
+        powerUpActivated[playerNumber] = false;
     }
 
     internal void ResetProgress()

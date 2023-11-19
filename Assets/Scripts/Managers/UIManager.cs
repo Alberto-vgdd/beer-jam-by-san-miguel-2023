@@ -1,16 +1,17 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
     [Header("Components")]
     [SerializeField]
-    private GameObject soloGameOverScreenGameObject;
+    private GameObject leaderBoardsScreenGameObject;
     [SerializeField]
-    private GameObject multiGameOverScreenGameObject;
+    private GameObject enterNewNameScreenGameObject;
+    [SerializeField]
+    private GameObject gameOverScreenGameObject;
     [SerializeField]
     private GameObject titleScreenGameObject;
     [SerializeField]
@@ -19,17 +20,22 @@ public class UIManager : MonoBehaviour
     private GameObject multiplayerGameplayScreenGameObject;
     [SerializeField]
     private EventSystem eventSystem;
-
-    private GameOverScreen soloGameOverScreen;
-    private GameOverScreen multiGameOverScreen;
+    [SerializeField]
+    private InputSystemUIInputModule inputSystemUIInputModule;
 
     [SerializeField]
-    private GameFinishedDisplay[] gameFinishedDisplays;
+    private GameFinishedDisplay gameFinishedDisplay;
 
-    void Awake()
+
+
+    private GameOverScreen gameOverScreen;
+    private EnterNewNameScreen enterNewNameScreen;
+    private LeaderboardsScreen leaderboardsScreen;
+
+    protected override void Awake()
     {
-        soloGameOverScreen = soloGameOverScreenGameObject.GetComponent<GameOverScreen>();
-        multiGameOverScreen = multiGameOverScreenGameObject.GetComponent<GameOverScreen>();
+        base.Awake();
+        gameOverScreen = gameOverScreenGameObject.GetComponent<GameOverScreen>();
     }
 
     void OnEnable()
@@ -43,51 +49,76 @@ public class UIManager : MonoBehaviour
         BaseScreen.SelectGameObjectRequested -= OnSelectGameObjectRequested;
     }
 
-    public void ShowGameOverScreen(int winnerPlayerNumber, PlayerProgress[] playersGameProgresses)
+    public void ShowGameOverScreen(int winnerPlayerNumber, PlayerProgress[] playersGameProgresses, bool isNewRecord)
     {
-        if (InputManager.NUMBER_OF_PLAYERS > 1)
-        {
-            soloGameOverScreenGameObject.SetActive(false);
-            multiGameOverScreenGameObject.SetActive(true);
-            multiGameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore);
-        }
-        else
-        {
-            soloGameOverScreenGameObject.SetActive(true);
-            multiGameOverScreenGameObject.SetActive(false);
-            soloGameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore);
-        }
+        gameOverScreenGameObject.SetActive(true);
+
+        gameOverScreen.SetTotalScore(playersGameProgresses[winnerPlayerNumber].totalScore, winnerPlayerNumber, InputManager.NUMBER_OF_PLAYERS > 1, isNewRecord);
 
         titleScreenGameObject.SetActive(false);
-
-
+        enterNewNameScreenGameObject.SetActive(false);
+        leaderBoardsScreenGameObject.SetActive(false);
     }
 
     internal void ShowGameplayScreen()
     {
-        soloGameOverScreenGameObject.SetActive(false);
-        multiGameOverScreenGameObject.SetActive(false);
-
+        gameOverScreenGameObject.SetActive(false);
+        enterNewNameScreenGameObject.SetActive(false);
+        leaderBoardsScreenGameObject.SetActive(false);
         titleScreenGameObject.SetActive(false);
 
         soloGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 1);
         multiplayerGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 2);
 
-        gameFinishedDisplays[InputManager.NUMBER_OF_PLAYERS - 1].Reset();
+        if (InputManager.NUMBER_OF_PLAYERS == 2)
+        {
+            gameFinishedDisplay.Reset();
+        }
 
     }
 
     internal void ShowTitleScreen()
     {
-        soloGameOverScreenGameObject.SetActive(false);
-        multiGameOverScreenGameObject.SetActive(false);
+        gameOverScreenGameObject.SetActive(false);
         titleScreenGameObject.SetActive(true);
         soloGameplayScreenGameObject.SetActive(false);
         multiplayerGameplayScreenGameObject.SetActive(false);
+        enterNewNameScreenGameObject.SetActive(false);
+        leaderBoardsScreenGameObject.SetActive(false);
     }
 
     private void OnSelectGameObjectRequested(GameObject newGameObjectToSelect)
     {
         eventSystem.SetSelectedGameObject(newGameObjectToSelect);
+    }
+
+    protected override UIManager GetThis()
+    {
+        return this;
+    }
+
+    internal void ShowLeaderboardsScreen()
+    {
+        gameOverScreenGameObject.SetActive(false);
+        titleScreenGameObject.SetActive(false);
+        soloGameplayScreenGameObject.SetActive(false);
+        multiplayerGameplayScreenGameObject.SetActive(false);
+        enterNewNameScreenGameObject.SetActive(false);
+        leaderBoardsScreenGameObject.SetActive(true);
+    }
+
+    internal void ShowEnterNewNameScreen()
+    {
+        gameOverScreenGameObject.SetActive(false);
+        titleScreenGameObject.SetActive(false);
+        soloGameplayScreenGameObject.SetActive(false);
+        multiplayerGameplayScreenGameObject.SetActive(false);
+        enterNewNameScreenGameObject.SetActive(true);
+        leaderBoardsScreenGameObject.SetActive(false);
+    }
+
+    internal void OnlyReadInputsFrom(PlayerControls playerControls)
+    {
+        inputSystemUIInputModule.actionsAsset.devices = playerControls.devices;
     }
 }
