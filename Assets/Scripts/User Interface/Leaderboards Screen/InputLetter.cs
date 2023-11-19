@@ -10,6 +10,9 @@ public class InputLetter : MonoBehaviour
     [SerializeField]
     private GameObject highlightedUnderscore;
 
+    [SerializeField]
+    private int letterTextFontWeight = 900;
+
     private int selectedLetter = 0;
     private char letter = AVAILABLE_LETTERS[0];
 
@@ -19,7 +22,7 @@ public class InputLetter : MonoBehaviour
         selectedLetter = (selectedLetter >= AVAILABLE_LETTERS.Length) ? 0 : selectedLetter;
         selectedLetter = (selectedLetter < 0) ? AVAILABLE_LETTERS.Length - 1 : selectedLetter;
         letter = AVAILABLE_LETTERS[selectedLetter];
-        letterText.text = letter.ToString();
+        letterText.text = StringUtils.FormatStringWithFontWeight(letter.ToString(), letterTextFontWeight);
     }
 
     internal void Highlight(bool highlighted)
@@ -36,6 +39,6 @@ public class InputLetter : MonoBehaviour
     {
         selectedLetter = 0;
         letter = AVAILABLE_LETTERS[selectedLetter];
-        letterText.text = letter.ToString();
+        letterText.text = StringUtils.FormatStringWithFontWeight(letter.ToString(), letterTextFontWeight);
     }
 }
