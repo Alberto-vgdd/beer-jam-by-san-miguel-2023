@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18351282, g: 0.22906652, b: 0.3057104, a: 1}
+  m_IndirectSpecularColor: {r: 0.12729266, g: 0.13414232, b: 0.12114291, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2213,7 +2213,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &442019940
 Canvas:
   m_ObjectHideFlags: 0
@@ -2721,6 +2721,7 @@ MonoBehaviour:
   - {fileID: 744004147700924373, guid: fb492cd6e3ff7492e861dce89bc4fc55, type: 3}
   - {fileID: 7923665346152302209, guid: 571661bb2f1934beaaebe748b5320a24, type: 3}
   - {fileID: 6942398790077823271, guid: 69db5fe0ae13f4bd2891af3cbfecc09e, type: 3}
+  - {fileID: 6942398790077823271, guid: 3c107fe1209a041ebb46bc56e53863bd, type: 3}
   easyPieceChancesCurve:
     serializedVersion: 2
     m_Curve:
@@ -4199,7 +4200,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &745055199
 Canvas:
   m_ObjectHideFlags: 0
