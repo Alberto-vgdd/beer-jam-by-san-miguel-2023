@@ -34,6 +34,7 @@ public class BeerBox : MonoBehaviour
 
     public List<MeshRenderer> meshesToChangeWithPowerUp;
     public List<Material> powerUpMaterials;
+    public List<Mesh> powerUpMeshes;
 
 
     public TypeOfBox boxType = TypeOfBox.Default;
@@ -107,18 +108,21 @@ public class BeerBox : MonoBehaviour
                 foreach (MeshRenderer renderer in meshesToChangeWithPowerUp)
                 {
                     renderer.material = powerUpMaterials[0];
+                    renderer.GetComponent<MeshFilter>().mesh = powerUpMeshes[0];
                 }
                 break;
             case TypeOfBox.SlowDownTime:
                 foreach (MeshRenderer renderer in meshesToChangeWithPowerUp)
                 {
                     renderer.material = powerUpMaterials[1];
+                    renderer.GetComponent<MeshFilter>().mesh = powerUpMeshes[1];
                 }
                 break;
             case TypeOfBox.SpeedUpTime:
                 foreach (MeshRenderer renderer in meshesToChangeWithPowerUp)
                 {
                     renderer.material = powerUpMaterials[2];
+                    renderer.GetComponent<MeshFilter>().mesh = powerUpMeshes[2];
                 }
                 break;
         }
