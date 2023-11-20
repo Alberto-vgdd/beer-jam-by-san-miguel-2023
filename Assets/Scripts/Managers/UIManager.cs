@@ -15,9 +15,9 @@ public class UIManager : Singleton<UIManager>
     [SerializeField]
     private GameObject titleScreenGameObject;
     [SerializeField]
-    private GameObject soloGameplayScreenGameObject;
+    private GameObject[] soloGameplayScreenGameObjects;
     [SerializeField]
-    private GameObject multiplayerGameplayScreenGameObject;
+    private GameObject[] multiplayerGameplayScreenGameObjects;
     [SerializeField]
     private EventSystem eventSystem;
     [SerializeField]
@@ -67,8 +67,14 @@ public class UIManager : Singleton<UIManager>
         leaderBoardsScreenGameObject.SetActive(false);
         titleScreenGameObject.SetActive(false);
 
-        soloGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 1);
-        multiplayerGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 2);
+        foreach (GameObject soloGameplayScreenGameObject in soloGameplayScreenGameObjects)
+        {
+            soloGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 1);
+        }
+        foreach (GameObject multiplayerGameplayScreenGameObject in multiplayerGameplayScreenGameObjects)
+        {
+            multiplayerGameplayScreenGameObject.SetActive(InputManager.NUMBER_OF_PLAYERS == 2);
+        }
 
         if (InputManager.NUMBER_OF_PLAYERS == 2)
         {
@@ -81,8 +87,14 @@ public class UIManager : Singleton<UIManager>
     {
         gameOverScreenGameObject.SetActive(false);
         titleScreenGameObject.SetActive(true);
-        soloGameplayScreenGameObject.SetActive(false);
-        multiplayerGameplayScreenGameObject.SetActive(false);
+        foreach (GameObject soloGameplayScreenGameObject in soloGameplayScreenGameObjects)
+        {
+            soloGameplayScreenGameObject.SetActive(false);
+        }
+        foreach (GameObject multiplayerGameplayScreenGameObject in multiplayerGameplayScreenGameObjects)
+        {
+            multiplayerGameplayScreenGameObject.SetActive(false);
+        }
         enterNewNameScreenGameObject.SetActive(false);
         leaderBoardsScreenGameObject.SetActive(false);
     }
@@ -101,8 +113,14 @@ public class UIManager : Singleton<UIManager>
     {
         gameOverScreenGameObject.SetActive(false);
         titleScreenGameObject.SetActive(false);
-        soloGameplayScreenGameObject.SetActive(false);
-        multiplayerGameplayScreenGameObject.SetActive(false);
+        foreach (GameObject soloGameplayScreenGameObject in soloGameplayScreenGameObjects)
+        {
+            soloGameplayScreenGameObject.SetActive(false);
+        }
+        foreach (GameObject multiplayerGameplayScreenGameObject in multiplayerGameplayScreenGameObjects)
+        {
+            multiplayerGameplayScreenGameObject.SetActive(false);
+        }
         enterNewNameScreenGameObject.SetActive(false);
         leaderBoardsScreenGameObject.SetActive(true);
     }
@@ -111,8 +129,14 @@ public class UIManager : Singleton<UIManager>
     {
         gameOverScreenGameObject.SetActive(false);
         titleScreenGameObject.SetActive(false);
-        soloGameplayScreenGameObject.SetActive(false);
-        multiplayerGameplayScreenGameObject.SetActive(false);
+        foreach (GameObject soloGameplayScreenGameObject in soloGameplayScreenGameObjects)
+        {
+            soloGameplayScreenGameObject.SetActive(false);
+        }
+        foreach (GameObject multiplayerGameplayScreenGameObject in multiplayerGameplayScreenGameObjects)
+        {
+            multiplayerGameplayScreenGameObject.SetActive(false);
+        }
         enterNewNameScreenGameObject.SetActive(true);
         leaderBoardsScreenGameObject.SetActive(false);
     }
