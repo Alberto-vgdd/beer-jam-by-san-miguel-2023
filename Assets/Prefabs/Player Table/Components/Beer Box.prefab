@@ -5248,13 +5248,15 @@ ParticleSystemRenderer:
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 0
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
+  m_UseCustomVertexStreams: 0
   m_VertexStreams: 00010304
+  m_UseCustomTrailVertexStreams: 0
+  m_TrailVertexStreams: 00010304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
@@ -10292,13 +10294,15 @@ ParticleSystemRenderer:
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 0
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
+  m_UseCustomVertexStreams: 0
   m_VertexStreams: 00010304
+  m_UseCustomTrailVertexStreams: 0
+  m_TrailVertexStreams: 00010304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
@@ -10372,6 +10376,10 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 6169b8a403c60482383051455a22001f, type: 2}
   - {fileID: 2100000, guid: 968aba699a9bdeb44a2b617b31d9aab8, type: 2}
   - {fileID: 2100000, guid: 5ac87055c9b842343a06d7f7dc813944, type: 2}
+  powerUpMeshes:
+  - {fileID: -7948945675101318237, guid: b46a7c4472f414a9484c35e49820e3c2, type: 3}
+  - {fileID: -6070953091098300674, guid: 796bbc7008a88ad45837c81abacb63e4, type: 3}
+  - {fileID: -4864508500903148577, guid: fdafc741827cca24d96d0d97080f2e1d, type: 3}
   boxType: 0
 --- !u!114 &1666174816862487015
 MonoBehaviour:
