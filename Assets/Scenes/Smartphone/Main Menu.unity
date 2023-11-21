@@ -2412,6 +2412,8 @@ MonoBehaviour:
   - {fileID: 744004147700924373, guid: fb492cd6e3ff7492e861dce89bc4fc55, type: 3}
   - {fileID: 7923665346152302209, guid: 571661bb2f1934beaaebe748b5320a24, type: 3}
   - {fileID: 6942398790077823271, guid: 69db5fe0ae13f4bd2891af3cbfecc09e, type: 3}
+  - {fileID: 2448156118487162965, guid: f8025e436571a40248e578ec8025febe, type: 3}
+  - {fileID: 6942398790077823271, guid: 3c107fe1209a041ebb46bc56e53863bd, type: 3}
   easyPieceChancesCurve:
     serializedVersion: 2
     m_Curve:
