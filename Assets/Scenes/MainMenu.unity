@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12729266, g: 0.13414232, b: 0.12114291, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4855,7 +4855,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!223 &745055199
 Canvas:
   m_ObjectHideFlags: 0
@@ -11564,7 +11564,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &1795375051
 Canvas:
   m_ObjectHideFlags: 0
@@ -12386,6 +12386,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player 2 Finished Display
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724204639881809272, guid: 05302b46ae21e4d9cb00c9b4e608fb1c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5912351003035616905, guid: 05302b46ae21e4d9cb00c9b4e608fb1c,
         type: 3}
@@ -13684,6 +13689,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player 1 Finished Display
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724204639881809272, guid: 05302b46ae21e4d9cb00c9b4e608fb1c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5912351003035616905, guid: 05302b46ae21e4d9cb00c9b4e608fb1c,
         type: 3}
