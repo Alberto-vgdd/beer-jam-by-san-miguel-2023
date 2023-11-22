@@ -23,7 +23,7 @@ public class ChefAnimationController : MonoBehaviour
     }
     private void OnEnable()
     {
-       DOTween.Sequence().Append(chefSprite.DOMoveY(showPos.transform.position.y, 1)).Append(textBackGround.DOFade(1, 1)).Append(chefTextField.DOText(chefText, 2f)).OnComplete(KillChef);
+       DOTween.Sequence().Append(chefSprite.DOMoveY(showPos.transform.position.y, 1)).Append(textBackGround.DOFade(1, 1)).Append(chefTextField.DOText(chefText, 1.5f)).OnComplete(KillChef);
     }
 
     private void OnDisable()
