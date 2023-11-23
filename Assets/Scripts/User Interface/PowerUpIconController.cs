@@ -63,7 +63,7 @@ public class PowerUpIconController : MonoBehaviour
 
         GetComponent<AudioSource>().Play();
 
-        filledImage.DOFillAmount(0, time).OnComplete(DeactivateIcon);
+        filledImage.DOFillAmount(0, time).SetEase(Ease.Linear).OnComplete(DeactivateIcon);
     }
 
     void DeactivateIcon() 
@@ -110,6 +110,11 @@ public class PowerUpIconController : MonoBehaviour
         }
     }
 
+
+    private void Update()
+    {
+        
+    }
 
 
 }
