@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12729266, g: 0.13414232, b: 0.12114291, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4266,6 +4266,51 @@ PrefabInstance:
     - target: {fileID: 4210809338109361339, guid: 1950fb7126aba6f4399aa39df4f73146,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435381486850313142, guid: 1950fb7126aba6f4399aa39df4f73146,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435381486850313142, guid: 1950fb7126aba6f4399aa39df4f73146,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435381486850313142, guid: 1950fb7126aba6f4399aa39df4f73146,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435381486850313142, guid: 1950fb7126aba6f4399aa39df4f73146,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435381486850313142, guid: 1950fb7126aba6f4399aa39df4f73146,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435381486850313142, guid: 1950fb7126aba6f4399aa39df4f73146,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 736
+      objectReference: {fileID: 0}
+    - target: {fileID: 5552598242862480258, guid: 1950fb7126aba6f4399aa39df4f73146,
+        type: 3}
+      propertyPath: m_margin.x
+      value: -2308.395
+      objectReference: {fileID: 0}
+    - target: {fileID: 5552598242862480258, guid: 1950fb7126aba6f4399aa39df4f73146,
+        type: 3}
+      propertyPath: m_margin.z
+      value: -1368.3169
+      objectReference: {fileID: 0}
+    - target: {fileID: 8627870515004016143, guid: 1950fb7126aba6f4399aa39df4f73146,
+        type: 3}
+      propertyPath: m_Alpha
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8759268888832990462, guid: 1950fb7126aba6f4399aa39df4f73146,
