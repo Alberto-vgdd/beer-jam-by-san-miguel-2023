@@ -86,14 +86,11 @@ public class DifficultyManager : MonoBehaviour
         if (!powerUpActivated[playerProgress.playerNumber]) 
         {
             playerProgress.difficulty = difficultyIncrease * playerProgress.levelNumber;
+            isPowerUpDiff = false;
         }
         if (!isPowerUpDiff)
         {
             playerProgress.livesLeft = Mathf.Min(MAX_LIVES, playerProgress.livesLeft + 1);
-        }
-        else 
-        {
-            isPowerUpDiff = false;
         }
 
 
