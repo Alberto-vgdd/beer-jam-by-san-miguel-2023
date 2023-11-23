@@ -5,37 +5,38 @@ using DG.Tweening;
 using UnityEngine.UI;
 public class ChefAnimationController : MonoBehaviour
 {
+    [TextArea]
     public string chefText;
 
     public Text chefTextField;
 
-    public Transform chefSprite;
+    public RectTransform chefSprite;
 
     public CanvasGroup textBackGround;
 
     Vector3 initialPos;
 
-    public Transform showPos;
+    public RectTransform showPos;
 
     private void Awake()
     {
-        initialPos = chefSprite.transform.position;
+        initialPos = chefSprite.anchoredPosition;
     }
     private void OnEnable()
     {
-        DOTween.Sequence().Append(chefSprite.DOMoveY(showPos.transform.position.y, 1)).Append(textBackGround.DOFade(1, 1)).Append(chefTextField.DOText(chefText, 1.5f)).OnComplete(KillChef);
+        DOTween.Sequence().Append(chefSprite.DOAnchorPosY(showPos.anchoredPosition.y, 1)).Append(textBackGround.DOFade(1, 1)).Append(chefTextField.DOText(chefText, 1.5f)).OnComplete(KillChef);
     }
 
     private void OnDisable()
     {
-        chefSprite.transform.position = initialPos;
+        chefSprite.anchoredPosition = initialPos;
         chefTextField.text = "";
         textBackGround.alpha = 0;
     }
 
     void KillChef()
     {
-        DOTween.Sequence().PrependInterval(60).Append(textBackGround.DOFade(0, 0.5f)).Append(chefSprite.DOMoveY(initialPos.y, 1f)).Append(chefTextField.DOText("", 0));
+        DOTween.Sequence().PrependInterval(60).Append(textBackGround.DOFade(0, 0.5f)).Append(chefSprite.DOAnchorPosY(initialPos.y, 1f)).Append(chefTextField.DOText("", 0));
 
     }
 }
