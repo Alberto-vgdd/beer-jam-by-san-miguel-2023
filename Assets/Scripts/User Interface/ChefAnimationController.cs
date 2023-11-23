@@ -13,13 +13,13 @@ public class ChefAnimationController : MonoBehaviour
 
     public CanvasGroup textBackGround;
 
-    Transform initialPos;
+    Vector3 initialPos;
 
     public Transform showPos;
 
     private void Awake()
     {
-        initialPos = transform;
+        initialPos = chefSprite.transform.position;
     }
     private void OnEnable()
     {
@@ -28,14 +28,14 @@ public class ChefAnimationController : MonoBehaviour
 
     private void OnDisable()
     {
-        chefSprite.transform.position = initialPos.position;
+        chefSprite.transform.position = initialPos;
         chefTextField.text = "";
         textBackGround.alpha = 0;
     }
 
     void KillChef()
     {
-        DOTween.Sequence().PrependInterval(60).Append(textBackGround.DOFade(0, 0.5f)).Append(chefSprite.DOMoveY(initialPos.transform.position.y, 1f)).Append(chefTextField.DOText("", 0));
+        DOTween.Sequence().PrependInterval(60).Append(textBackGround.DOFade(0, 0.5f)).Append(chefSprite.DOMoveY(initialPos.y, 1f)).Append(chefTextField.DOText("", 0));
 
     }
 }

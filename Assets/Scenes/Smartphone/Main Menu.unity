@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18026505, g: 0.22568887, b: 0.30683368, a: 1}
+  m_IndirectSpecularColor: {r: 0.12729266, g: 0.13414232, b: 0.12114291, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -643,7 +643,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<font-weight=900>Equipo B</font-weight> y <font-weight=900>San Miguel</font-weight>
+  m_text: '<font-weight=900>San Miguel</font-weight> y <font-weight=900>Equipo B</font-weight>
 
     <font-weight=300>
     presentan:</font-weight>'
@@ -9810,7 +9810,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &1445766897
 Animator:
   serializedVersion: 5
