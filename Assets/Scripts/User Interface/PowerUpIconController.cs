@@ -31,10 +31,10 @@ public class PowerUpIconController : MonoBehaviour
     }
 
 
-    void OnStartPowerUp(float time, int increase) 
+    void OnStartPowerUp(float time, int increase)
     {
         filledImage.fillAmount = 1;
-        alertMsg.localScale = new Vector3(startScale,startScale,startScale);
+        alertMsg.localScale = new Vector3(startScale, startScale, startScale);
 
         if (increase > 0)
         {
@@ -51,7 +51,7 @@ public class PowerUpIconController : MonoBehaviour
             background.sprite = powerUpSprites[0];
             filledImage.sprite = powerUpSprites[0];
             filledImage.color = powerUpColors[0];
-            DOTween.Sequence().Append(alertMsgCanvas.DOFade(1, 0.25f)).Append(alertMsgCanvas.DOFade(0, 3));
+            DOTween.Sequence().Append(alertMsgCanvas.DOFade(1, 0.25f)).Append(alertMsgCanvas.DOFade(0, 2));
             AlertAnimationScaleUpSpeedDown();
             alertMsg.GetComponent<TextMeshProUGUI>().text = "Relax~";
             alertMsg.GetComponent<TextMeshProUGUI>().color = powerUpColors[0];
@@ -63,10 +63,10 @@ public class PowerUpIconController : MonoBehaviour
 
         GetComponent<AudioSource>().Play();
 
-        filledImage.DOFillAmount(0, time).OnComplete(DeactivateIcon);
+        filledImage.DOFillAmount(0, time).SetEase(Ease.InQuad).OnComplete(DeactivateIcon);
     }
 
-    void DeactivateIcon() 
+    void DeactivateIcon()
     {
         background.gameObject.SetActive(false);
         filledImage.gameObject.SetActive(false);
@@ -76,11 +76,11 @@ public class PowerUpIconController : MonoBehaviour
 
 
 
-    void AlertAnimationScaleUpSpeedUp() 
+    void AlertAnimationScaleUpSpeedUp()
     {
-        if (filledImage.fillAmount > 0) 
+        if (filledImage.fillAmount > 0)
         {
-            alertMsg.DOScale(alertMsg.localScale.x*1.5f, 0.25f).OnComplete(AlertAnimationScaleDownSpeedUp);
+            alertMsg.DOScale(alertMsg.localScale.x * 1.5f, 0.25f).OnComplete(AlertAnimationScaleDownSpeedUp);
         }
     }
 
@@ -92,10 +92,10 @@ public class PowerUpIconController : MonoBehaviour
             alertMsg.DOScale(alertMsg.localScale.x * 0.5f, 0.25f).OnComplete(AlertAnimationScaleUpSpeedUp);
         }
     }
-    
-    void AlertAnimationScaleUpSpeedDown() 
+
+    void AlertAnimationScaleUpSpeedDown()
     {
-        if (filledImage.fillAmount > 0) 
+        if (filledImage.fillAmount > 0)
         {
             alertMsg.DOScale(alertMsg.localScale.x * 1.5f, 2f).OnComplete(AlertAnimationScaleDownSpeedDown);
         }
