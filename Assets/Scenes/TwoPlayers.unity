@@ -1074,6 +1074,80 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 501885735}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &577668060
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2130033225}
+    m_Modifications:
+    - target: {fileID: 549854163070303635, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+        type: 3}
+      propertyPath: m_Name
+      value: San Miguel Logo
+      objectReference: {fileID: 0}
+    - target: {fileID: 7604134779702577832, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 7604134779702577832, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.508
+      objectReference: {fileID: 0}
+    - target: {fileID: 7604134779702577832, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.129
+      objectReference: {fileID: 0}
+    - target: {fileID: 7604134779702577832, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9149349
+      objectReference: {fileID: 0}
+    - target: {fileID: 7604134779702577832, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.24515611
+      objectReference: {fileID: 0}
+    - target: {fileID: 7604134779702577832, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.30968836
+      objectReference: {fileID: 0}
+    - target: {fileID: 7604134779702577832, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.08298076
+      objectReference: {fileID: 0}
+    - target: {fileID: 7604134779702577832, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7604134779702577832, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 37.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7604134779702577832, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7ba7a62cf03e04dc1a1eab13bb13c705, type: 3}
+--- !u!4 &577668061 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7604134779702577832, guid: 7ba7a62cf03e04dc1a1eab13bb13c705,
+    type: 3}
+  m_PrefabInstance: {fileID: 577668060}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &625722711
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3205,6 +3279,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1563002922}
+    - targetCorrespondingSourceObject: {fileID: 400528472421846500, guid: 520968490b2f24af58202cc30eaab084,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 577668061}
     - targetCorrespondingSourceObject: {fileID: 400528472421846500, guid: 520968490b2f24af58202cc30eaab084,
         type: 3}
       insertIndex: -1
