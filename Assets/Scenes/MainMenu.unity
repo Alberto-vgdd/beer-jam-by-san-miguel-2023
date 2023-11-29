@@ -1339,7 +1339,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &196081926
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3951,7 +3951,7 @@ PrefabInstance:
     - target: {fileID: 2330856871778570322, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -250
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2330856871778570322, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
@@ -4988,6 +4988,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Exit Game Button
       objectReference: {fileID: 0}
+    - target: {fileID: 6062022232064519600, guid: 514d49035839a44c69a6a60f6152e008,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5520,7 +5525,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &803858742
 RectTransform:
   m_ObjectHideFlags: 0
