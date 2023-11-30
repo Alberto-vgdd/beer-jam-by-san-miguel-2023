@@ -1339,7 +1339,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &196081926
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12736,7 +12736,7 @@ PrefabInstance:
     - target: {fileID: 7279745985214056811, guid: 9115a63f3a0a78341ad2bd925bf04b4c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7279745985214056811, guid: 9115a63f3a0a78341ad2bd925bf04b4c,
         type: 3}
@@ -12786,8 +12786,7 @@ PrefabInstance:
     - target: {fileID: 7445254684507564846, guid: 9115a63f3a0a78341ad2bd925bf04b4c,
         type: 3}
       propertyPath: m_Text
-      value: "\xA1Hola! Soy Diego Gallegos, el chef gamer.\n\nPon a prueba tu habilidad
-        en mi restaurante."
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7445254684507564846, guid: 9115a63f3a0a78341ad2bd925bf04b4c,
         type: 3}
