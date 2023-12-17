@@ -14,7 +14,7 @@ class BinaryBuilder
     private const string GAME_NAME = "excelente-servicio";
 
     // Build variables
-    private static string[] buildScenes = new string[] { "Assets/Scenes/SampleScene.unity" };
+    private static string[] buildScenes = new string[] { "Assets/Scenes/MainMenu.unity" };
 
     [MenuItem("Binary Builder/Build Standalone Windows")]
     static void PerformWindowsBuild()
