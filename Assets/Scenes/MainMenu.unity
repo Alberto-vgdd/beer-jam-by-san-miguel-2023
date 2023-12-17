@@ -4996,7 +4996,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6062022232064519600, guid: 514d49035839a44c69a6a60f6152e008,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 679033250}
   m_SourcePrefab: {fileID: 100100000, guid: 514d49035839a44c69a6a60f6152e008, type: 3}
 --- !u!224 &679033248 stripped
 RectTransform:
@@ -5004,6 +5008,25 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 679033247}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &679033249 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6062022232064519600, guid: 514d49035839a44c69a6a60f6152e008,
+    type: 3}
+  m_PrefabInstance: {fileID: 679033247}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &679033250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679033249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2885aa42ee84db281a95f32289f363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unsupportedPlatforms: 11000000
 --- !u!1 &702210227
 GameObject:
   m_ObjectHideFlags: 0
@@ -14229,6 +14252,7 @@ GameObject:
   - component: {fileID: 2137667426}
   - component: {fileID: 2137667425}
   - component: {fileID: 2137667424}
+  - component: {fileID: 2137667427}
   m_Layer: 5
   m_Name: Exit Button
   m_TagString: Untagged
@@ -14351,6 +14375,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137667422}
   m_CullTransparentMesh: 1
+--- !u!114 &2137667427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137667422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2885aa42ee84db281a95f32289f363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unsupportedPlatforms: 11000000
 --- !u!1001 &336457029778664038
 PrefabInstance:
   m_ObjectHideFlags: 0
