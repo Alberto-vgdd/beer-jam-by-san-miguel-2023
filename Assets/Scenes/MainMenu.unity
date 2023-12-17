@@ -1339,7 +1339,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &196081926
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3951,7 +3951,7 @@ PrefabInstance:
     - target: {fileID: 2330856871778570322, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -250
       objectReference: {fileID: 0}
     - target: {fileID: 2330856871778570322, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
@@ -4991,7 +4991,7 @@ PrefabInstance:
     - target: {fileID: 6062022232064519600, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9048,7 +9048,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db9e9f55e40054f068cc550f24db397f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  developmentMode: 0
+  developmentMode: 1
   playerDeviceNames:
   - 'DragonRise Inc.   Generic   USB  Joystick  '
   - DragonRise Inc.   Generic   USB  Joystick  1
@@ -10230,7 +10230,7 @@ PrefabInstance:
     - target: {fileID: 3386356540622101282, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3386356540622101282, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
@@ -10241,7 +10241,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 61648751}
+      objectReference: {fileID: 474330401}
     - target: {fileID: 3386356540622101282, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -10255,7 +10255,7 @@ PrefabInstance:
     - target: {fileID: 3386356540622101282, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
+      value: StartNewGame
       objectReference: {fileID: 0}
     - target: {fileID: 3386356540622101282, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
@@ -10265,7 +10265,7 @@ PrefabInstance:
     - target: {fileID: 3386356540622101282, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
+      value: GameManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3386356540622101282, guid: 514d49035839a44c69a6a60f6152e008,
         type: 3}
@@ -14311,7 +14311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2137667423
 RectTransform:
   m_ObjectHideFlags: 0
